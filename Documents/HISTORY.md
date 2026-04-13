@@ -12,12 +12,26 @@
 2. **2일차 강의 자료 (`DAY02_CS_CONTROL_FLOW_202604131800.md`)**
    - 기본 연산자(산술, 비교, 논리) 섹션 추가.
    - 제어문(break, continue, switch, while, do-while) 및 입출력(Parse) 학습.
-   - 모든 예제에 `namespace` 및 `internal class Program` 구조 적용.
-   - 실전 미션: Up & Down 게임 완성.
 3. **3일차 강의 자료 (`DAY03_CS_METHOD_CLASS_202604131800.md`)**
    - 메소드(기능 분리)와 클래스(설계도와 실체) 개념 정립.
    - 접근 제한자(public/private) 비유 설명.
-   - 실전 미션: RPG 캐릭터 클래스 설계.
+4. **4일차 강의 자료 (`DAY04_CS_INHERITANCE_202604131800.md`)**
+   - 생성자(Constructor)와 오버로딩 개념.
+   - 상속(Inheritance) 및 가상 메소드(virtual/override) 활용.
+5. **5일차 강의 자료 (`DAY05_CS_ARRAY_MISSION_202604131800.md`)**
+   - 배열(Array)과 foreach문.
+   - Random 클래스를 활용한 게임 로직 구현.
+6. **6~10일차 강의 자료 (2주차 집중 과정) 완료**
+   - **6일차**: 인터페이스(Interface)의 정의와 다중 구현.
+   - **7일차**: 컬렉션(List, Dictionary)의 기초와 제네릭 맛보기.
+   - **8일차**: 제네릭(Generics) 메소드 및 클래스 설계.
+   - **9일차**: Stack과 Queue의 특징 및 인벤토리 검색 로직.
+   - **10일차**: 2주차 최종 미션 - RPG 인벤토리 시스템 완성.
+7. **퀴즈 및 정답 시스템 구축**
+   - 1~11일차 모든 강의 자료에 핵심 퀴즈 추가.
+   - `QUIZ_ANSWERS_202604131800.md` 정답지 별도 생성.
+8. **11일차 강의 자료 (`DAY11_CS_EXCEPTION_202604131800.md`)**
+   - 예외 처리(try-catch-finally) 및 에러 방어 전략.
 
 ### 🚀 향후 로드맵 (4주 집중 과정)
 - **1주차**: 클래스 심화, 상속, 생성자, 배열.
