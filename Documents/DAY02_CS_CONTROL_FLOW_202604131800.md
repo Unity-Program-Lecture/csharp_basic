@@ -74,7 +74,7 @@ namespace Day02
 
                 if (i == 7)
                 {
-                    Console.WriteLine("🎯 7을 찾았다! 종료!");
+                    Console.WriteLine("7을 찾았다! 종료!");
                     break; // 찾았으니까 "당장 멈춰!"
                 }
             }
@@ -107,13 +107,13 @@ namespace Day02
             switch (input)
             {
                 case "1":
-                    Console.WriteLine("⚔️ 검을 선택했습니다.");
+                    Console.WriteLine("검을 선택했습니다.");
                     break;
                 case "2":
-                    Console.WriteLine("🏹 활을 선택했습니다.");
+                    Console.WriteLine("활을 선택했습니다.");
                     break;
                 default:
-                    Console.WriteLine("❓ 다시 골라주세요.");
+                    Console.WriteLine("다시 골라주세요.");
                     break;
             }
         }
@@ -144,7 +144,7 @@ namespace Day02
                 Console.WriteLine("공격! 남은 HP: " + hp);
                 hp -= 10;
             }
-            Console.WriteLine("🐉 몬스터 처치!");
+            Console.WriteLine("몬스터 처치!");
         }
     }
 }
@@ -200,7 +200,7 @@ namespace Day02
 
                 if (guess == target)
                 {
-                    Console.WriteLine("🎉 정답!");
+                    Console.WriteLine("정답!");
                     break; 
                 }
                 else if (guess < target) Console.WriteLine("UP!");
