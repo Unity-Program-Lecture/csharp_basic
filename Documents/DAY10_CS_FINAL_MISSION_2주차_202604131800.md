@@ -39,6 +39,9 @@
 ---
 
 ### **[정답 예시 가이드 - 힌트]**
+**미션:** List와 foreach를 활용해 특정 이름을 가진 아이템을 검색하고 사용하는 로직을 구현합니다.
+<details><summary>코드 보기</summary>
+
 ```csharp
 // 힌트: 특정 이름을 가진 아이템을 리스트에서 찾는 법
 foreach (Item item in itemList)
@@ -50,6 +53,8 @@ foreach (Item item in itemList)
     }
 }
 ```
+
+</details>
 
 ---
 

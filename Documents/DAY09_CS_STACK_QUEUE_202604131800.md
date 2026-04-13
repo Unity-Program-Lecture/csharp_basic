@@ -11,6 +11,9 @@
 - **`Peek()`**: 맨 위에 뭐가 있는지 훔쳐보기만 합니다. (데이터는 그대로 유지)
 
 ### 💻 실습 예제: 게임 뒤로 가기(Undo) 기능
+**미션:** Stack을 이용해 페이지 방문 기록을 관리하고 뒤로 가기(Undo) 기능을 구현합니다.
+<details><summary>코드 보기</summary>
+
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -40,6 +43,8 @@ namespace Day09
 }
 ```
 
+</details>
+
 ---
 
 ## 2. Queue(큐): "맛집 대기줄"
@@ -48,6 +53,9 @@ namespace Day09
 - **`Dequeue()`**: 맨 앞 사람을 입장시키는 것입니다. (줄에서 사라집니다!)
 
 ### 💻 실습 예제: 게임 서버 대기열 / 대화창
+**미션:** Queue를 사용해 입력된 채팅 메시지를 순서대로 처리하는 대화창 시스템을 시뮬레이션합니다.
+<details><summary>코드 보기</summary>
+
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -76,12 +84,17 @@ namespace Day09
 }
 ```
 
+</details>
+
 ---
 
 ## 3. 실전 활용: 인벤토리 아이템 찾기
 단순히 담는 것을 넘어, 원하는 아이템을 **검색하고 삭제**하는 로직입니다.
 
 ### 💻 실습 예제: 특정 아이템 버리기
+**미션:** List 인벤토리에서 특정 아이템의 존재 여부를 확인하고 삭제하는 기능을 구현합니다.
+<details><summary>코드 보기</summary>
+
 ```csharp
 List<string> inventory = new List<string> { "검", "방패", "포션", "물약" };
 
@@ -92,6 +105,8 @@ if (inventory.Contains("방패"))
     Console.WriteLine("방패를 버렸습니다.");
 }
 ```
+
+</details>
 
 ---
 

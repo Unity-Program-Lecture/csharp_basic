@@ -14,6 +14,11 @@
 - **`Count`**: 배열의 `Length`처럼, 지금 바구니에 몇 개가 들어있는지 알려줍니다.
 
 ### 💻 실습 예제: 게임 서버 접속자 목록
+**미션:** List<T>를 사용하여 가변적인 데이터 목록을 관리하고, 요소를 추가 및 삭제하며 현재 상태를 확인하는 코드를 작성해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 using System.Collections.Generic; // List를 쓰기 위해 꼭 필요합니다!
@@ -46,6 +51,8 @@ namespace Day07
 }
 ```
 
+</details>
+
 ---
 
 ## 2. Dictionary<K, V>: "데이터 사전"
@@ -56,6 +63,11 @@ namespace Day07
 - **Value (밸류)**: 열쇠를 열면 나오는 **'진짜 데이터'**입니다.
 
 ### 💻 실습 예제: 몬스터 정보 사전
+**미션:** Dictionary<K, V>를 활용하여 키(Key)와 값(Value) 쌍으로 데이터를 저장하고, 특정 키를 통해 데이터를 빠르게 검색하는 방법을 익혀 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -84,6 +96,8 @@ namespace Day07
     }
 }
 ```
+
+</details>
 
 ---
 

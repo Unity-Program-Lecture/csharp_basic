@@ -13,6 +13,11 @@
 - **`Length` (길이)**: 배열에 총 몇 개의 칸이 있는지 알려줍니다.
 
 ### 💻 실습 예제: 학생 성적 관리하기
+**미션:** 정수형 배열을 선언하고 인덱스를 사용하여 값을 할당한 뒤, for문을 통해 배열의 모든 요소를 순차적으로 출력해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -41,12 +46,19 @@ namespace Day05
 }
 ```
 
+</details>
+
 ---
 
 ## 2. foreach문: "하나씩 꺼내보기"
 배열 안에 있는 모든 내용을 순서대로 꺼낼 때 쓰는 가장 쉽고 안전한 반복문입니다.
 
 ### 💻 실습 예제: 인벤토리 아이템 훑어보기
+**미션:** string형 배열에 아이템 이름을 저장하고, foreach문을 사용하여 인벤토리의 모든 항목을 간결하게 출력해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -68,12 +80,19 @@ namespace Day05
 }
 ```
 
+</details>
+
 ---
 
 ## 3. Random 클래스: "운명의 주사위"
 게임에서 빠질 수 없는 요소인 '무작위(Random)' 값을 만드는 방법입니다.
 
 ### 💻 실습 예제: 주사위 굴리기
+**미션:** Random 클래스를 활용하여 1부터 6 사이의 무작위 숫자를 생성하고, 주사위 던지기 결과를 시뮬레이션해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -94,6 +113,8 @@ namespace Day05
 }
 ```
 
+</details>
+
 ---
 
 ## 4. ⚔️ 1주차 최종 미션: "몬스터 대격돌"
@@ -109,6 +130,11 @@ namespace Day05
 ---
 
 ### **[정답 예시 가이드]**
+**미션:** 배열과 foreach문을 조합하여 여러 객체의 상태 정보를 한꺼번에 조회하고 출력하는 기능을 구현해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 // Hint: 배열과 foreach를 활용해 몬스터 상태를 한 번에 보여주세요!
 foreach (Monster m in monsters)
@@ -116,6 +142,8 @@ foreach (Monster m in monsters)
     Console.WriteLine("{0}의 남은 HP: {1}", m.name, m.hp);
 }
 ```
+
+</details>
 
 ---
 
