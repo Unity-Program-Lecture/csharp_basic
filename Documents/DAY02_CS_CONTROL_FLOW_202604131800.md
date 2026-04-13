@@ -17,6 +17,9 @@
     - **`||`**: "하나라도 맞으면 정답!" (사과 또는 배 중 하나만 있어도 OK)
 
 ### 💻 실습 예제: 간단한 계산기 만들기
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -47,6 +50,8 @@ namespace Day02
 }
 ```
 
+</details>
+
 ---
 
 ## 1. break와 continue: "내 마음대로 흐름 바꾸기"
@@ -57,6 +62,9 @@ namespace Day02
 - **`continue`**: "이번 판은 패스!" (아래 코드 무시하고 다음 숫자로 점프)
 
 ### 💻 실습 예제: 럭키 세븐 찾기
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -83,6 +91,8 @@ namespace Day02
 }
 ```
 
+</details>
+
 ---
 
 ## 2. switch, case, default: "깔끔한 메뉴 선택"
@@ -92,6 +102,9 @@ namespace Day02
 - **`default`**: "나머지 전부"라는 뜻입니다.
 
 ### 💻 실습 예제: 무기 상점
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -121,6 +134,8 @@ namespace Day02
 }
 ```
 
+</details>
+
 ---
 
 ## 3. while과 do: "조건부 무한 반복"
@@ -129,6 +144,9 @@ namespace Day02
 - **`do`**: "일단 해!" (무조건 한 번은 실행)
 
 ### 💻 실습 예제: 몬스터 HP 깎기 (while)
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -150,6 +168,8 @@ namespace Day02
 }
 ```
 
+</details>
+
 ---
 
 ## 4. int.Parse: "변신의 마법"
@@ -157,6 +177,9 @@ namespace Day02
 - **`Parse`**: "글자를 해석해서 숫자로 변신시켜줘!"라는 주문입니다.
 
 ### 💻 실습 예제: 내년 나이 구하기
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -176,9 +199,14 @@ namespace Day02
 }
 ```
 
+</details>
+
 ---
 
 ## 5. 실전 미션: "Up & Down 게임 완성하기"
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using System;
 
@@ -210,6 +238,8 @@ namespace Day02
     }
 }
 ```
+
+</details>
 
 ---
 
