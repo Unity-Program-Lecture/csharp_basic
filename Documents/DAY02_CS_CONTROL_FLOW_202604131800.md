@@ -42,11 +42,17 @@ namespace Day02
             Console.WriteLine("\n=== 비교 연산 실습 ===");
             Console.WriteLine("10은 3보다 큰가요? " + (num1 > num2));     // True
             Console.WriteLine("10은 3과 똑같나요? " + (num1 == num2));   // False
+            Console.WriteLine("10은 3보다 작은가요? " + (num1 < num2));   // False
+            Console.WriteLine("10은 3보다 작거나 같은가요? " + (num1 <= num2));   // False
+            Console.WriteLine("10은 3보다 크거나 같은가요? " + (num1 >= num2));     // True
+            Console.WriteLine("10은 3과 다른가요? " + (num1 != num2));     // True
 
             Console.WriteLine("\n=== 논리 연산 실습 ===");
             bool isApple = true;
             bool isBanana = false;
             Console.WriteLine("사과와 바나나가 둘 다 있나요? " + (isApple && isBanana)); // False
+            Console.WriteLine("사과와 바나나가 하나라도 있나요? " + (isApple || isBanana)); // True
+            Console.WriteLine("바나나가 없나요? " + (!isBanana)); // True
         }
     }
 }
