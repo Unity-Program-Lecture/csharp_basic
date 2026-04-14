@@ -284,8 +284,7 @@ namespace Day02
 2. 프로그래밍 힌트
     - 반복문은 while (true) 또는 bool 변수를 활용한 while문을 사용하세요.
     - 메뉴 선택은 switch문을 사용하면 코드가 깔끔해집니다.
-
-입력값 처리는 int.TryParse() 또는 int.Parse(Console.ReadLine())을 활용하세요.
+    - 입력값 처리는 int.TryParse() 또는 int.Parse(Console.ReadLine())을 활용하세요.
 ---
 
 ## ✍️ 2일차 핵심 퀴즈
