@@ -285,6 +285,86 @@ namespace Day02
     - 반복문은 while (true) 또는 bool 변수를 활용한 while문을 사용하세요.
     - 메뉴 선택은 switch문을 사용하면 코드가 깔끔해집니다.
     - 입력값 처리는 int.TryParse() 또는 int.Parse(Console.ReadLine())을 활용하세요.
+
+<details>
+<summary>코드 보기</summary>
+
+```csharp
+using System;
+
+namespace Day02
+{
+    class Program
+    {
+        static void Main()
+        {
+            Console.WriteLine("=== C# 간이 자판기 ===");
+            Console.Write("투입할 금액을 입력하세요: ");
+
+            int balance = int.Parse(Console.ReadLine());
+
+            bool isRunning = true;
+            while (isRunning)
+            {
+                Console.WriteLine($"\n[현재 잔액: {balance}원]");
+                Console.WriteLine("1. 콜라(1200원) 2. 사이다(1100원) 3. 커피(700원) 4. 종료");
+                Console.Write("메뉴를 선택하세요: ");
+                string choice = Console.ReadLine();
+                
+                switch (choice)
+                {
+                    case "1": // 콜라
+                        if (balance >= 1200)
+                        {
+                            balance -= 1200;
+                            Console.WriteLine("콜라를 구매했습니다.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("잔액이 부족합니다!");
+                        }
+                        break;
+
+                    case "2": // 사이다
+                        if (balance >= 1100)
+                        {
+                            balance -= 1100;
+                            Console.WriteLine("사이다를 구매했습니다.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("잔액이 부족합니다!");
+                        }
+                        break;
+
+                    case "3": // 커피
+                        if (balance >= 700)
+                        {
+                            balance -= 700;
+                            Console.WriteLine("커피를 구매했습니다.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("잔액이 부족합니다!");
+                        }
+                        break;
+
+                    case "4": // 종료
+                        Console.WriteLine($"자판기를 종료합니다. 남은 잔돈 {balance}원이 반환됩니다.");
+                        isRunning = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("잘못된 선택입니다. 다시 입력해주세요.");
+                        break;
+                }
+            }
+        }
+    }
+}
+```
+
+</details>
 ---
 
 ## ✍️ 2일차 핵심 퀴즈
