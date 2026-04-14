@@ -126,7 +126,7 @@ namespace Day02
     {
         static void Main(string[] args)
         {
-            Console.Write("무기를 선택하세요 (1.검 / 2.활): ");
+            Console.Write("무기를 선택하세요 (1.검 / 2.활 / 3.몽둥이): ");
             string input = Console.ReadLine();
 
             switch (input)
@@ -136,6 +136,9 @@ namespace Day02
                     break;
                 case "2":
                     Console.WriteLine("활을 선택했습니다.");
+                    break;
+                case "3":
+                    Console.WriteLine("몽둥이를 선택했습니다.");
                     break;
                 default:
                     Console.WriteLine("다시 골라주세요.");
