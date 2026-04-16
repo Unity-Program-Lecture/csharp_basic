@@ -183,7 +183,7 @@
 
                 for (int i = 0; i < monsters.Length; ++i)
                 {
-                    Monster monster = aliveMonsters[i];
+                    Monster monster = monsters[i];
                     if (monster.IsDead())
                     {
                         continue;
