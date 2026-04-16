@@ -193,29 +193,29 @@
                 switch (Console.ReadLine())
                 {
                     case "1":
-                    {
-                        Console.WriteLine("공격할 몬스터를 선택하세요.");
-
-                        for (int i = 0; i < aliveMonsterCount; ++i)
                         {
-                            Monster aliveMonster = aliveMonsters[i];
+                            Console.WriteLine("공격할 몬스터를 선택하세요.");
 
-                            Console.WriteLine($"{i + 1}. {aliveMonster.Name} HP : [{aliveMonster.Hp}]");
-                        }
+                            for (int i = 0; i < aliveMonsterCount; ++i)
+                            {
+                                Monster aliveMonster = aliveMonsters[i];
 
-                        Console.Write(">> ");
-                        int monsterIndex = int.Parse(Console.ReadLine());
-                        if (monsterIndex < 1 || monsterIndex > aliveMonsterCount)
-                        {
-                            isInvalidInput = true;
-                        }
-                        else
-                        {
-                            player.Attack(aliveMonsters[monsterIndex - 1]);
-                        }
+                                Console.WriteLine($"{i + 1}. {aliveMonster.Name} HP : [{aliveMonster.Hp}]");
+                            }
 
-                        break;
-                    }
+                            Console.Write(">> ");
+                            int monsterIndex = int.Parse(Console.ReadLine());
+                            if (monsterIndex < 1 || monsterIndex > aliveMonsterCount)
+                            {
+                                isInvalidInput = true;
+                            }
+                            else
+                            {
+                                player.Attack(aliveMonsters[monsterIndex - 1]);
+                            }
+
+                            break;
+                        }
 
                     case "2":
                         player.Heal();
