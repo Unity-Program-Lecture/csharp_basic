@@ -28,7 +28,7 @@
             target.TakeDamage(Atk);
         }
 
-        public void Heal(int healAmount)
+        public virtual void Heal(int healAmount)
         {
             Hp += healAmount;
 
@@ -45,7 +45,7 @@
             Heal(HealAmount);
         }
 
-        private void TakeDamage(int damage)
+        protected virtual void TakeDamage(int damage)
         {
             if (Hp <= damage)
             {
@@ -93,6 +93,23 @@
         }
     }
 
+    class Skeleton : Monster
+    {
+        public Skeleton(string name, int maxHp, int atk, int healAmount) : base(name, maxHp, atk, healAmount)
+        {
+        }
+
+        public override void Heal(int healAmount)
+        {
+            TakeDamage(healAmount);
+        }
+
+        public override void AIAction(Creature target)
+        {
+            Attack(target);
+        }
+    }
+
     class HuntMonster
     {
         static void Main(string[] args)
@@ -104,7 +121,8 @@
             Monster[] monsters = new Monster[]
             {
                 new Monster("슬라임", 40, 10, 2),
-                new Monster("오크", 70, 20, 4),
+                //new Monster("오크", 70, 20, 4),
+                new Skeleton("해골", 50, 10, 0)
             };
 
             Console.WriteLine();
@@ -140,31 +158,59 @@
                 switch (Console.ReadLine())
                 {
                     case "1":
-                    {
-                        Console.WriteLine("공격할 몬스터를 선택하세요.");
-
-                        for (int i = 0; i < aliveMonsterCount; ++i)
                         {
-                            Monster aliveMonster = aliveMonsters[i];
+                            Console.WriteLine("공격할 몬스터를 선택하세요.");
 
-                            Console.WriteLine($"{i + 1}. {aliveMonster.Name} HP : [{aliveMonster.Hp}]");
-                        }
+                            for (int i = 0; i < aliveMonsterCount; ++i)
+                            {
+                                Monster aliveMonster = aliveMonsters[i];
 
-                        Console.Write(">> ");
-                        if (!int.TryParse(Console.ReadLine(), out int monsterIndex) || monsterIndex < 1 || monsterIndex > aliveMonsterCount)
-                        {
-                            isValidInput = false;
-                        }
-                        else
-                        {
-                            player.Attack(aliveMonsters[monsterIndex - 1]);
-                        }
+                                Console.WriteLine($"{i + 1}. {aliveMonster.Name} HP : [{aliveMonster.Hp}]");
+                            }
 
-                        break;
-                    }
+                            Console.Write(">> ");
+                            if (!int.TryParse(Console.ReadLine(), out int monsterIndex) || monsterIndex < 1 || monsterIndex > aliveMonsterCount)
+                            {
+                                isValidInput = false;
+                            }
+                            else
+                            {
+                                player.Attack(aliveMonsters[monsterIndex - 1]);
+                            }
+
+                            break;
+                        }
 
                     case "2":
-                        player.Heal();
+                        {
+                            Console.WriteLine("회복 대상을 선택하세요.");
+
+                            Console.WriteLine($"0. {player.Name} HP : [{player.Hp}]");
+
+                            for (int i = 0; i < aliveMonsterCount; ++i)
+                            {
+                                Monster aliveMonster = aliveMonsters[i];
+
+                                Console.WriteLine($"{i + 1}. {aliveMonster.Name} HP : [{aliveMonster.Hp}]");
+                            }
+
+                            Console.Write(">> ");
+                            if (int.TryParse(Console.ReadLine(), out int healTargetNumber))
+                            {
+                                if (healTargetNumber == 0)
+                                {
+                                    player.Heal();
+                                }
+                                else if (healTargetNumber <= aliveMonsterCount)
+                                {
+                                    aliveMonsters[healTargetNumber - 1].Heal(player.HealAmount);
+                                }
+                                else
+                                {
+                                    isValidInput = false;
+                                }
+                            }
+                        }
                         break;
 
                     default:
@@ -175,7 +221,7 @@
                 if (!isValidInput)
                 {
                     Console.WriteLine("입력이 잘못되었습니다.");
-                    
+
                     continue;
                 }
 
