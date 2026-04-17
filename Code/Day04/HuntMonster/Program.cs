@@ -121,7 +121,7 @@
             Monster[] monsters = new Monster[]
             {
                 new Monster("슬라임", 40, 10, 2),
-                //new Monster("오크", 70, 20, 4),
+                new Monster("오크", 70, 20, 4),
                 new Skeleton("해골", 50, 10, 0)
             };
 
