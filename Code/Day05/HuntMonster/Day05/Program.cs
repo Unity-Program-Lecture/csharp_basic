@@ -151,7 +151,8 @@ namespace Day05
                         continue;
                     }
 
-                    if (damagables[i] is Monster monster)
+                    Monster monster = damagable as Monster;
+                    if (monster != null)
                     {
                         monster.AIAction(player);
                     }

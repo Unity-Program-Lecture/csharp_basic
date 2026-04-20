@@ -8,7 +8,7 @@
         /// <summary>
         /// 내구도
         /// </summary>
-        public int Durability => Hp;
+        public int Durability { get { return Hp; } }
 
         public string Name { get; private set; }
 
