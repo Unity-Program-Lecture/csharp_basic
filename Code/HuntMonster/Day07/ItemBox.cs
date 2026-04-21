@@ -2,8 +2,12 @@
 {
     public class ItemBox : IIdentifier, IDamagable
     {
+        public delegate void OnDestroy(ItemBox itemBox);
+
         private int _hp;
         private int _maxHp;
+
+        private Item _dropItem;
 
         /// <summary>
         /// 내구도
@@ -62,15 +66,20 @@
             }
         }
 
+        public Item DropItem => _dropItem;
+
+        public event OnDestroy OnDestroyEvent;
+
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="name">이름</param>
         /// <param name="maxDurability">최대 내구도</param>
-        public ItemBox(string name, int maxDurability)
+        public ItemBox(string name, int maxDurability, Item dropItem)
         {
             Name = name;
             _hp = _maxHp = maxDurability;
+            _dropItem = dropItem;
         }
 
         public void TakeDamage(int damage)
@@ -97,6 +106,8 @@
             Hp = 0;
 
             Console.WriteLine($"<{Name}>가(이) 파괴되었습니다.");
+
+            OnDestroyEvent?.Invoke(this);
         }
     }
 }

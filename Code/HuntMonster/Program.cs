@@ -9,9 +9,26 @@ namespace HuntMonster
     {
         static void Main(string[] args)
         {
+            #region spawn player
+
             Console.Write("플레이어 이름을 입력하세요 : ");
 
             Player player = new Player(Console.ReadLine(), 100, 10, 40);
+
+            #endregion
+
+            #region create inventory
+
+            Inventory inventory = new Inventory();
+            inventory.AddItem(new PotionItem("포션(소)", 2, 30));
+            inventory.AddItem(new PotionItem("포션(대)", 2, 100));
+
+            Console.WriteLine("현재 가방");
+            inventory.PrintItems();
+
+            #endregion
+
+            #region spawn monsters
 
             List<Monster> monsters = new List<Monster>
             {
@@ -32,12 +49,18 @@ namespace HuntMonster
 
             Console.WriteLine();
 
-            ItemBox itemBox = new ItemBox("[?] 상자", 4);
+            #endregion
+
+            #region spawn item box
+
+            ItemBox itemBox = new ItemBox("[?] 상자", 4, new PotionItem("포션(초대형)", 10, 200));
+            itemBox.OnDestroyEvent += box => inventory.AddItem(box.DropItem);
+
             Console.WriteLine("아이템이 들어있을지도 모르는 상자가 나타났습니다!");
-
             Console.WriteLine($"{itemBox.Name} 내구도 : [{itemBox.Durability}]");
-
             Console.WriteLine();
+
+            #endregion
 
             int turnCount = 1;
 
@@ -49,17 +72,11 @@ namespace HuntMonster
             List<IDamagable> aliveDamagables = new List<IDamagable>(damagables);
             List<IRecoverable> aliveRecoverables = new List<IRecoverable>(recoverables);
 
-            Inventory inventory = new Inventory();
-            inventory.AddItem(new PotionItem("포션(소)", 2, 30));
-            inventory.AddItem(new PotionItem("포션(대)", 2, 100));
-
-            Console.WriteLine("현재 가방");
-            inventory.PrintItems();
-
             while (!player.IsDead && aliveDamagables.Count > 0)
             {
                 Console.WriteLine($"현재 {player.Name}의 Hp : [{player.Hp}]");
 
+                // 가방에 아이템이 하나도 없으면 아이템 사용 선택지를 보여주지 않는다.
                 if (inventory.Bag.Count == 0)
                 {
                     Console.WriteLine($"현재 턴[{turnCount}]에 할 행동을 선택하세요.\n1. 공격\n2. 회복");
@@ -132,6 +149,7 @@ namespace HuntMonster
 
                     case "3":
                         {
+                            // 가방이 비어있는 상태로 아이템 사용하려고 하면 잘못된 입력으로 처리한다.
                             if (inventory.Bag.Count == 0)
                             {
                                 isValidInput = false;
