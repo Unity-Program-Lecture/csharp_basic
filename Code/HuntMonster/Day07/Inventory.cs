@@ -4,11 +4,13 @@ namespace HuntMonster.Day07
 {
     public class Inventory
     {
-        public Dictionary<string, Item> Bag;
+        private Dictionary<string, Item> _bag;
+
+        public IReadOnlyDictionary<string, Item> Bag => _bag;
 
         public Inventory()
         {
-            Bag = new Dictionary<string, Item>();
+            _bag = new Dictionary<string, Item>();
         }
 
         public void AddItem(Item item)
@@ -18,25 +20,25 @@ namespace HuntMonster.Day07
                 return;
             }
 
-            if (Bag.TryGetValue(item.Name, out Item curItem))
+            if (_bag.TryGetValue(item.Name, out Item curItem))
             {
                 curItem.Count += item.Count;
             }
             else
             {
-                Bag[item.Name] = item;
+                _bag[item.Name] = item;
             }
         }
 
         public void RemoveItem(string itemName, int count)
         {
-            if (Bag.TryGetValue(itemName, out Item curItem))
+            if (_bag.TryGetValue(itemName, out Item curItem))
             {
                 curItem.Count -= count;
 
                 if (curItem.Count <= 0)
                 {
-                    Bag.Remove(itemName);
+                    _bag.Remove(itemName);
                 }
             }
         }
@@ -48,7 +50,7 @@ namespace HuntMonster.Day07
 
         public bool TryGetItem(string name, out Item item)
         {
-            return Bag.TryGetValue(name, out item);
+            return _bag.TryGetValue(name, out item);
         }
 
         public Item GetItem(string name)
@@ -56,7 +58,7 @@ namespace HuntMonster.Day07
             // 아래 3가지 경우 중에 한가지를 보통 사용함.
 
             // 1. 가장 권장
-            if (Bag.TryGetValue(name, out Item curItem))
+            if (_bag.TryGetValue(name, out Item curItem))
             {
                 return curItem;
             }
@@ -106,7 +108,7 @@ namespace HuntMonster.Day07
 
         public void PrintItems()
         {
-            foreach (KeyValuePair<string, Item> pair in Bag)
+            foreach (KeyValuePair<string, Item> pair in _bag)
             {
                 pair.Value.Print();
             }
