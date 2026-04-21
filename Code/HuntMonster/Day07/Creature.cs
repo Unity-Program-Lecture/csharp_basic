@@ -1,6 +1,6 @@
 ﻿namespace HuntMonster.Day07
 {
-    class Creature : IIdentifier, IDamagable, IAttackable, IRecoverable, IMortal
+    public class Creature : IIdentifier, IDamagable, IAttackable, IRecoverable, IMortal
     {
         #region IIdentifier 구현부
 
@@ -55,8 +55,6 @@
                 {
                     Hp = _maxHp;
                 }
-
-                Console.WriteLine("Warning!");
             }
         }        
 

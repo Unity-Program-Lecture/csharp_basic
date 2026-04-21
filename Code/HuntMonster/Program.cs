@@ -1,8 +1,11 @@
-﻿namespace HuntMonster
+﻿using System.Collections.Generic;
+
+namespace HuntMonster
 {
     using Day07;
-    
-    class Program
+
+
+    public class Program
     {
         static void Main(string[] args)
         {
@@ -10,7 +13,7 @@
 
             Player player = new Player(Console.ReadLine(), 100, 10, 40);
 
-            Monster[] monsters = new Monster[]
+            List<Monster> monsters = new List<Monster>
             {
                 new Monster("슬라임", 40, 10, 2),
                 new Monster("오크", 70, 20, 4),
@@ -20,7 +23,7 @@
             Console.WriteLine();
             Console.WriteLine("몬스터들이 나타났습니다!");
 
-            for (int i = 0; i < monsters.Length; ++i)
+            for (int i = 0; i < monsters.Count; ++i)
             {
                 Monster monster = monsters[i];
 
@@ -34,36 +37,35 @@
 
             Console.WriteLine($"{itemBox.Name} 내구도 : [{itemBox.Durability}]");
 
+            Console.WriteLine();
+
             int turnCount = 1;
 
-            IDamagable[] damagables = new IDamagable[monsters.Length + 1];
-            for (int i = 0; i < monsters.Length; ++i)
-            {
-                damagables[i] = monsters[i];
-            }
-            damagables[monsters.Length] = itemBox;
+            List<IDamagable> damagables = new List<IDamagable>(monsters);
+            damagables.Add(itemBox);
 
-            IRecoverable[] recoverables = new IRecoverable[monsters.Length];
-            for (int i = 0; i < monsters.Length; ++i)
-            {
-                recoverables[i] = monsters[i];
-            }
+            List<IRecoverable> recoverables = new List<IRecoverable>(monsters);
 
-            int aliveDamagableCount = damagables.Length;
-            IDamagable[] aliveDamagables = new IDamagable[aliveDamagableCount];
-            for (int i = 0; i < damagables.Length; ++i)
-            {
-                aliveDamagables[i] = damagables[i];
-            }
+            List<IDamagable> aliveDamagables = new List<IDamagable>(damagables);
+            List<IRecoverable> aliveRecoverables = new List<IRecoverable>(recoverables);
 
-            int aliveRecoverableCount = recoverables.Length;
-            IRecoverable[] aliveRecoverables = new IRecoverable[aliveRecoverableCount];
-            for (int i = 0; i < recoverables.Length; ++i)
-            {
-                aliveRecoverables[i] = recoverables[i];
-            }
+            Inventory inventory = new Inventory();
+            inventory.AddItem(new PotionItem("포션(소)", 2, 30));
+            inventory.AddItem(new PotionItem("포션(대)", 2, 100));
 
-            while (!player.IsDead && aliveDamagableCount > 0)
+            Console.WriteLine("현재 가방");
+            inventory.PrintItems();
+
+            inventory.RemoveItem("포션(소)");
+            inventory.RemoveItem("포션(대)");
+
+            Console.WriteLine("제거 후 가방");
+            inventory.PrintItems();
+
+            inventory.GetItem("포션(소)");
+            inventory.GetItem("포션(대)");
+
+            while (!player.IsDead && aliveDamagables.Count > 0)
             {
                 Console.WriteLine($"현재 {player.Name}의 Hp : [{player.Hp}]");
                 Console.WriteLine($"현재 턴[{turnCount}]에 할 행동을 선택하세요.\n1. 공격\n2. 회복");
@@ -77,7 +79,7 @@
                         {
                             Console.WriteLine("공격할 대상을 선택하세요.");
 
-                            for (int i = 0; i < aliveDamagableCount; ++i)
+                            for (int i = 0; i < aliveDamagables.Count; ++i)
                             {
                                 IDamagable aliveDamagable = aliveDamagables[i];
 
@@ -85,7 +87,7 @@
                             }
 
                             Console.Write(">> ");
-                            if (!int.TryParse(Console.ReadLine(), out int targetNumber) || targetNumber < 1 || targetNumber > aliveDamagableCount)
+                            if (!int.TryParse(Console.ReadLine(), out int targetNumber) || targetNumber < 1 || targetNumber > aliveDamagables.Count)
                             {
                                 isValidInput = false;
                             }
@@ -103,7 +105,7 @@
 
                             Console.WriteLine($"0. {player.Name} HP : [{player.Hp}]");
 
-                            for (int i = 0; i < aliveRecoverableCount; ++i)
+                            for (int i = 0; i < aliveRecoverables.Count; ++i)
                             {
                                 IRecoverable aliveRecoverable = aliveRecoverables[i];
 
@@ -117,7 +119,7 @@
                                 {
                                     player.Heal();
                                 }
-                                else if (healTargetNumber <= aliveRecoverableCount)
+                                else if (healTargetNumber <= aliveRecoverables.Count)
                                 {
                                     aliveRecoverables[healTargetNumber - 1].Heal(player.HealAmount);
                                 }
@@ -141,9 +143,9 @@
                     continue;
                 }
 
-                aliveDamagableCount = 0;
+                aliveDamagables.Clear();
 
-                for (int i = 0; i < damagables.Length; ++i)
+                for (int i = 0; i < damagables.Count; ++i)
                 {
                     IDamagable damagable = damagables[i];
                     if (damagable.IsDead)
@@ -151,19 +153,17 @@
                         continue;
                     }
 
-                    Monster monster = damagable as Monster;
-                    if (monster != null)
+                    if (damagable is Monster monster)
                     {
                         monster.AIAction(player);
                     }
 
-                    aliveDamagables[aliveDamagableCount] = damagable;
-                    aliveDamagableCount++;
+                    aliveDamagables.Add(damagable);
                 }
 
-                aliveRecoverableCount = 0;
+                aliveRecoverables.Clear();
 
-                for (int i = 0; i < recoverables.Length; ++i)
+                for (int i = 0; i < recoverables.Count; ++i)
                 {
                     IRecoverable recoverable = recoverables[i];
                     if (recoverable.IsDead)
@@ -171,8 +171,7 @@
                         continue;
                     }
 
-                    aliveRecoverables[aliveRecoverableCount] = recoverable;
-                    aliveRecoverableCount++;
+                    aliveRecoverables.Add(recoverable);
                 }
 
                 turnCount++;
