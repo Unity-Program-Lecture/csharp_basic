@@ -1,6 +1,6 @@
 ﻿namespace HuntMonster.Day07
 {
-    class Monster : Creature
+    class Monster : Creature, ICarryingItem
     {
         public event OnDropItem OnDropItemEvent;
 
