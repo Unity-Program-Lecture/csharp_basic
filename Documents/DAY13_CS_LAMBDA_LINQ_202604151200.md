@@ -35,7 +35,10 @@ namespace Day13
             var evens = numbers.Where(n => n % 2 == 0); // n이 2로 나누어떨어지면(true) 골라라!
 
             Console.WriteLine("짝수 목록:");
-            foreach (var n in evens) Console.WriteLine(n);
+            foreach (var n in evens)
+            {
+                Console.WriteLine(n);
+            }
         }
     }
 }

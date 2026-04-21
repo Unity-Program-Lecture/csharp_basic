@@ -86,7 +86,10 @@ namespace Day02
         {
             for (int i = 1; i <= 10; i++)
             {
-                if (i % 2 == 0) continue; // 짝수는 "패스!" (찌꺼기가 0이면 짝수)
+                if (i % 2 == 0)
+                {
+                    continue; // 짝수는 "패스!" (찌꺼기가 0이면 짝수)
+                }
 
                 Console.WriteLine("홀수 확인: " + i);
 
@@ -252,8 +255,14 @@ namespace Day02
                     Console.WriteLine("정답!");
                     break; 
                 }
-                else if (guess < target) Console.WriteLine("UP!");
-                else Console.WriteLine("DOWN!");
+                else if (guess < target)
+                {
+                    Console.WriteLine("UP!");
+                }
+                else
+                {
+                    Console.WriteLine("DOWN!");
+                }
             }
         }
     }

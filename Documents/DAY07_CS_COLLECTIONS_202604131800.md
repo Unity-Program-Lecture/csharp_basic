@@ -1,73 +1,45 @@
-# 🚀 7일차: 변하는 바구니 (List와 Dictionary)
+# 🚀 7일차: 몬스터 사냥꾼의 가방 (List와 Dictionary)
 
 오늘의 목표는 **"개수가 정해지지 않은 데이터를 자유롭게 넣고 빼는 법(List)과, 이름으로 데이터를 찾는 법(Dictionary)을 배운다"**입니다.
 
 ---
 
-## 1. List<T>: "늘어나는 배열"
-배열은 처음에 정한 칸수(예: 3칸)를 바꿀 수 없지만, List는 데이터를 넣는 대로 **자동으로 칸이 늘어납니다.**
-
-### 💡 이 단어는 무슨 뜻인가요?
-- **`<T>` (제네릭)**: "어떤 타입(Type)을 담을 것인가"를 정하는 괄호입니다. (예: `List<int>`는 정수 바구니)
-- **`Add()`**: 바구니에 데이터를 새로 추가합니다.
-- **`Remove()` / `RemoveAt()`**: 데이터를 삭제합니다.
-- **`Count`**: 배열의 `Length`처럼, 지금 바구니에 몇 개가 들어있는지 알려줍니다.
-
-### 💻 실습 예제: 게임 서버 접속자 목록
-**미션:** List<T>를 사용하여 가변적인 데이터 목록을 관리하고, 요소를 추가 및 삭제하며 현재 상태를 확인하는 코드를 작성해 보세요.
-
-<details>
-<summary>코드 보기</summary>
+## 🛠️ 시작 전 준비물
+`List`와 `Dictionary`는 C#에서 제공하는 '특별한 도구상자' 안에 들어있습니다. 이 도구들을 꺼내 쓰려면 코드 맨 윗줄에 반드시 다음 한 줄을 적어줘야 합니다.
 
 ```csharp
-using System;
-using System.Collections.Generic; // List를 쓰기 위해 꼭 필요합니다!
-
-namespace Day07
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            // 1. 문자열을 담는 리스트 만들기
-            List<string> users = new List<string>();
-
-            // 2. 유저 추가
-            users.Add("IronMan");
-            users.Add("SpiderMan");
-            users.Add("Hulk");
-
-            // 3. 유저 한 명 삭제
-            users.Remove("Hulk");
-
-            // 4. 전체 유저 출력
-            Console.WriteLine("--- 현재 접속 유저 ({0}명) ---", users.Count);
-            foreach (string user in users)
-            {
-                Console.WriteLine("- {0}", user);
-            }
-        }
-    }
-}
+using System.Collections.Generic; // 이 줄이 없으면 List와 Dictionary를 쓸 수 없어요!
 ```
-
-</details>
 
 ---
 
-## 2. Dictionary<K, V>: "데이터 사전"
-번호(0, 1, 2...)가 아닌 **이름(Key)**으로 **내용(Value)**을 찾는 바구니입니다. 마치 영어 사전에서 단어를 찾으면 뜻이 나오는 것과 같습니다.
+## 1. List<T>: "실시간 몬스터 스폰 목록"
+배열은 처음에 3마리로 정하면 더 늘릴 수 없지만, `List`는 몬스터가 소환될 때마다 **자동으로 칸이 늘어납니다.**
 
-### 💡 이 단어는 무슨 뜻인가요?
-- **Key (키)**: 데이터를 찾기 위한 **'열쇠'**입니다. (중복될 수 없습니다!)
-- **Value (밸류)**: 열쇠를 열면 나오는 **'진짜 데이터'**입니다.
+### 💡 주요 기능
+- **`Add("오크")`**: 새로운 몬스터가 필드에 스폰됩니다.
+- **`RemoveAt(0)`**: 특정 번호(인덱스)의 몬스터를 목록에서 제거합니다.
+- **`Count`**: 현재 필드에 살아있는 몬스터가 몇 마리인지 알려줍니다.
+- **인덱서(`[]`)**: 배열처럼 `fieldMonsters[0]`과 같이 번호를 써서 특정 위치의 몬스터를 지목하거나 바꿀 수 있습니다.
 
-### 💻 실습 예제: 몬스터 정보 사전
-**미션:** Dictionary<K, V>를 활용하여 키(Key)와 값(Value) 쌍으로 데이터를 저장하고, 특정 키를 통해 데이터를 빠르게 검색하는 방법을 익혀 보세요.
+### 🖼️ 그림으로 이해하는 List의 동작
+**1) `Add("고블린")` : 맨 뒤에 새 칸을 만들고 추가됩니다.**
+```text
+[ 슬라임 ] [ 오크 ] + [ 고블린 ]  ➜  [ 슬라임 ] [ 오크 ] [ 고블린 ]
+  (0번)     (1번)      (추가!)        (0번)     (1번)     (2번)
+```
 
-<details>
-<summary>코드 보기</summary>
+**2) `RemoveAt(1)` : 중간이 빠지면 뒤의 데이터들이 앞으로 당겨집니다! (중요 ★)**
+```text
+[0:슬라임] [1:오크] [2:고블린] [3:드래곤]
+             ↓ (1번 오크 삭제!)
+[0:슬라임] [ 빠짐 ] [2:고블린] [3:드래곤]
+             ⬅️ ⬅️ (한 칸씩 당기기)
+[0:슬라임] [1:고블린] [2:드래곤]
+```
+> **주의!**: 1번이 사라지면 2번이었던 고블린이 **새로운 1번**이 됩니다. 순서가 바뀌기 때문에 리스트를 다룰 때는 항상 인덱스 변화에 주의해야 합니다.
 
+### 💻 실습 예제: 필드 몬스터 관리
 ```csharp
 using System;
 using System.Collections.Generic;
@@ -78,84 +50,176 @@ namespace Day07
     {
         static void Main(string[] args)
         {
-            // 키는 string(이름), 값은 int(체력)인 딕셔너리 만들기
-            Dictionary<string, int> monsterHPs = new Dictionary<string, int>();
+            // 1. 필드에 있는 몬스터 이름 목록
+            List<string> fieldMonsters = new List<string>();
 
-            // 데이터 저장
-            monsterHPs["슬라임"] = 30;
-            monsterHPs["오크"] = 150;
-            monsterHPs["드래곤"] = 5000;
+            // 2. 몬스터 스폰 (추가)
+            fieldMonsters.Add("슬라임");
+            fieldMonsters.Add("오크");
+            fieldMonsters.Add("고블린");
 
-            // 데이터 찾기
-            string searchName = "오크";
-            if (monsterHPs.ContainsKey(searchName)) // 사전에 이름이 있는지 확인
+            Console.WriteLine("--- [1] 몬스터 스폰 직후 ({0}마리) ---", fieldMonsters.Count);
+            foreach (string m in fieldMonsters) 
             {
-                Console.WriteLine("{0}의 체력은 {1}입니다.", searchName, monsterHPs[searchName]);
+                Console.WriteLine("- " + m);
+            }
+
+            // 3. 인덱서로 접근 및 수정
+            Console.WriteLine("\n[소식] 1번 몬스터 오크가 '강한 오크'로 진화했습니다!");
+            fieldMonsters[1] = "강한 오크"; 
+
+            Console.WriteLine("--- [2] 진화 후 필드 상황 ({0}마리) ---", fieldMonsters.Count);
+            foreach (string m in fieldMonsters)
+            {
+                Console.WriteLine("- " + m);
+            }
+
+            // 4. 몬스터 처치 (삭제)
+            Console.WriteLine("\n[전투] 펑! 0번 몬스터 {0}을(를) 처치했습니다.", fieldMonsters[0]);
+            fieldMonsters.RemoveAt(0); // 0번(슬라임) 삭제
+
+            // 5. 삭제 후 변화 확인
+            Console.WriteLine("\n--- [3] 처치 후 필드 상황 ({0}마리) ---", fieldMonsters.Count);
+            foreach (string m in fieldMonsters)
+            {
+                // 슬라임이 사라지고 '강한 오크'가 0번이 된 것을 확인할 수 있습니다!
+                Console.WriteLine("필드에 [ {0} ]이(가) 배회 중입니다.", m);
             }
         }
     }
 }
 ```
 
-</details>
+---
+
+## 2. Dictionary<K, V>: "전리품 인벤토리"
+배열은 반드시 번호(0, 1, 2...)로만 데이터를 찾아야 하지만, 딕셔너리는 **아이템 이름(Key)**을 대면 바로 **개수(Value)**가 나오는 **"똑똑한 배열"**입니다.
+
+### 💡 주요 기능
+- **Key(키)**: 데이터를 찾을 기준(열쇠)입니다. (예: 아이템 이름)
+- **Value(값)**: 열쇠로 열면 나오는 실제 데이터입니다. (예: 아이템 개수)
+- **인덱서(`[]`)**: 딕셔너리의 **'입구'**입니다. 이 괄호 안에 열쇠(Key)를 넣으면 상자 안의 내용물(Value)을 꺼내주거나 새로 넣을 수 있습니다.
+- **`inventory["포션"] = 10`**: 포션이라는 이름표가 붙은 칸에 숫자 10을 저장합니다.
+- **`ContainsKey("동전")`**: 가방에 해당 아이템이 있는지 먼저 확인하여 에러를 방지합니다.
+- **`Remove("녹슨 칼")`**: 더 이상 필요 없는 특정 열쇠와 그 데이터를 가방에서 지웁니다.
+- **`foreach (var item in inventory)`**: 가방 안의 모든 아이템(Key)과 개수(Value)를 하나씩 꺼내봅니다.
+
+### 💻 실습 예제: 아이템 획득 시스템
+```csharp
+using System;
+using System.Collections.Generic;
+
+namespace Day07
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // 키: 아이템 이름, 값: 개수
+            Dictionary<string, int> inventory = new Dictionary<string, int>();
+
+            // 1. 아이템 획득 및 수정
+            inventory["녹슨 칼"] = 1;
+            inventory["동전"] = 50;
+            inventory["동전"] = 100; // 이미 있으면 값이 100으로 바뀝니다(수정)
+
+            Console.WriteLine("--- [1] 아이템 획득 직후 ---");
+            foreach (var item in inventory)
+            {
+                Console.WriteLine("- {0} : {1}개", item.Key, item.Value);
+            }
+
+            // 2. 아이템 삭제
+            Console.WriteLine("\n[가방] 필요 없는 '녹슨 칼'을 버렸습니다.");
+            inventory.Remove("녹슨 칼");
+
+            Console.WriteLine("--- [2] 삭제 후 가방 상황 ---");
+            foreach (var item in inventory)
+            {
+                Console.WriteLine("- {0} : {1}개", item.Key, item.Value);
+            }
+
+            // 3. 아이템 확인
+            Console.WriteLine("\n--- [3] 특정 아이템 검색 ---");
+            string searchItem = "동전";
+            if (inventory.ContainsKey(searchItem))
+            {
+                Console.WriteLine("{0}을(를) {1}개 가지고 있습니다.", searchItem, inventory[searchItem]);
+            }
+        }
+    }
+}
+```
 
 ---
 
-## 3. 왜 컬렉션을 쓰나요?
-1. **유연성**: 게임에서 아이템을 획득하거나 버릴 때, 몬스터가 생성되거나 죽을 때처럼 **개수가 계속 변할 때** 필수적입니다.
-2. **속도**: Dictionary를 쓰면 수만 개의 데이터 중에서도 내가 원하는 것을 **눈 깜짝할 새(Key)**에 찾을 수 있습니다.
+## 3. 💡 [필살기] 인벤토리에서 안전하게 아이템 꺼내기
+가방에 없는 아이템을 꺼내려고 하면(`inventory["전설의 검"]`) 게임이 멈춰버립니다(에러). 이를 방지하는 가장 안전한 방법이 **`TryGetValue`**입니다.
+
+### TryGetValue: "한 번에 찾아서 꺼내기"
+```csharp
+int count;
+// "포션"이 가방에 있는지 찾아서(Try), 있으면 count에 개수를 담아줘(out)!
+if (inventory.TryGetValue("포션", out count)) 
+{
+    Console.WriteLine("포션을 사용합니다. 남은 개수: " + count);
+}
+else 
+{
+    Console.WriteLine("가방에 포션이 없습니다.");
+}
+```
+> **왜 쓰나요?**: `ContainsKey`로 확인하고 `[]`로 또 찾으면 두 번 일하는 셈이지만, `TryGetValue`는 한 번만 일하므로 성능도 좋고 코드도 안전합니다.
 
 ---
 
-## 4. 7일차 미션: "학생부 관리 프로그램"
-다음 기능을 가진 프로그램을 만들어보세요.
+## 4. 7일차 미션: "진짜 전리품 가방 만들기"
+몬스터를 잡을 때마다 아이템이 가방에 쌓이는 로직을 완성해 보세요.
 
-1. `students`라는 이름의 `Dictionary<string, int>`를 만듭니다. (Key: 학생 이름, Value: 점수)
-2. 사용자로부터 학생 이름과 점수를 입력받아 딕셔너리에 저장합니다. (3번 반복)
-3. 이후, 특정 학생의 이름을 입력하면 그 학생의 점수를 출력해주는 검색 기능을 만드세요.
-4. 만약 이름이 없으면 "등록되지 않은 학생입니다."를 출력하세요.
+### 🎮 시나리오
+당신은 지금 사냥 중입니다. 몬스터를 잡을 때마다 어떤 몬스터를 잡았는지 입력하세요.
+- **슬라임**을 잡으면 **"젤리"**를 1개 얻습니다.
+- **오크**를 잡으면 **"이빨"**을 1개 얻습니다.
+- 이미 가지고 있는 아이템이라면 개수가 늘어나야 하고, 처음 얻는 아이템이라면 새로 가방에 넣어야 합니다.
 
----
+### 📋 미션 단계
+1. 빈 `inventory` 딕셔너리를 만듭니다. (Key: 아이템 이름, Value: 개수)
+2. `for` 문을 사용하여 3번 반복하며 "잡은 몬스터(슬라임/오크): "를 입력받습니다.
+   - **Tip**: 만약 이전 수업에서 `while` 문을 이용한 전투 로직을 이미 완성했다면, 몬스터가 죽는 시점에 아이템을 획득하도록 기존 코드에 통합해도 좋습니다!
+3. 입력받은 이름에 따라 획득할 아이템 이름을 정합니다.
+4. **[중요]** 가방에 이미 그 아이템이 있는지 `ContainsKey`로 확인합니다.
+   - **있다면**: `inventory[아이템] = inventory[아이템] + 1;` (개수 증가)
+   - **없다면**: `inventory[아이템] = 1;` (새로 추가)
+5. 마지막에 가방에 담긴 모든 아이템과 개수를 출력하세요.
 
-**Tip**: `using System.Collections.Generic;`을 쓰지 않으면 `List`와 `Dictionary`를 인식하지 못하니 주의하세요!
+### ✅ 실행 결과 예시
+```text
+잡은 몬스터(슬라임/오크): 슬라임
+[획득] 젤리를 얻었습니다!
+잡은 몬스터(슬라임/오크): 오크
+[획득] 이빨을 얻었습니다!
+잡은 몬스터(슬라임/오크): 슬라임
+[획득] 젤리를 얻었습니다!
 
----
-
-## 5. 7일차 심화 미션: "동적 인벤토리와 스폰 시스템"
-
-**[미션 목표]**
-크기가 고정된 배열 대신, 실행 중에 요소를 자유롭게 추가하거나 삭제할 수 있는 `List<T>`와 키-값 쌍으로 데이터를 관리하는 `Dictionary<K, V>`를 활용합니다. 이를 통해 보다 유연한 게임 데이터 관리 시스템을 설계합니다.
-
----
-
-### 1) 요구 사항
-
-#### 1. 동적 몬스터 관리 (`List<T>`)
-* `List<Monster> monsterList = new List<Monster>();`를 생성합니다.
-* **Spawn 명령**: 사용자가 "스폰"을 입력하면 랜덤한 몬스터(슬라임, 오크 등)가 리스트에 추가됩니다.
-* **자동 제거**: 전투 중 체력이 0이 된 몬스터는 리스트에서 즉시 제거(`Remove`)되도록 설계합니다.
-
-#### 2. 아이템 가방 구현 (`Dictionary<K, V>`)
-* `Dictionary<string, int> inventory = new Dictionary<string, int>();`를 사용하여 아이템 이름과 개수를 저장합니다.
-* **아이템 획득**: 몬스터 처치 시 특정 아이템(예: "빨간 포션")의 개수를 1 증가시킵니다. 
-* 이미 있는 아이템이라면 숫자를 올리고, 처음 얻는 아이템이라면 새로 추가하는 로직을 고민해 보세요.
-
-#### 3. 전체 목록 출력
-* 현재 필드에 있는 모든 몬스터의 목록과 인벤토리에 담긴 아이템 및 그 개수를 각각 출력하는 기능을 만듭니다.
+--- 최종 인벤토리 ---
+- 젤리 : 2개
+- 이빨 : 1개
+```
 
 ---
 
-### 2) 프로그래밍 힌트
-* `List`에서 요소를 제거할 때 `for` 문을 정방향으로 돌리며 삭제하면 인덱스 꼬임 현상이 발생할 수 있으니 주의하세요. (역순 루프 권장)
-* `Dictionary`에 값이 있는지 확인할 때는 `inventory.ContainsKey("아이템명")` 메서드를 활용하면 안전합니다.
-* `foreach (var item in inventory)`를 통해 딕셔너리의 모든 내용을 출력할 수 있습니다. (item.Key, item.Value 활용)
+## ⚠️ [절대 주의] 달리는 기차의 바퀴를 갈지 마세요!
+`foreach` 문으로 가방을 열어보고 있는 도중에, 가방 안의 아이템을 **버리거나(Remove) 새로 넣는(Add) 행동**은 절대로 하면 안 됩니다!
 
-
-**[심화 과제 (선택 사항)]**
-- **정렬 기능**: `monsterList.Sort()`를 응용하여 체력이 낮은 순서대로 몬스터를 정렬해 보세요. (IComparable 인터페이스 학습 권장)
-- **아이템 사용**: 인벤토리에서 아이템 이름을 입력하면 개수가 1 줄어들고 효과가 나타나는 로직을 추가해 보세요.
+- **왜 안 되나요?**: `foreach`는 데이터의 처음부터 끝까지 순서대로 훑고 있는 중입니다. 그런데 중간에 데이터가 사라지거나 늘어나면 순서가 꼬여서 컴퓨터가 당황하고 게임이 멈춰버립니다. (이를 **'달리는 기차의 바퀴를 갈아 끼우려 하는 행동'**이라고 비유합니다.)
+- **해결 방법**:
+  1. 데이터를 수정(개수 변경 등)하는 것은 괜찮습니다.
+  2. 삭제나 추가가 꼭 필요하다면 `foreach` 대신 `for` 문을 사용하거나, 루프가 다 끝난 뒤에 처리해야 합니다.
 
 ---
+
 ## ✍️ 7일차 핵심 퀴즈
-1. `List`에서 특정 위치의 데이터를 지울 때 사용하는 메소드는 무엇인가요?
-2. `Dictionary`에서 중복된 'Key'를 가질 수 있나요?
+1. `List`에서 데이터를 추가할 때 쓰는 메소드는?
+2. `Dictionary`에서 아이템 이름처럼 '찾는 기준'이 되는 데이터를 무엇이라 부르나요?
+3. 없는 아이템을 꺼내려 할 때 발생하는 에러를 막기 위한 안전한 메소드는?
+4. `foreach` 문이 돌아가는 도중에 `Remove`나 `Add`를 하면 어떻게 되나요?
