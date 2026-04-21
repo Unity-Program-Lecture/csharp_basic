@@ -28,6 +28,8 @@ namespace HuntMonster.Day07
             {
                 _bag[item.Name] = item;
             }
+
+            Console.WriteLine($"{item.Name} 아이템을 {item.Count}개 얻었습니다. 현재 {_bag[item.Name].Count}개 보유중입니다.");
         }
 
         public void RemoveItem(string itemName, int count)

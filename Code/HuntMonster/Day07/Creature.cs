@@ -138,7 +138,7 @@
             HealAmount = healAmount;
         }
 
-        private void Die()
+        protected virtual void Die()
         {
             Console.WriteLine($"<{Name}>가(이) 사망했습니다.");
 

@@ -45,6 +45,10 @@ namespace HuntMonster
                 Monster monster = monsters[i];
 
                 Console.WriteLine($"{i + 1}. {monster.Name} HP : [{monster.Hp}] / ATK : [{monster.Atk}] / HEAL : [{monster.HealAmount}]");
+
+                monster.SetDropItem(new PotionItem("포션(대)", 1, 100));
+
+                monster.OnDropItemEvent += dropItem => inventory.AddItem(dropItem);
             }
 
             Console.WriteLine();
@@ -54,7 +58,7 @@ namespace HuntMonster
             #region spawn item box
 
             ItemBox itemBox = new ItemBox("[?] 상자", 4, new PotionItem("포션(초대형)", 10, 200));
-            itemBox.OnDestroyEvent += box => inventory.AddItem(box.DropItem);
+            itemBox.OnDropItemEvent += dropItem => inventory.AddItem(dropItem);
 
             Console.WriteLine("아이템이 들어있을지도 모르는 상자가 나타났습니다!");
             Console.WriteLine($"{itemBox.Name} 내구도 : [{itemBox.Durability}]");

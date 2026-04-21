@@ -1,9 +1,7 @@
 ﻿namespace HuntMonster.Day07
 {
-    public class ItemBox : IIdentifier, IDamagable
+    public class ItemBox : IIdentifier, IDamagable, ICarryingItem
     {
-        public delegate void OnDestroy(ItemBox itemBox);
-
         private int _hp;
         private int _maxHp;
 
@@ -68,7 +66,7 @@
 
         public Item DropItem => _dropItem;
 
-        public event OnDestroy OnDestroyEvent;
+        public event OnDropItem OnDropItemEvent;
 
         /// <summary>
         /// Constructor.
@@ -107,7 +105,7 @@
 
             Console.WriteLine($"<{Name}>가(이) 파괴되었습니다.");
 
-            OnDestroyEvent?.Invoke(this);
+            OnDropItemEvent?.Invoke(DropItem);
         }
     }
 }
