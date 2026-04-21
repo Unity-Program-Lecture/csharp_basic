@@ -56,19 +56,18 @@ namespace HuntMonster
             Console.WriteLine("현재 가방");
             inventory.PrintItems();
 
-            inventory.RemoveItem("포션(소)");
-            inventory.RemoveItem("포션(대)");
-
-            Console.WriteLine("제거 후 가방");
-            inventory.PrintItems();
-
-            inventory.GetItem("포션(소)");
-            inventory.GetItem("포션(대)");
-
             while (!player.IsDead && aliveDamagables.Count > 0)
             {
                 Console.WriteLine($"현재 {player.Name}의 Hp : [{player.Hp}]");
-                Console.WriteLine($"현재 턴[{turnCount}]에 할 행동을 선택하세요.\n1. 공격\n2. 회복");
+
+                if (inventory.Bag.Count == 0)
+                {
+                    Console.WriteLine($"현재 턴[{turnCount}]에 할 행동을 선택하세요.\n1. 공격\n2. 회복");
+                }
+                else
+                {
+                    Console.WriteLine($"현재 턴[{turnCount}]에 할 행동을 선택하세요.\n1. 공격\n2. 회복\n3. 아이템 사용");
+                }
 
                 bool isValidInput = true;
 
@@ -130,6 +129,48 @@ namespace HuntMonster
                             }
                         }
                         break;
+
+                    case "3":
+                        {
+                            if (inventory.Bag.Count == 0)
+                            {
+                                isValidInput = false;
+
+                                break;
+                            }
+
+                            Console.WriteLine("사용할 아이템을 선택하세요.");
+
+                            List<Item> currentItems = new List<Item>();
+                            int itemNumber = 1;
+
+                            foreach (KeyValuePair<string, Item> pair in inventory.Bag)
+                            {
+                                Item currentItem = pair.Value;
+
+                                Console.WriteLine($"{itemNumber}. {currentItem.GetStatusText()}");
+
+                                itemNumber++;
+
+                                currentItems.Add(currentItem);
+                            }
+
+                            Console.Write(">> ");
+                            if (!int.TryParse(Console.ReadLine(), out int targetItemNumber) ||
+                                targetItemNumber < 1 ||
+                                targetItemNumber > currentItems.Count)
+                            {
+                                isValidInput = false;
+                            }
+                            else
+                            {
+                                Item itemWillUse = currentItems[targetItemNumber - 1];
+
+                                inventory.TryUseItem(itemWillUse.Name, player);
+                            }
+
+                            break;
+                        }
 
                     default:
                         isValidInput = false;
