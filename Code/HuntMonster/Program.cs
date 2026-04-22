@@ -84,20 +84,53 @@ namespace HuntMonster
 
             int turnCount = 1;
 
-            List<IDamagable> damagables = new List<IDamagable>(monsters);
-            damagables.Add(itemBox);
+            List<IMortal> motals = new List<IMortal>(); // 죽을 수 있는 객체 리스트
+            motals.Add(player);// 플레이어를 추가
+            motals.AddRange(monsters); // 몬스터를 모두 추가
+            motals.Add(itemBox); // 아이템박스를 추가
 
-            List<IRecovable> recovables = new List<IRecovable>(monsters);
-            // 회복가능 리스트에 플레이어를 가장 앞에 추가
-            recovables.Insert(0, player);
+            List<IDamagable> damagables = new List<IDamagable>(); // 현재 데미지를 입힐 수 있는 객체 리스트
+            List<IRecovable> recovables = new List<IRecovable>(); // 현재 회복 가능한 객체 리스트            
+            List<Item> currentItemsInBag = new List<Item>(); // 현재 가방에 있는 아이템 리스트
 
-            List<IDamagable> aliveDamagables = new List<IDamagable>(damagables);
-            List<IRecovable> aliveRecovables = new List<IRecovable>(recovables);
-
-            List<Item> currentItemsInBag = new List<Item>();
-
-            while (!player.IsDead && aliveDamagables.Count > 0)
+            while (true)
             {
+                // 죽을 수 있는 객체 리스트에서 죽은 객체를 제거
+                for (int i = motals.Count - 1; i >= 0; --i)
+                {
+                    if (motals[i].IsDead)
+                    {
+                        motals.RemoveAt(i);
+                    }
+                }
+
+                damagables.Clear();
+                recovables.Clear();
+                monsters.Clear();
+
+                foreach (IMortal mortal in motals)
+                {
+                    if (mortal is Monster monster)
+                    {
+                        monsters.Add(monster);
+                    }
+
+                    if (mortal is IDamagable damagable && damagable is not Player)
+                    {
+                        damagables.Add(damagable);
+                    }
+
+                    if (mortal is IRecovable recovable)
+                    {
+                        recovables.Add(recovable);
+                    }
+                }
+
+                if (player.IsDead || monsters.Count == 0)
+                {
+                    break;
+                }
+
                 Console.WriteLine(player.GetStatusText());
 
                 // 가방에 아이템이 하나도 없으면 아이템 사용 선택지를 보여주지 않는다.
@@ -120,13 +153,10 @@ namespace HuntMonster
                             Console.WriteLine();
                             Console.WriteLine("공격할 대상을 선택하세요.");
 
-                            if (TrySelectTarget<IDamagable>(aliveDamagables, out int targetNumber))
+                            isValidInput = TrySelectTarget<IDamagable>(damagables, out int selectedIndex);
+                            if (isValidInput)
                             {
-                                player.Attack(aliveDamagables[targetNumber - 1]);
-                            }
-                            else
-                            {
-                                isValidInput = false;
+                                player.Attack(damagables[selectedIndex]);
                             }
 
                             break;
@@ -137,16 +167,14 @@ namespace HuntMonster
                             Console.WriteLine();
                             Console.WriteLine("회복 대상을 선택하세요.");
 
-                            if (TrySelectTarget<IRecovable>(aliveRecovables, out int targetNumber))
+                            isValidInput = TrySelectTarget<IRecovable>(recovables, out int selectedIndex);
+                            if (isValidInput)
                             {
-                                aliveRecovables[targetNumber - 1].Heal(player.HealAmount);
+                                recovables[selectedIndex].Heal(player.HealAmount);
                             }
-                            else
-                            {
-                                isValidInput = false;
-                            }
+
+                            break;
                         }
-                        break;
 
                     case "3":
                         {
@@ -164,15 +192,12 @@ namespace HuntMonster
                             currentItemsInBag.Clear();
                             currentItemsInBag.AddRange(inventory.Bag.Values);
 
-                            if (TrySelectTarget<Item>(currentItemsInBag, out int targetNumber))
+                            isValidInput = TrySelectTarget<Item>(currentItemsInBag, out int selectedIndex);
+                            if (isValidInput)
                             {
-                                Item itemWillUse = currentItemsInBag[targetNumber - 1];
+                                Item itemWillUse = currentItemsInBag[selectedIndex];
 
                                 inventory.TryUseItem(itemWillUse.Name, player);
-                            }
-                            else
-                            {
-                                isValidInput = false;
                             }
 
                             break;
@@ -190,35 +215,12 @@ namespace HuntMonster
                     continue;
                 }
 
-                aliveDamagables.Clear();
-
-                for (int i = 0; i < damagables.Count; ++i)
+                foreach (Monster monster in monsters)
                 {
-                    IDamagable damagable = damagables[i];
-                    if (damagable.IsDead)
-                    {
-                        continue;
-                    }
-
-                    if (damagable is Monster monster)
+                    if (!monster.IsDead)
                     {
                         monster.AIAction(player);
                     }
-
-                    aliveDamagables.Add(damagable);
-                }
-
-                aliveRecovables.Clear();
-
-                for (int i = 0; i < recovables.Count; ++i)
-                {
-                    IRecovable recoverable = recovables[i];
-                    if (recoverable.IsDead)
-                    {
-                        continue;
-                    }
-
-                    aliveRecovables.Add(recoverable);
                 }
 
                 turnCount++;
@@ -236,7 +238,14 @@ namespace HuntMonster
             }
         }
 
-        static bool TrySelectTarget<T>(List<T> targets, out int targetNumber)
+        /// <summary>
+        /// 리스트에서 대상을 선택한다.
+        /// </summary>
+        /// <typeparam name="T">선택할 대상의 타입</typeparam>
+        /// <param name="targets">선택할 대상 리스트</param>
+        /// <param name="selectedTargetIndex">선택된 대상의 인덱스</param>
+        /// <returns>제대로 선택했다면 true, 아니면 false</returns>
+        private static bool TrySelectTarget<T>(IReadOnlyList<T> targets, out int selectedTargetIndex)
             where T : IIdentifier
         {
             for (int i = 0; i < targets.Count; ++i)
@@ -247,16 +256,20 @@ namespace HuntMonster
             }
 
             Console.Write(">> ");
-            if (!int.TryParse(Console.ReadLine(), out targetNumber) ||
-                targetNumber < 1 ||
-                targetNumber > targets.Count)
+            if (int.TryParse(Console.ReadLine(), out int targetNumber) &&
+                targetNumber >= 1 &&
+                targetNumber <= targets.Count)
             {
-                return false;
+                selectedTargetIndex = targetNumber - 1;
+
+                return true;
             }
 
             Console.WriteLine();
 
-            return true;
+            selectedTargetIndex = -1;
+
+            return false;
         }
     }
 }
