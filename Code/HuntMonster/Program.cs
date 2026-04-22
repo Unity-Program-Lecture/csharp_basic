@@ -4,16 +4,31 @@ namespace HuntMonster
 {
     using Day07;
 
-
     public class Program
     {
         static void Main(string[] args)
         {
             #region spawn player
 
-            Console.Write("플레이어 이름을 입력하세요 : ");
+            string? playerName;
 
-            Player player = new Player(Console.ReadLine(), 100, 10, 40);
+            do
+            {
+                Console.Write("플레이어 이름을 입력하세요 : ");
+
+                playerName = Console.ReadLine();
+                if (!string.IsNullOrEmpty(playerName))
+                {
+                    break;
+                }
+
+                Console.WriteLine("입력이 잘못되었습니다.");
+            }
+            while (true);
+
+            Player player = new Player(playerName, 100, 10, 40);
+
+            Console.WriteLine();
 
             #endregion
 
@@ -26,6 +41,8 @@ namespace HuntMonster
             Console.WriteLine("현재 가방");
             inventory.PrintItems();
 
+            Console.WriteLine();
+
             #endregion
 
             #region spawn monsters
@@ -37,14 +54,13 @@ namespace HuntMonster
                 new Skeleton("해골", 50, 10, 0)
             };
 
-            Console.WriteLine();
             Console.WriteLine("몬스터들이 나타났습니다!");
 
             for (int i = 0; i < monsters.Count; ++i)
             {
                 Monster monster = monsters[i];
 
-                Console.WriteLine($"{i + 1}. {monster.Name} HP : [{monster.Hp}] / ATK : [{monster.Atk}] / HEAL : [{monster.HealAmount}]");
+                Console.WriteLine($"{i + 1}. {monster.GetStatusText()}");
 
                 monster.SetDropItem(new PotionItem("포션(대)", 1, 100));
 
@@ -61,7 +77,7 @@ namespace HuntMonster
             itemBox.OnDropItemEvent += dropItem => inventory.AddItem(dropItem);
 
             Console.WriteLine("아이템이 들어있을지도 모르는 상자가 나타났습니다!");
-            Console.WriteLine($"{itemBox.Name} 내구도 : [{itemBox.Durability}]");
+            Console.WriteLine(itemBox.GetStatusText());
             Console.WriteLine();
 
             #endregion
@@ -71,14 +87,18 @@ namespace HuntMonster
             List<IDamagable> damagables = new List<IDamagable>(monsters);
             damagables.Add(itemBox);
 
-            List<IRecoverable> recoverables = new List<IRecoverable>(monsters);
+            List<IRecovable> recovables = new List<IRecovable>(monsters);
+            // 회복가능 리스트에 플레이어를 가장 앞에 추가
+            recovables.Insert(0, player);
 
             List<IDamagable> aliveDamagables = new List<IDamagable>(damagables);
-            List<IRecoverable> aliveRecoverables = new List<IRecoverable>(recoverables);
+            List<IRecovable> aliveRecovables = new List<IRecovable>(recovables);
+
+            List<Item> currentItemsInBag = new List<Item>();
 
             while (!player.IsDead && aliveDamagables.Count > 0)
             {
-                Console.WriteLine($"현재 {player.Name}의 Hp : [{player.Hp}]");
+                Console.WriteLine(player.GetStatusText());
 
                 // 가방에 아이템이 하나도 없으면 아이템 사용 선택지를 보여주지 않는다.
                 if (inventory.Bag.Count == 0)
@@ -97,23 +117,16 @@ namespace HuntMonster
                 {
                     case "1":
                         {
+                            Console.WriteLine();
                             Console.WriteLine("공격할 대상을 선택하세요.");
 
-                            for (int i = 0; i < aliveDamagables.Count; ++i)
+                            if (TrySelectTarget<IDamagable>(aliveDamagables, out int targetNumber))
                             {
-                                IDamagable aliveDamagable = aliveDamagables[i];
-
-                                Console.WriteLine($"{i + 1}. {aliveDamagable.Name} {aliveDamagable.GetStatusText()}");
-                            }
-
-                            Console.Write(">> ");
-                            if (!int.TryParse(Console.ReadLine(), out int targetNumber) || targetNumber < 1 || targetNumber > aliveDamagables.Count)
-                            {
-                                isValidInput = false;
+                                player.Attack(aliveDamagables[targetNumber - 1]);
                             }
                             else
                             {
-                                player.Attack(aliveDamagables[targetNumber - 1]);
+                                isValidInput = false;
                             }
 
                             break;
@@ -121,32 +134,16 @@ namespace HuntMonster
 
                     case "2":
                         {
+                            Console.WriteLine();
                             Console.WriteLine("회복 대상을 선택하세요.");
 
-                            Console.WriteLine($"0. {player.Name} HP : [{player.Hp}]");
-
-                            for (int i = 0; i < aliveRecoverables.Count; ++i)
+                            if (TrySelectTarget<IRecovable>(aliveRecovables, out int targetNumber))
                             {
-                                IRecoverable aliveRecoverable = aliveRecoverables[i];
-
-                                Console.WriteLine($"{i + 1}. {aliveRecoverable.Name} {aliveRecoverable.GetStatusText()}");
+                                aliveRecovables[targetNumber - 1].Heal(player.HealAmount);
                             }
-
-                            Console.Write(">> ");
-                            if (int.TryParse(Console.ReadLine(), out int healTargetNumber))
+                            else
                             {
-                                if (healTargetNumber == 0)
-                                {
-                                    player.Heal();
-                                }
-                                else if (healTargetNumber <= aliveRecoverables.Count)
-                                {
-                                    aliveRecoverables[healTargetNumber - 1].Heal(player.HealAmount);
-                                }
-                                else
-                                {
-                                    isValidInput = false;
-                                }
+                                isValidInput = false;
                             }
                         }
                         break;
@@ -161,34 +158,21 @@ namespace HuntMonster
                                 break;
                             }
 
+                            Console.WriteLine();
                             Console.WriteLine("사용할 아이템을 선택하세요.");
 
-                            List<Item> currentItems = new List<Item>();
-                            int itemNumber = 1;
+                            currentItemsInBag.Clear();
+                            currentItemsInBag.AddRange(inventory.Bag.Values);
 
-                            foreach (KeyValuePair<string, Item> pair in inventory.Bag)
+                            if (TrySelectTarget<Item>(currentItemsInBag, out int targetNumber))
                             {
-                                Item currentItem = pair.Value;
+                                Item itemWillUse = currentItemsInBag[targetNumber - 1];
 
-                                Console.WriteLine($"{itemNumber}. {currentItem.GetStatusText()}");
-
-                                itemNumber++;
-
-                                currentItems.Add(currentItem);
-                            }
-
-                            Console.Write(">> ");
-                            if (!int.TryParse(Console.ReadLine(), out int targetItemNumber) ||
-                                targetItemNumber < 1 ||
-                                targetItemNumber > currentItems.Count)
-                            {
-                                isValidInput = false;
+                                inventory.TryUseItem(itemWillUse.Name, player);
                             }
                             else
                             {
-                                Item itemWillUse = currentItems[targetItemNumber - 1];
-
-                                inventory.TryUseItem(itemWillUse.Name, player);
+                                isValidInput = false;
                             }
 
                             break;
@@ -224,17 +208,17 @@ namespace HuntMonster
                     aliveDamagables.Add(damagable);
                 }
 
-                aliveRecoverables.Clear();
+                aliveRecovables.Clear();
 
-                for (int i = 0; i < recoverables.Count; ++i)
+                for (int i = 0; i < recovables.Count; ++i)
                 {
-                    IRecoverable recoverable = recoverables[i];
+                    IRecovable recoverable = recovables[i];
                     if (recoverable.IsDead)
                     {
                         continue;
                     }
 
-                    aliveRecoverables.Add(recoverable);
+                    aliveRecovables.Add(recoverable);
                 }
 
                 turnCount++;
@@ -250,6 +234,29 @@ namespace HuntMonster
             {
                 Console.WriteLine("승리했습니다!!!");
             }
+        }
+
+        static bool TrySelectTarget<T>(List<T> targets, out int targetNumber)
+            where T : IIdentifier
+        {
+            for (int i = 0; i < targets.Count; ++i)
+            {
+                T target = targets[i];
+
+                Console.WriteLine($"{i + 1}. {target.GetStatusText()}");
+            }
+
+            Console.Write(">> ");
+            if (!int.TryParse(Console.ReadLine(), out targetNumber) ||
+                targetNumber < 1 ||
+                targetNumber > targets.Count)
+            {
+                return false;
+            }
+
+            Console.WriteLine();
+
+            return true;
         }
     }
 }

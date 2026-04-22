@@ -96,7 +96,7 @@
 
         public string GetStatusText()
         {
-            return $"내구도 : [{Hp}/{MaxHp}]";
+            return $"{Name} : 내구도[{Hp}/{MaxHp}]";
         }
 
         private void Destoy()

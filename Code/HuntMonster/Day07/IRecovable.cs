@@ -1,6 +1,6 @@
 ﻿namespace HuntMonster.Day07
 {
-    public interface IRecoverable : IIdentifier, IMortal
+    public interface IRecovable : IIdentifier, IMortal
     {
         int HealAmount { get; }
 

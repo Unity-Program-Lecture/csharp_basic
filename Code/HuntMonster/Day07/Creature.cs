@@ -1,6 +1,6 @@
 ﻿namespace HuntMonster.Day07
 {
-    public class Creature : IIdentifier, IDamagable, IAttackable, IRecoverable, IMortal
+    public class Creature : IIdentifier, IDamagable, IAttackable, IRecovable, IMortal
     {
         #region IIdentifier 구현부
 
@@ -8,7 +8,7 @@
 
         public string GetStatusText()
         {
-            return $"Hp : [{Hp}/{MaxHp}], 공격력 : [{Atk}], 회복력 : [{HealAmount}]";
+            return $"{Name} : HP[{Hp}/{MaxHp}], 공격력[{Atk}], 회복력[{HealAmount}]";
         }
 
         #endregion
