@@ -6,6 +6,27 @@
 
 ## 1. Stack(스택): "프링글스 통"
 나중에 들어온 데이터가 먼저 나가는 구조입니다. (**LIFO**: Last-In, First-Out)
+
+```mermaid
+graph TD
+    Push((Push)) -- "입력" --> Item3
+    Pop((Pop)) -. "출력" .-> Item3
+
+    subgraph "Stack (LIFO: 후입선출)"
+        direction TB
+        Item3["3. 마지막 데이터 (Top)"]
+        Item2["2. 중간 데이터"]
+        Item1["1. 처음 데이터 (Bottom)"]
+        
+        Item3 --- Item2
+        Item2 --- Item1
+    end
+    
+    style Item3 fill:#f9f,stroke:#333,stroke-width:4px
+    style Push fill:#e1f5fe,stroke:#01579b
+    style Pop fill:#fff9c4,stroke:#fbc02d
+```
+
 - **`Push()`**: 통에 감자칩을 넣습니다.
 - **`Pop()`**: 맨 위에 있는 감자칩을 꺼냅니다. (데이터가 통에서 사라집니다!)
 - **`Peek()`**: 맨 위에 뭐가 있는지 훔쳐보기만 합니다. (데이터는 그대로 유지)
@@ -49,6 +70,25 @@ namespace Day09
 
 ## 2. Queue(큐): "맛집 대기줄"
 먼저 들어온 데이터가 먼저 나가는 정직한 구조입니다. (**FIFO**: First-In, First-Out)
+
+```mermaid
+graph LR
+    subgraph "Queue (FIFO: 선입선출)"
+        direction LR
+        Back[3. 마지막 데이터]
+        Mid[2. 중간 데이터]
+        Front[1. 먼저 들어온 데이터]
+        Back --- Mid
+        Mid --- Front
+    end
+    Enqueue((Enqueue)) -- "뒤로 입장" --> Back
+    Front -- "앞으로 퇴장" --> Dequeue((Dequeue))
+    
+    style Front fill:#f9f,stroke:#333,stroke-width:4px
+    style Enqueue fill:#e1f5fe,stroke:#01579b
+    style Dequeue fill:#fff9c4,stroke:#fbc02d
+```
+
 - **`Enqueue()`**: 줄의 맨 뒤에 서는 것입니다.
 - **`Dequeue()`**: 맨 앞 사람을 입장시키는 것입니다. (줄에서 사라집니다!)
 
