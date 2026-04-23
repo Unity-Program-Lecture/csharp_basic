@@ -6,8 +6,19 @@ namespace HuntMonster
 
     public class Program
     {
+        static void Swap<T>(ref T a, ref T b)
+            where T : struct
+        {
+            T temp = a;
+            a = b;
+            b = temp;
+        }
+
         static void Main(string[] args)
         {
+            List<IDamagable> damagables = new List<IDamagable>(); // 현재 데미지를 입힐 수 있는 객체 리스트
+            List<IRecovable> recovables = new List<IRecovable>(); // 현재 회복 가능한 객체 리스트            
+
             #region spawn player
 
             string? playerName;
@@ -64,7 +75,16 @@ namespace HuntMonster
 
                 monster.SetDropItem(new PotionItem("포션(대)", 1, 100));
 
+                monster.OnDeadEvent += () =>
+                {
+                    monsters.Remove(monster);
+                    damagables.Remove(monster);
+                    recovables.Remove(monster);
+                };
                 monster.OnDropItemEvent += dropItem => inventory.AddItem(dropItem);
+
+                damagables.Add(monster);
+                recovables.Add(monster);
             }
 
             Console.WriteLine();
@@ -74,7 +94,13 @@ namespace HuntMonster
             #region spawn item box
 
             ItemBox itemBox = new ItemBox("[?] 상자", 4, new PotionItem("포션(초대형)", 10, 200));
+            itemBox.OnDeadEvent += () =>
+            {
+                damagables.Remove(itemBox);
+            };
             itemBox.OnDropItemEvent += dropItem => inventory.AddItem(dropItem);
+
+            damagables.Add(itemBox);
 
             Console.WriteLine("아이템이 들어있을지도 모르는 상자가 나타났습니다!");
             Console.WriteLine(itemBox.GetStatusText());
@@ -84,53 +110,10 @@ namespace HuntMonster
 
             int turnCount = 1;
 
-            List<IMortal> motals = new List<IMortal>(); // 죽을 수 있는 객체 리스트
-            motals.Add(player);// 플레이어를 추가
-            motals.AddRange(monsters); // 몬스터를 모두 추가
-            motals.Add(itemBox); // 아이템박스를 추가
-
-            List<IDamagable> damagables = new List<IDamagable>(); // 현재 데미지를 입힐 수 있는 객체 리스트
-            List<IRecovable> recovables = new List<IRecovable>(); // 현재 회복 가능한 객체 리스트            
             List<Item> currentItemsInBag = new List<Item>(); // 현재 가방에 있는 아이템 리스트
 
-            while (true)
+            while (!player.IsDead && monsters.Count > 0)
             {
-                // 죽을 수 있는 객체 리스트에서 죽은 객체를 제거
-                for (int i = motals.Count - 1; i >= 0; --i)
-                {
-                    if (motals[i].IsDead)
-                    {
-                        motals.RemoveAt(i);
-                    }
-                }
-
-                damagables.Clear();
-                recovables.Clear();
-                monsters.Clear();
-
-                foreach (IMortal mortal in motals)
-                {
-                    if (mortal is Monster monster)
-                    {
-                        monsters.Add(monster);
-                    }
-
-                    if (mortal is IDamagable damagable && damagable is not Player)
-                    {
-                        damagables.Add(damagable);
-                    }
-
-                    if (mortal is IRecovable recovable)
-                    {
-                        recovables.Add(recovable);
-                    }
-                }
-
-                if (player.IsDead || monsters.Count == 0)
-                {
-                    break;
-                }
-
                 Console.WriteLine(player.GetStatusText());
 
                 // 가방에 아이템이 하나도 없으면 아이템 사용 선택지를 보여주지 않는다.
@@ -217,10 +200,7 @@ namespace HuntMonster
 
                 foreach (Monster monster in monsters)
                 {
-                    if (!monster.IsDead)
-                    {
-                        monster.AIAction(player);
-                    }
+                    monster.AIAction(player);
                 }
 
                 turnCount++;

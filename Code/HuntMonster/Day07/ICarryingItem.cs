@@ -1,11 +1,11 @@
 ﻿namespace HuntMonster.Day07
 {
-    public delegate void OnDropItem(Item dropItem);
-
     public interface ICarryingItem
     {
-        Item DropItem { get; }
+        delegate void OnDropItem(Item dropItem);
 
         event OnDropItem OnDropItemEvent;
+
+        Item Item { get; }
     }
 }

@@ -2,6 +2,10 @@
 {
     public interface IMortal : IIdentifier
     {
+        delegate void OnDead();
+
+        event OnDead OnDeadEvent;
+
         bool IsDead { get; }
     }
 }

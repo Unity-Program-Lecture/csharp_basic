@@ -127,8 +127,9 @@
             }
         }
 
-        #endregion
+        public event IMortal.OnDead OnDeadEvent;
 
+        #endregion
 
         public Creature(string name, int maxHp, int atk, int healAmount)
         {
@@ -138,11 +139,13 @@
             HealAmount = healAmount;
         }
 
-        protected virtual void Die()
+        private void Die()
         {
             Console.WriteLine($"<{Name}>가(이) 사망했습니다.");
 
             Hp = 0;
+
+            OnDeadEvent?.Invoke();
         }
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace HuntMonster.Day07
+﻿using static HuntMonster.Day07.ICarryingItem;
+using static HuntMonster.Day07.IMortal;
+
+namespace HuntMonster.Day07
 {
-    public class ItemBox : IIdentifier, IDamagable, ICarryingItem
+    public class ItemBox : IIdentifier, IDamagable, ICarryingItem, IMortal
     {
         private int _hp;
         private int _maxHp;
@@ -64,8 +67,9 @@
             }
         }
 
-        public Item DropItem => _dropItem;
+        public Item Item => _dropItem;
 
+        public event OnDead OnDeadEvent;
         public event OnDropItem OnDropItemEvent;
 
         /// <summary>
@@ -78,6 +82,8 @@
             Name = name;
             _hp = _maxHp = maxDurability;
             _dropItem = dropItem;
+
+            OnDeadEvent += () => OnDropItemEvent?.Invoke(_dropItem);
         }
 
         public void TakeDamage(int damage)
@@ -103,9 +109,9 @@
         {
             Hp = 0;
 
-            Console.WriteLine($"<{Name}>가(이) 파괴되었습니다.");
+            OnDeadEvent?.Invoke();
 
-            OnDropItemEvent?.Invoke(DropItem);
+            Console.WriteLine($"<{Name}>가(이) 파괴되었습니다.");
         }
     }
 }

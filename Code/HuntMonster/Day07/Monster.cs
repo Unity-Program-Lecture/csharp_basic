@@ -1,18 +1,27 @@
-﻿namespace HuntMonster.Day07
+﻿using static HuntMonster.Day07.ICarryingItem;
+
+namespace HuntMonster.Day07
 {
     class Monster : Creature, ICarryingItem
     {
         public event OnDropItem OnDropItemEvent;
 
-        public Item DropItem { get; private set; }
+        public Item Item { get; private set; }
 
         public Monster(string name, int maxHp, int atk, int healAmount) : base(name, maxHp, atk, healAmount)
         {
+            OnDeadEvent += () =>
+            {
+                if (Item is not null)
+                {
+                    OnDropItemEvent?.Invoke(Item);
+                }
+            };
         }
 
         public void SetDropItem(Item dropItem)
         {
-            DropItem = dropItem;
+            Item = dropItem;
         }
 
         public virtual void AIAction(Creature target)
@@ -24,16 +33,6 @@
             else
             {
                 Attack(target);
-            }
-        }
-
-        protected override void Die()
-        {
-            base.Die();
-
-            if (DropItem is not null)
-            {
-                OnDropItemEvent?.Invoke(DropItem);
             }
         }
     }
