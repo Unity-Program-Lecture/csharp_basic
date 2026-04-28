@@ -118,14 +118,15 @@ namespace Day04
 
 ---
 
-## 3. 오버라이딩(Overriding): "물려받은 기술 재창조"
-부모의 기능이 마음에 들지 않거나, 자식마다 다르게 행동해야 할 때 기능을 **'덮어쓰기'**하는 것입니다.
+## 3. 오버라이딩(Overriding)과 추상화(Abstract)
+부모의 기능이 마음에 들지 않거나, 자식마다 **반드시 다르게 행동해야 할 때** 기능을 재정의하거나 강제하는 기술입니다.
 
 ### 💡 이 단어는 무슨 뜻인가요?
-- **`virtual` (버추얼)**: "이 기능은 자식이 **바꿀 수 있게 허용**하겠다"는 뜻입니다. (부모 쪽에 작성)
-- **`override` (오버라이드)**: "부모가 준 기능을 **내가 다시 정의**하겠다"는 뜻입니다. (자식 쪽에 작성)
+- **`virtual` (가상)**: "이 기능은 자식이 **바꿀 수 있게 허용**하겠다"는 뜻입니다. (기본 구현이 있음)
+- **`override` (재정의)**: "부모가 준 기능을 **내가 다시 정의**하겠다"는 뜻입니다.
+- **`abstract` (추상)**: "실체는 없고 **선언만 존재**한다"는 뜻입니다. 추상 클래스는 직접 객체(`new`)를 만들 수 없으며, 자식 클래스에서 **반드시** 구현하도록 강제합니다.
 
-### 💻 실습 예제: 몬스터마다 다른 울음소리
+### 💻 실습 예제 1: 몬스터마다 다른 울음소리 (virtual)
 **미션:** 부모 클래스의 가상 메소드(virtual)를 자식 클래스에서 재정의(override)하여 각 객체마다 고유한 동작을 수행하도록 구현해 보세요.
 
 <details>
@@ -169,6 +170,62 @@ namespace Day04
 
             s.Cry(); // "푸슉푸슉~" 출력
             d.Cry(); // "크워어어어어!" 출력
+        }
+    }
+}
+```
+
+</details>
+
+### 💻 실습 예제 2: "반드시" 사용해야 하는 스킬 (abstract)
+**미션:** 모든 스킬은 '사용'되어야 하지만 방식은 제각각입니다. 부모 클래스에서 구현부 없이 이름만 선언하고(abstract), 자식에서 이를 완성해 보세요.
+
+<details>
+<summary>코드 보기</summary>
+
+```csharp
+using System;
+
+namespace Day04
+{
+    // 추상 클래스: "스킬"이라는 개념만 존재 (객체 생성 불가)
+    abstract class Skill
+    {
+        public string skillName;
+        
+        // 추상 메소드: 내용({})이 없고 이름만 있음. 자식은 무조건 override 해야 함!
+        public abstract void Use(); 
+    }
+
+    class FireBall : Skill
+    {
+        public FireBall() { skillName = "화염구"; }
+        public override void Use()
+        {
+            Console.WriteLine("{0} 발사! 거대한 폭발이 일어납니다.", skillName);
+        }
+    }
+
+    class Heal : Skill
+    {
+        public Heal() { skillName = "치유"; }
+        public override void Use()
+        {
+            Console.WriteLine("{0} 시전! 체력이 회복됩니다.", skillName);
+        }
+    }
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            // Skill s = new Skill(); // 에러! 추상 클래스는 직접 만들 수 없음
+            
+            Skill s1 = new FireBall();
+            Skill s2 = new Heal();
+
+            s1.Use();
+            s2.Use();
         }
     }
 }
