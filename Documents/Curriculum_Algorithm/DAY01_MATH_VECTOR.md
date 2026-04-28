@@ -112,6 +112,90 @@
 *[그림 1-3] 공간상의 한 점(2, 3, 4)을 가리키는 벡터 화살표*
 </div>
 
+### 📍 벡터의 주요 연산 (Vector Operations)
+게임 개발에서 벡터 연산은 오브젝트의 이동, 방향 전환, 거리 계산 등에 필수적으로 사용됩니다.
+
+#### 1. 벡터의 덧셈 (Addition)
+- **방법**: 각 성분(x, y, z)끼리 더합니다. ($A + B = (x_1+x_2, y_1+y_2)$)
+- **의미**: **연속적인 이동**. A만큼 이동한 후 B만큼 더 이동했을 때의 최종 위치를 나타냅니다.
+
+<div align="center">
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#34495e" /></marker>
+    <marker id="arr-res" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
+  </defs>
+  <line x1="50" y1="150" x2="130" y2="100" stroke="#f1c40f" stroke-width="3" marker-end="url(#arr)" />
+  <text x="80" y="120" fill="#d35400" font-weight="bold">A</text>
+  <line x1="130" y1="100" x2="230" y2="120" stroke="#f1c40f" stroke-width="3" marker-end="url(#arr)" />
+  <text x="180" y="105" fill="#d35400" font-weight="bold">B</text>
+  <line x1="50" y1="150" x2="223" y2="123" stroke="#2ecc71" stroke-width="4" stroke-dasharray="4" marker-end="url(#arr-res)" />
+  <text x="130" y="160" fill="#27ae60" font-weight="bold">A + B</text>
+</svg>
+</div>
+
+#### 2. 벡터의 뺄셈 (Subtraction) ⭐️ 핵심 중의 핵심
+- **방법**: 각 성분끼리 뺍니다. ($B - A = (x_2-x_1, y_2-y_1)$)
+- **의미**: **"A에서 B로 가려면 어디로 얼마나 가야 하는가?"** (방향과 거리)
+- **실무 활용**: 몬스터가 플레이어를 추적할 때, **(플레이어 위치 - 몬스터 위치)**를 계산하면 몬스터가 움직여야 할 방향이 나옵니다.
+- **암기법**: **"타겟(Target) - 나(Self)"** 또는 **"나중 - 처음"**
+
+<div align="center">
+<svg width="400" height="250" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 가이드 라인 -->
+  <path d="M 50 200 L 350 200" stroke="#eee" stroke-width="1" />
+  <path d="M 50 50 L 50 200" stroke="#eee" stroke-width="1" />
+  
+  <!-- 원점과 위치 벡터 -->
+  <circle cx="50" cy="200" r="3" fill="#34495e" />
+  <text x="35" y="215" fill="#7f8c8d" font-size="10">Origin</text>
+
+  <!-- 벡터 A (나 / 시작점) -->
+  <line x1="50" y1="200" x2="130" y2="130" stroke="#bdc3c7" stroke-width="1" stroke-dasharray="2" />
+  <circle cx="130" cy="130" r="12" fill="#3498db" />
+  <text x="115" y="155" fill="#2980b9" font-weight="bold" font-size="12">나 (A)</text>
+
+  <!-- 벡터 B (목표 / 타겟) -->
+  <line x1="50" y1="200" x2="280" y2="70" stroke="#bdc3c7" stroke-width="1" stroke-dasharray="2" />
+  <circle cx="280" cy="70" r="12" fill="#e74c3c" />
+  <text x="270" y="95" fill="#c0392b" font-weight="bold" font-size="12">목표 (B)</text>
+
+  <!-- 결과 벡터 B - A (A에서 B로 향하는 화살표) -->
+  <defs>
+    <marker id="arrow-sub" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" />
+    </marker>
+  </defs>
+  <line x1="130" y1="130" x2="272" y2="74" stroke="#2ecc71" stroke-width="4" marker-end="url(#arrow-sub)" />
+  
+  <!-- 설명 텍스트 -->
+  <text x="160" y="115" fill="#27ae60" font-weight="bold" font-size="14" transform="rotate(-23, 160, 115)">B - A (추적 방향)</text>
+  <rect x="230" y="180" width="140" height="50" rx="5" fill="#f9f9f9" stroke="#ddd" />
+  <text x="240" y="200" fill="#333" font-size="11" font-weight="bold">결과: A에서 시작해서</text>
+  <text x="240" y="218" fill="#333" font-size="11" font-weight="bold">B로 끝나는 화살표</text>
+</svg>
+</div>
+
+> 🎯 **직관적 이해**: "내가(A) 목표(B)를 맞추기 위해 쏴야 하는 화살표가 바로 **B - A**입니다." 거꾸로 **A - B**를 하면 목표가 나를 쏘는 방향(도망쳐야 할 방향)이 됩니다.
+
+#### 3. 스칼라 곱 (Scalar Multiplication)
+- **방법**: 벡터에 숫자(스칼라)를 곱합니다. ($k \cdot A = (kx, ky)$)
+- **의미**: 방향은 유지한 채 **길이(크기)**만 늘리거나 줄입니다. (예: 이동 속도 조절)
+
+#### 4. 정규화 (Normalization)
+- **의미**: 벡터의 크기를 **1**로 만드는 과정입니다. 이를 **단위 벡터(Unit Vector)**라고 부릅니다.
+- **용도**: 순수하게 **'방향'** 정보만 필요할 때 사용합니다.
+- **유니티**: `Vector3.normalized` 속성을 사용합니다.
+
+<div align="center">
+<svg width="300" height="120" viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg">
+  <line x1="30" y1="60" x2="250" y2="60" stroke="#f1c40f" stroke-width="8" opacity="0.3" />
+  <text x="200" y="50" fill="#7f8c8d" font-size="12">Original Vector (Length: 5)</text>
+  <line x1="30" y1="60" x2="80" y2="60" stroke="#2980b9" stroke-width="4" marker-end="url(#v-b)" />
+  <text x="35" y="85" fill="#2980b9" font-weight="bold">Normalized (Length: 1)</text>
+</svg>
+</div>
+
 ---
 
 ## 2. 💻 실습 (70%): 유니티 Transform 제어
