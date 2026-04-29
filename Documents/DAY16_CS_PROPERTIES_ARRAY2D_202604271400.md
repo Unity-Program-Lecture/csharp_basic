@@ -68,7 +68,7 @@ for (int y = 0; y < 3; y++)
 
 ---
 
-## 3. 시니어의 팁: `StringBuilder`
+## 3. 팁: `StringBuilder`
 문자열(`string`)을 `+` 기호로 너무 많이 합치면 컴퓨터가 힘들어합니다. 문자열을 아주 많이 합쳐야 할 때는 '문자열 전용 건설 현장'인 **`StringBuilder`**를 사용하세요.
 
 ---
