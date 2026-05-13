@@ -14,6 +14,10 @@ void PrintData<T>(T data)
 {
     Debug.Log($"데이터 출력: {data}");
 }
+
+// 사용 예시
+PrintData<int>(10);
+PrintData<string>("Hello");
 ```
 
 ### 1-2. 제네릭 클래스 & 구조체 (Generic Class/Struct)
@@ -39,6 +43,13 @@ public struct Pair<T>
     public T first;
     public T second;
 }
+
+// 사용 예시
+ItemBox<int> intBox = new ItemBox<int>();
+intBox.SetItem(100);
+
+Pair<string> namePair = new Pair<string> { first = "Kim", second = "Lee" };
+```
 ```
 
 ### 1-3. 제네릭 인터페이스 (Generic Interface)

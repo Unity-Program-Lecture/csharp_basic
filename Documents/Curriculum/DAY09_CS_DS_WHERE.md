@@ -7,15 +7,39 @@
 ## 1. Stack (스택): "접시 쌓기"
 나중에 들어온 것이 먼저 나갑니다. (LIFO)
 
+```csharp
+Stack<string> pages = new Stack<string>();
+pages.Push("네이버");
+pages.Push("구글");
+
+string lastPage = pages.Pop(); // "구글"이 나옴
+```
+
 ---
 
 ## 2. Queue (큐): "줄 서기"
 먼저 들어온 것이 먼저 나갑니다. (FIFO)
 
+```csharp
+Queue<string> waitList = new Queue<string>();
+waitList.Enqueue("1번 손님");
+waitList.Enqueue("2번 손님");
+
+string next = waitList.Dequeue(); // "1번 손님"이 나옴
+```
+
 ---
 
 ## 3. 제네릭 제약 조건 (where): "만능 틀의 문지기"
 "이런 특징을 가진 놈만 들어와!"라고 제한하는 문구입니다.
+
+```csharp
+// T는 반드시 클래스여야 함
+class Box<T> where T : class { }
+
+// T는 반드시 특정 인터페이스를 구현해야 함
+void Attack<T>(T target) where T : IDamageable { }
+```
 
 ---
 

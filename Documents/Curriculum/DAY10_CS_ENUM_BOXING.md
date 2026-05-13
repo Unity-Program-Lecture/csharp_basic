@@ -7,12 +7,29 @@
 ## 1. 열거형(Enum): "숫자에 붙인 이름표"
 숫자 대신 사람이 이해하기 쉬운 이름으로 상태를 관리합니다.
 
+```csharp
+public enum ItemType 
+{
+    Weapon,   // 0
+    Armor,    // 1
+    Potion    // 2
+}
+
+ItemType myItem = ItemType.Weapon;
+```
+
 ---
 
 ## 2. Boxing & Unboxing: "선물 포장"
 - **Boxing**: 값 형식을 상자에 담아 힙(Heap)으로 보내는 것.
 - **Unboxing**: 상자에서 데이터를 꺼내는 것.
 - **주의**: 자주 발생하면 성능이 떨어집니다.
+
+```csharp
+int n = 10;
+object obj = n;      // Boxing (값 -> 참조)
+int m = (int)obj;    // Unboxing (참조 -> 값)
+```
 
 ---
 
