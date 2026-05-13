@@ -7,11 +7,40 @@
 ## 1. 상속(Inheritance): "부모님께 물려받기"
 이미 만들어진 클래스의 기능을 그대로 가져와 새로운 기능을 덧붙이는 것입니다.
 
+```csharp
+public class Animal 
+{
+    public void Eat() { Debug.Log("냠냠 먹습니다."); }
+}
+
+// Animal의 기능을 물려받음
+public class Dog : Animal 
+{
+    public void Bark() { Debug.Log("멍멍!"); }
+}
+```
+
 ---
 
 ## 2. this vs base (나 vs 부모)
 - **`this`**: "지금 이 객체(나)"를 가리킵니다.
 - **`base`**: "나를 만든 부모님"을 가리킵니다.
+
+```csharp
+public class Parent
+{
+    public Parent(string msg) { Debug.Log($"부모 생성자: {msg}"); }
+}
+
+public class Child : Parent
+{
+    // base()를 통해 부모 생성자에 데이터를 전달
+    public Child() : base("안녕!") 
+    {
+        Debug.Log("자식 생성자 호출");
+    }
+}
+```
 
 ---
 
@@ -19,6 +48,18 @@
 부모의 기능을 자식의 방식대로 바꾸고 싶을 때 사용합니다.
 - **`virtual`**: 부모가 수정을 허락함.
 - **`override`**: 자식이 재정의함.
+
+```csharp
+public class Player
+{
+    public virtual void Move() { Debug.Log("천천히 걷습니다."); }
+}
+
+public class Warrior : Player
+{
+    public override void Move() { Debug.Log("빠르게 달려갑니다!"); }
+}
+```
 
 ---
 
