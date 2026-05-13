@@ -47,6 +47,31 @@ public class Child : Parent
 2. **부모의 "기본 생성자"가 없을 때**: 부모 클래스에 매개변수가 있는 생성자를 하나라도 직접 만들면, 컴파일러는 더 이상 **기본 생성자(매개변수 없는 것)**를 자동으로 만들어주지 않습니다.
 3. **명시적 약속**: 자식 입장에서는 부모의 영역을 어떻게 초기화할지 선택해야 합니다. 부모에게 기본 생성자가 없다면, 자식은 반드시 `base(값)`을 통해 "부모님, 이 데이터로 초기화해주세요!"라고 명시적으로 알려줘야만 합니다.
 
+```csharp
+public class Parent 
+{
+    public string name;
+    // 매개변수가 있는 생성자를 직접 만들면 -> 기본 생성자가 사라짐!
+    public Parent(string name) { this.name = name; }
+}
+
+public class Child : Parent 
+{
+    /* 
+    // [에러 발생!] 부모에게 매개변수 없는 생성자가 없어서 자동으로 연결할 수 없음
+    public Child() 
+    { 
+    } 
+    */
+
+    // [정상] base()를 사용하여 부모의 생성자 규격에 맞춰 데이터를 전달함
+    public Child(string name) : base(name) 
+    {
+        Debug.Log("부모의 name 변수까지 안전하게 초기화 완료!");
+    }
+}
+```
+
 ---
 
 ## 3. 오버라이딩 (virtual & override)
