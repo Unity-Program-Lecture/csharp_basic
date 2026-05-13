@@ -32,12 +32,19 @@ public struct Point
 3. **상속 불가**: 다른 구조체나 클래스로부터 상속을 받을 수 없습니다.
 
 ```csharp
-// 1. 값 형식 확인
+// --- 1. 구조체 (값 형식) : "내용물 복사" ---
 Point p1 = new Point(10, 10);
-Point p2 = p1; // p1의 내용이 p2로 '복사'됨
+Point p2 = p1; // p1의 내용이 p2로 통째로 복사됨 (별개의 상자)
 p2.x = 20;     // p2를 바꿔도 p1은 그대로 10!
 
-// 2. 상속 불가 (에러 발생)
+// --- 2. 클래스 (참조 형식) : "주소 복사" ---
+public class PointClass { public int x; }
+
+PointClass c1 = new PointClass { x = 10 };
+PointClass c2 = c1; // c1의 '위치 주소'가 c2로 복사됨 (같은 상자를 가리킴)
+c2.x = 20;          // c2를 바꾸면? c1.x도 20으로 바뀜! (충격)
+
+// 3. 상속 불가 (구조체만의 특징)
 // public struct SuperPoint : Point { } 
 ```
 
