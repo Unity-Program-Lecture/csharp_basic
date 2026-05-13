@@ -23,14 +23,67 @@ m.Move();
 
 ---
 
-## 2. 접근 한정자 (Access Modifiers): "문지기"
+## 2. 생성자 (Constructor): "객체의 탄생과 초기화"
+객체가 생성될 때(`new`) 자동으로 호출되는 특별한 함수입니다. 주로 변수의 초기값을 설정할 때 사용합니다.
+
+### 🐣 기본 생성자 (Default Constructor)
+매개변수가 없는 생성자입니다. 클래스에 생성자를 하나도 만들지 않으면 컴파일러가 자동으로 빈 기본 생성자를 만들어줍니다.
+
+```csharp
+public class Player
+{
+    public string name;
+    // 기본 생성자
+    public Player() 
+    {
+        name = "이름 없음";
+        Debug.Log("플레이어가 탄생했습니다.");
+    }
+}
+```
+
+### ⚡ 생성자 오버로딩 (Constructor Overloading)
+매개변수의 개수나 타입을 다르게 하여, 여러 가지 방식으로 객체를 초기화할 수 있게 하는 기술입니다.
+
+```csharp
+public class Monster
+{
+    public string name;
+    public int hp;
+
+    // 1. 기본 생성자
+    public Monster() 
+    {
+        name = "평범한 몬스터";
+        hp = 100;
+    }
+
+    // 2. 오버로딩된 생성자 (이름만 받기)
+    public Monster(string name)
+    {
+        this.name = name;
+        this.hp = 100;
+    }
+
+    // 3. 오버로딩된 생성자 (이름과 체력 모두 받기)
+    public Monster(string name, int hp)
+    {
+        this.name = name;
+        this.hp = hp;
+    }
+}
+```
+
+---
+
+## 3. 접근 한정자 (Access Modifiers): "문지기"
 - **public**: 누구나 접근 가능 (광장)
 - **private**: 나만 접근 가능 (비밀 일기장). 클래스 내부에서만 보입니다.
 - **protected**: 자식 클래스에게만 공개합니다.
 
 ---
 
-## 3. 프로퍼티 (Property): "안전한 데이터 창구"
+## 4. 프로퍼티 (Property): "안전한 데이터 창구"
 변수를 `public`으로 두면 외부에서 마음대로 값을 바꿀 수 있어 위험합니다. 프로퍼티는 데이터를 보호하면서도 외부와 소통하게 해줍니다.
 
 ---
