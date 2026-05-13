@@ -11,6 +11,18 @@
 - **`await`**: "이 작업이 끝날 때까지 여기서 잠시 기다려줘"라고 말합니다. (하지만 프로그램 전체가 멈추는 것은 아닙니다!)
 - **`Task`**: 비동기 작업의 단위입니다.
 
+```csharp
+using System.Threading.Tasks;
+
+// 비동기 함수 정의
+async Task DoSomethingAsync() 
+{
+    // 1초 동안 기다림 (프로그램은 멈추지 않음)
+    await Task.Delay(1000); 
+    Debug.Log("비동기 작업 완료!");
+}
+```
+
 ---
 
 ## 💻 실습 예제: 네트워크 데이터 로딩 시뮬레이션
