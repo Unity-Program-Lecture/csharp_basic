@@ -1,4 +1,4 @@
-# 🚀 Day 04: 구조체 (Struct) - "가볍고 빠른 데이터 상자"
+# 🚀 Day 05: 구조체 (Struct) - "가볍고 빠른 데이터 상자"
 
 오늘의 목표는 "**클래스와 비슷하지만 다른 구조체(Struct)를 배우고, 값 형식의 데이터 복사 원리를 이해한다**"입니다.
 
@@ -38,7 +38,7 @@ public struct Position
     }
 }
 
-public class Day04_Practice : MonoBehaviour
+public class Day05_Practice : MonoBehaviour
 {
     void Start()
     {
@@ -70,8 +70,8 @@ public class Day04_Practice : MonoBehaviour
 
 ## 🎯 종합 연습 문제
 
-### [심화 미션: 몬스터 사냥 시스템 (Level 3)]
-3일차 시스템에 **구조체**를 도입하여 몬스터의 보상 정보와 위치 정보를 추가합니다.
+### [심화 미션: 몬스터 사냥 시스템 (Level 4)]
+4일차 시스템에 **구조체**를 도입하여 몬스터의 보상 정보와 위치 정보를 추가합니다.
 
 **[요구 사항]**
 1. 보상 정보를 담는 `Reward` 구조체를 만드세요. (필드: `string itemName`, `int gold`)

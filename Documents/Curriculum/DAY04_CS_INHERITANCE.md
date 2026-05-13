@@ -1,4 +1,4 @@
-# 🚀 Day 05: 상속과 다형성 (전통과 개성)
+# 🚀 Day 04: 상속과 다형성 (전통과 개성)
 
 오늘의 목표는 "**부모의 기능을 물려받는 상속을 배우고, 자식만의 개성을 더하는 오버라이딩을 마스터한다**"입니다.
 
@@ -46,7 +46,7 @@ public class Orc : Monster
     }
 }
 
-public class Day05_Practice : MonoBehaviour
+public class Day04_Practice : MonoBehaviour
 {
     void Start()
     {
@@ -67,7 +67,7 @@ public class Day05_Practice : MonoBehaviour
 
 ## 🎯 종합 연습 문제
 
-### [심화 미션: 몬스터 사냥 시스템 (Level 4)]
+### [심화 미션: 몬스터 사냥 시스템 (Level 3)]
 **상속**과 **다형성**을 활용하여 일반 몬스터와 보스 몬스터를 구분하고 다른 행동을 하도록 만듭니다.
 
 **[요구 사항]**
