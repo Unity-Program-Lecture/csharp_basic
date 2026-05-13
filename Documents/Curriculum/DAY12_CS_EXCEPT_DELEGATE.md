@@ -7,10 +7,36 @@
 ## 1. 예외 처리 (Exception): "에어백 설치"
 `try-catch-finally`를 사용하여 예상치 못한 에러에도 프로그램이 멈추지 않게 합니다.
 
+```csharp
+try 
+{
+    int[] arr = new int[2];
+    arr[5] = 10; // 에러 발생!
+}
+catch (System.IndexOutOfRangeException e) 
+{
+    Debug.LogError($"배열 범위 초과: {e.Message}");
+}
+finally 
+{
+    Debug.Log("이 코드는 무조건 실행됩니다.");
+}
+```
+
 ---
 
 ## 2. 델리게이트 (Delegate): "심부름꾼"
 함수 자체를 변수에 담아 전달하는 기술입니다.
+
+```csharp
+public delegate void MyDelegate(string msg);
+
+void ShowMessage(string message) { Debug.Log(message); }
+
+// 사용 예시
+MyDelegate del = ShowMessage;
+del("안녕!");
+```
 
 ---
 

@@ -7,10 +7,32 @@
 ## 1. 2차원 배열: "평면 공간 데이터"
 행과 열을 가진 바둑판 형태의 배열입니다. `map[y, x]` 순서로 접근합니다.
 
+```csharp
+int[,] map = new int[5, 5];
+map[0, 0] = 1; // 0행 0열에 1 대입
+
+// 선언과 동시에 초기화
+int[,] grid = {
+    { 1, 2 },
+    { 3, 4 }
+};
+```
+
 ---
 
 ## 2. StringBuilder: "문자열 건설 현장"
 문자열을 아주 많이 합쳐야 할 때 메모리 낭비를 줄이기 위해 사용합니다.
+
+```csharp
+using System.Text;
+
+StringBuilder sb = new StringBuilder();
+sb.Append("Hello ");
+sb.AppendLine("World!");
+sb.AppendFormat("Level: {0}", 10);
+
+string result = sb.ToString();
+```
 
 ---
 

@@ -7,10 +7,31 @@
 ## 1. 람다식 (Lambda): "이름 없는 일꾼"
 즉석에서 만들어 쓰는 짧은 함수입니다. `(입력) => { 내용 }`
 
+```csharp
+// 일반적인 델리게이트 사용
+System.Action<int> act = (n) => Debug.Log(n * n);
+act(5); // 25 출력
+
+// 여러 줄인 경우 { } 사용
+System.Func<int, int, int> add = (a, b) => {
+    return a + b;
+};
+```
+
 ---
 
 ## 2. LINQ (링크): "데이터 필터링의 마법"
 `Where`, `OrderBy`, `Select` 등을 사용하여 데이터를 쉽게 가공합니다.
+
+```csharp
+using System.Linq;
+
+int[] scores = { 90, 70, 80, 100 };
+
+// 80점 이상인 점수만 골라 내림차순 정렬
+var highScores = scores.Where(s => s >= 80)
+                       .OrderByDescending(s => s);
+```
 
 ---
 
