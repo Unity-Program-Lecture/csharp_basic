@@ -10,13 +10,40 @@
 - **비유**: 친구에게 내 시험지 **복사본**을 주는 것.
 - **특징**: 함수 안에서 값을 바꿔도 밖의 원본은 변하지 않습니다.
 
+```csharp
+void AddOne(int n) { n++; }
+
+int score = 10;
+AddOne(score);
+// score는 여전히 10!
+```
+
 ### 📝 ref (참조 전달 - 원본 직접 주기)
 - **비유**: 내 **원본 시험지**를 직접 주는 것.
 - **특징**: 함수 안의 변화가 원본에 그대로 적용됩니다. 초기화가 필수입니다.
 
+```csharp
+void RealAddOne(ref int n) { n++; }
+
+int realScore = 10;
+RealAddOne(ref realScore);
+// realScore는 11이 됨!
+```
+
 ### 📥 out (출력 전용 - 빈 종이 주기)
 - **비유**: 친구에게 **빈 종이**를 주며 답을 적어달라고 하는 것.
 - **특징**: 함수 내부에서 반드시 값을 채워야 합니다.
+
+```csharp
+void GetPlayerStatus(out int hp, out int mp) 
+{
+    hp = 100; // 반드시 채워야 함!
+    mp = 50;
+}
+
+int h, m;
+GetPlayerStatus(out h, out m);
+```
 
 ---
 

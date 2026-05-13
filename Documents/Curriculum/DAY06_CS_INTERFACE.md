@@ -7,10 +7,38 @@
 ## 1. 추상 클래스(Abstract Class): "미완성 설계도"
 공통적인 기능은 미리 만들어두되, 중요한 기능은 자식에게 완성하도록 맡기는 클래스입니다.
 
+```csharp
+public abstract class Monster 
+{
+    public string name;
+    public void Move() { Debug.Log($"{name}이 이동합니다."); }
+
+    // 자식마다 공격 방식이 다르니, 내용은 나중에 채워라!
+    public abstract void Attack(); 
+}
+
+public class Slime : Monster 
+{
+    public override void Attack() { Debug.Log("점프해서 몸통 박치기!"); }
+}
+```
+
 ---
 
 ## 2. 인터페이스(Interface): "기능의 약속"
 "이걸 가진 놈이라면 반드시 이 기능을 할 줄 알아야 해!"라고 약속하는 것입니다. 다중 구현이 가능합니다.
+
+```csharp
+public interface IItem 
+{
+    void Use(); // 본문({ })이 없는 것이 특징!
+}
+
+public class Potion : IItem 
+{
+    public void Use() { Debug.Log("체력을 회복합니다."); }
+}
+```
 
 ---
 
