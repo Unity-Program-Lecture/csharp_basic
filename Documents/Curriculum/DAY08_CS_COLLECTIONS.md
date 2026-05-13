@@ -50,7 +50,6 @@ intBox.SetItem(100);
 
 Pair<string> namePair = new Pair<string> { first = "Kim", second = "Lee" };
 ```
-```
 
 ### 1-3. 제네릭 인터페이스 (Generic Interface)
 특정 타입에 의존하지 않는 기능의 약속을 정의합니다.
