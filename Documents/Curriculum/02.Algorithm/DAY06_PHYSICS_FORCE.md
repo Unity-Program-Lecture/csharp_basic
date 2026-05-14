@@ -1,4 +1,4 @@
-# 🚀 Day 03: 게임 물리 기초 (가속도와 힘)
+# 🚀 Day 06: 게임 물리 기초 (가속도와 힘)
 
 오늘의 목표는 "**뉴턴의 운동 법칙을 게임에 적용하여, 속도와 가속도의 원리를 이해하고 유니티 물리 엔진(Rigidbody)을 제어한다**"입니다.
 
@@ -20,6 +20,7 @@
 
 ```csharp
 using UnityEngine;
+using UnityEngine.InputSystem; // 최신 인풋 시스템
 
 [RequireComponent(typeof(Rigidbody))]
 public class PhysicsMove : MonoBehaviour
@@ -32,16 +33,21 @@ public class PhysicsMove : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    // 물리 연산은 FixedUpdate에서 처리
     void FixedUpdate()
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        float h = 0;
+        float v = 0;
 
-        Vector3 forceDir = new Vector3(h, 0, v);
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) h = -1;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) h = 1;
+            if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) v = 1;
+            if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) v = -1;
+        }
+
+        Vector3 forceDir = new Vector3(h, 0, v).normalized;
         
-        // 질량과 물리 법칙에 기반한 힘 가하기
-        // ForceMode.Force: 연속적인 힘 적용 (질량 영향 받음)
         rb.AddForce(forceDir * pushForce, ForceMode.Force);
     }
 }

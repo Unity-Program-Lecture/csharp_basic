@@ -1,4 +1,4 @@
-# 🚀 Day 04: 게임 물리 심화 (중력과 투사체 운동)
+# 🚀 Day 09: 게임 물리 심화 (중력과 투사체 운동)
 
 오늘의 목표는 **"중력의 원리를 응용하여 가속도 및 속도 연산을 수행하고, 이를 이용해 포물선 운동을 하는 투사체(Projectile)를 구현한다"**입니다.
 
@@ -19,6 +19,7 @@
 
 ```csharp
 using UnityEngine;
+using UnityEngine.InputSystem; // 최신 인풋 시스템
 
 public class Cannon : MonoBehaviour
 {
@@ -28,8 +29,8 @@ public class Cannon : MonoBehaviour
 
     void Update()
     {
-        // 마우스 왼쪽 버튼 클릭 시 발사
-        if (Input.GetButtonDown("Fire1"))
+        // 마우스 왼쪽 버튼 클릭 시 발사 (Input System 방식)
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             Fire();
         }
@@ -37,12 +38,9 @@ public class Cannon : MonoBehaviour
 
     void Fire()
     {
-        // 1. 대포알 생성
         GameObject ball = Instantiate(cannonballPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = ball.GetComponent<Rigidbody>();
 
-        // 2. 투사체 물리 적용 (발사 방향 * 힘)
-        // ForceMode.Impulse: 순간적인 폭발력(충격량) 적용
         rb.AddForce(firePoint.forward * fireForce, ForceMode.Impulse);
     }
 }
