@@ -1,0 +1,100 @@
+{
+  "general": {
+    "sessionRetention": {
+      "enabled": true,
+      "maxAge": "30d",
+      "warningAcknowledged": true
+    },
+    "plan": {
+      "directory": ""
+    },
+    "checkpointing": {
+      "enabled": true
+    }
+  },
+  "ui": {
+    "autoThemeSwitching": false,
+    "footer": {
+      "hideContextPercentage": false
+    },
+    "showMemoryUsage": true,
+    "showModelInfoInChat": true
+  },
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "model": {
+    "name": "auto-gemini-3"
+  },
+  "ide": {
+    "hasSeenNudge": true,
+    "enabled": true
+  },
+  "tools": {
+    "shell": {
+      "showColors": true
+    }
+  },
+  "mcpServers": {    
+    "context-mode": {
+      "command": "context-mode"
+    },
+    "context7": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp",
+        "--api-key",
+        "ctx7sk-0635f6d3-984d-4775-96d6-83449dd80dc5"
+      ]
+    }
+  },
+  "hooks": {
+    "BeforeTool": [
+      {
+        "matcher": "run_shell_command|read_file|read_many_files|grep_search|search_file_content|web_fetch|activate_skill|mcp__plugin_context-mode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "context-mode hook gemini-cli beforetool"
+          }
+        ]
+      }
+    ],
+    "AfterTool": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "context-mode hook gemini-cli aftertool"
+          }
+        ]
+      }
+    ],
+    "PreCompress": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "context-mode hook gemini-cli precompress"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "context-mode hook gemini-cli sessionstart"
+          }
+        ]
+      }
+    ]
+  }
+}
