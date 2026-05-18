@@ -7,9 +7,10 @@
 ## 1. 위치, 속도, 가속도의 관계 (미분과 적분)
 게임 엔진은 매 프레임 아주 짧은 시간(`DeltaTime`) 동안의 변화를 계산하여 물체를 이동시킵니다.
 
-- **속도 (Velocity)**: 위치의 변화율. (위치를 시간에 대해 미분)
-- **가속도 (Acceleration)**: 속도의 변화율. (속도를 시간에 대해 미분)
-- **적분 (Integration)**: 반대로 가속도를 시간에 따라 쌓으면 속도가 되고, 속도를 쌓으면 위치가 됩니다.
+- **속력** (Speed): 단순히 물체가 얼마나 빠르게 움직이는지를 나타내는 "**스칼라 (Scalar)**" 값입니다.
+- **속도** (Velocity): 속력에 "**방향**"이 더해진 "**벡터 (Vector)**" 값입니다. (위치를 시간에 대해 미분, 게임 코드에서는 주로 `Vector3`로 표현)
+- **가속도** (Acceleration): 속도의 변화율입니다. (속도를 시간에 대해 미분)
+- **적분** (Integration): 반대로 가속도를 시간에 따라 쌓으면 속도가 되고, 속도를 쌓으면 위치가 됩니다.
 
 ---
 
@@ -34,15 +35,20 @@ using UnityEngine;
 public class ManualGravity : MonoBehaviour
 {
     public float gravity = -9.81f;
+
+    [SerializeField]
+    // 초기 속도를 에디터에서 지정할 수 있도록 직렬화합니다. (예: 점프는 양수값 입력)
+    // 방향(+/-) 정보를 포함하므로 '속도(Velocity)' 변수명을 사용합니다.
     private float currentVelocityY = 0f;
 
     void Update()
     {
         // 1. 가속도를 속도에 적분 (v = v0 + at)
+        // 가속도의 방향에 따라 속도의 크기와 방향이 결정됩니다.
         currentVelocityY += gravity * Time.deltaTime;
 
         // 2. 속도를 위치에 적분 (y = y0 + vt)
-        // 실제로는 공식 s = vt + 0.5at^2를 쓰지만, 매 프레임 계산 시에는 미분 형태로 적용함
+        // 속도(벡터)를 사용하여 현재 위치에서 어느 방향으로 얼마나 이동할지 결정합니다.
         Vector3 pos = transform.position;
         pos.y += currentVelocityY * Time.deltaTime;
 
@@ -50,7 +56,7 @@ public class ManualGravity : MonoBehaviour
         if (pos.y < 0)
         {
             pos.y = 0;
-            currentVelocityY = 0;
+            currentVelocityY = 0; // 속도를 0으로 만들어 정지시킴
         }
 
         transform.position = pos;
