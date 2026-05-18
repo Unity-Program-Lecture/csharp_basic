@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="150" viewBox="0 0 180 150">
+  <path d="M60 70 L120 50 L140 100 L70 110 Z" fill="#95a5a6" stroke="#7f8c8d" />
+  <circle cx="100" cy="80" r="55" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5" />
+  <line x1="100" y1="80" x2="155" y2="80" stroke="#3498db" stroke-width="2" />
+  <text x="105" y="75" font-family="Arial" font-size="12" fill="#3498db">Radius</text>
+  <text x="35" y="20" font-family="Arial" font-size="14" fill="#3498db" font-weight="bold">Bounding Sphere</text>
+</svg>

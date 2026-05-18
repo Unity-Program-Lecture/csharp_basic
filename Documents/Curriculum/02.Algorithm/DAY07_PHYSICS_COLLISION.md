@@ -12,11 +12,7 @@
 #### AABB (Axis-Aligned Bounding Box)
 
 <p align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" width="180" height="150" viewBox="0 0 180 150">
-    <path d="M40 60 L100 40 L140 90 L80 110 Z" fill="#95a5a6" stroke="#7f8c8d" />
-    <rect x="40" y="40" width="100" height="70" fill="none" stroke="#f39c12" stroke-width="2" stroke-dasharray="5,5" />
-    <text x="50" y="30" font-family="Arial" font-size="12" fill="#f39c12" font-weight="bold">AABB</text>
-  </svg>
+  <img src="Images/aabb.svg" width="180" alt="AABB Diagram">
 </p>
 
 - **특징**: 세상의 X, Y, Z축에 나란하게 고정된 상자입니다.
@@ -25,13 +21,7 @@
 #### Bounding Sphere (경계 구)
 
 <p align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" width="180" height="150" viewBox="0 0 180 150">
-    <path d="M60 70 L120 50 L140 100 L70 110 Z" fill="#95a5a6" stroke="#7f8c8d" />
-    <circle cx="100" cy="80" r="55" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="5,5" />
-    <line x1="100" y1="80" x2="155" y2="80" stroke="#3498db" stroke-width="2" />
-    <text x="105" y="75" font-family="Arial" font-size="11" fill="#3498db" font-weight="bold">Radius</text>
-    <text x="50" y="20" font-family="Arial" font-size="12" fill="#3498db" font-weight="bold">Bounding Sphere</text>
-  </svg>
+  <img src="Images/sphere.svg" width="180" alt="Bounding Sphere Diagram">
 </p>
 
 - **특징**: 물체를 완전히 감싸는 최소 크기의 구입니다.
@@ -40,13 +30,7 @@
 #### OBB (Oriented Bounding Box)
 
 <p align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" width="180" height="150" viewBox="0 0 180 150">
-    <g transform="rotate(-25, 90, 75)">
-        <rect x="50" y="50" width="80" height="50" fill="#95a5a6" stroke="#7f8c8d" />
-        <rect x="50" y="50" width="80" height="50" fill="none" stroke="#9b59b6" stroke-width="2" stroke-dasharray="5,5" />
-    </g>
-    <text x="50" y="25" font-family="Arial" font-size="12" fill="#9b59b6" font-weight="bold">OBB (Oriented Box)</text>
-  </svg>
+  <img src="Images/obb.svg" width="180" alt="OBB Diagram">
 </p>
 
 - **특징**: 물체의 "**회전 방향에 맞춰 상자도 함께 회전**"합니다.
@@ -60,12 +44,7 @@
 ### 📍 원 충돌 (Circle/Sphere Collision)
 
 <p align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" width="220" height="100" viewBox="0 0 220 100">
-    <circle cx="50" cy="50" r="30" fill="rgba(52, 152, 219, 0.4)" stroke="#3498db" stroke-width="2" />
-    <circle cx="160" cy="50" r="40" fill="rgba(231, 76, 60, 0.4)" stroke="#e74c3c" stroke-width="2" />
-    <line x1="50" y1="50" x2="160" y2="50" stroke="#7f8c8d" stroke-width="2" />
-    <text x="85" y="45" font-family="Arial" font-size="11" fill="#7f8c8d" font-weight="bold">Distance</text>
-  </svg>
+  <img src="Images/sphere_collision.svg" width="220" alt="Sphere Collision Logic">
 </p>
 
 - **공식**: `Distance <= (Radius A + Radius B)`
@@ -74,10 +53,7 @@
 ### 📍 AABB 충돌 (축 정렬 상자 충돌)
 
 <p align="center">
-  <svg xmlns="http://www.w3.org/2000/svg" width="220" height="120" viewBox="0 0 220 120">
-    <rect x="20" y="20" width="80" height="60" fill="rgba(46, 204, 113, 0.4)" stroke="#2ecc71" stroke-width="2" />
-    <rect x="80" y="50" width="80" height="60" fill="rgba(155, 89, 182, 0.4)" stroke="#9b59b6" stroke-width="2" />
-  </svg>
+  <img src="Images/aabb_collision.svg" width="220" alt="AABB Collision Logic">
 </p>
 
 - **판정 조건**: 모든 축 (X, Y, Z)에서 범위가 겹쳐야 충돌입니다.
