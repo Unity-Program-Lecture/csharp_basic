@@ -1,62 +1,80 @@
 # 🚀 Day 12: 길찾기 알고리즘 기초 (그래프와 노드)
 
-오늘의 목표는 **"게임 내 공간을 컴퓨터가 이해할 수 있는 수학적 모델(그래프)로 변환하고, 최단 경로 탐색을 위한 기초 지식을 쌓는다"**입니다.
+오늘의 목표는 "**게임 내 공간을 컴퓨터가 이해할 수 있는 수학적 모델(그래프)로 변환하고, 최단 경로 탐색을 위한 기초 지식을 쌓는다**"입니다.
 
 ---
 
-## 1. 💡 이론 (30%): 그래프(Graph)와 노드(Node)
-- **그래프(Graph)**: 노드(점)와 간선(선)으로 이루어진 자료구조입니다. 지하철 노선도를 상상하면 쉽습니다.
-- **노드(Node / Vertex)**: 게임 맵을 일정한 크기의 사각형(Grid)이나 다각형(NavMesh)으로 쪼갰을 때의 한 칸을 의미합니다.
-- **간선(Edge)**: 노드와 노드 사이가 연결되어 있는지(이동 가능한지) 나타냅니다.
-- **가중치(Weight)**: 평지는 1, 늪지대는 3처럼 이동하는 데 드는 비용(Cost)을 뜻합니다.
-- **길찾기란?**: 시작 노드에서 목표 노드까지 간선을 타고 이동할 때, 비용의 합이 가장 적은 경로를 수학적으로 찾아내는 과정입니다.
+## 1. 💡 이론: 그래프 (Graph)와 노드 (Node)
+길찾기 알고리즘의 핵심은 현실의 복잡한 맵을 컴퓨터가 연산하기 쉬운 "**데이터의 집합**"으로 요약하는 것입니다.
+
+<p align="center">
+  <img src="Images/graph_concept.svg" width="400" alt="Graph Concept Diagram">
+</p>
+
+### 📍 그래프의 구성 요소
+- **노드 (Node / Vertex)**: 지점 또는 위치를 의미합니다. 유니티에서는 타일 한 칸, 혹은 네비메쉬의 한 구역이 됩니다.
+- **간선 (Edge / Link)**: 노드와 노드 사이의 연결 통로입니다. 길이 연결되어 있어야만 이동할 수 있습니다.
+- **가중치 (Weight / Cost)**: 해당 길을 지나갈 때 드는 비용입니다. (예: 평지는 1, 진흙탕은 5)
+- **방향성 (Direction)**: 한쪽으로만 갈 수 있는지(일방통행), 양쪽 다 가능한지(양방통행)를 나타냅니다.
+
+> 💡 **핵심**: 길찾기란 시작점에서 목표점까지 "**가중치의 합이 최소**"가 되는 간선들의 조합을 찾아내는 과정입니다.
 
 ---
 
-## 2. 💻 실습 (70%): 그리드(Grid) 맵 생성 및 분석
-**미션:** 2차원 배열(`[,]`)을 사용하여 5x5 크기의 타일 맵을 만들고, 장애물(벽)이 있는 타일과 걸어갈 수 있는 타일을 구분하여 콘솔에 시각화하세요.
+## 2. 💻 실습: 객체지향 기반 그래프 구조 구현
+**미션:** 2차원 배열의 한계를 넘어, 노드와 간선의 관계를 객체(`class`)로 정의하고 인접한 노드들을 관리하는 구조를 만드세요.
 
 <details>
 <summary>코드 보기</summary>
 
 ```csharp
 using UnityEngine;
-using System.Text;
+using System.Collections.Generic;
 
-public class GridMap : MonoBehaviour
+// 1. 길찾기 지점을 나타내는 노드 클래스
+public class Node
 {
-    // 0: 이동 가능 길, 1: 벽(장애물)
-    int[,] mapData = {
-        { 0, 0, 0, 1, 0 },
-        { 0, 1, 0, 1, 0 },
-        { 0, 1, 0, 0, 0 },
-        { 0, 0, 0, 1, 0 },
-        { 1, 1, 0, 0, 0 }
-    };
+    public string name;
+    public List<Edge> edges = new List<Edge>(); // 이 노드에서 뻗어나가는 길들
 
+    public Node(string n) { name = n; }
+}
+
+// 2. 연결 통로와 비용을 나타내는 간선 클래스
+public class Edge
+{
+    public Node target; // 도착지
+    public int weight;  // 이동 비용
+
+    public Edge(Node t, int w) { target = t; weight = w; }
+}
+
+public class GraphManager : MonoBehaviour
+{
     void Start()
     {
-        GenerateMap();
+        // 노드 생성
+        Node startNode = new Node("Start");
+        Node jungleNode = new Node("Jungle");
+        Node goalNode = new Node("Goal");
+
+        // 간선 연결 (길 만들기)
+        // 시작점에서 정글로 가는 길 (비용 5)
+        startNode.edges.Add(new Edge(jungleNode, 5));
+        // 정글에서 목표 지점으로 가는 길 (비용 1)
+        jungleNode.edges.Add(new Edge(goalNode, 1));
+
+        // 데이터 분석 출력
+        PrintGraph(startNode);
     }
 
-    void GenerateMap()
+    void PrintGraph(Node node)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("=== 길찾기용 맵 데이터 ===");
-
-        for (int y = 0; y < 5; y++)
+        Debug.Log($"현재 위치: **{node.name}**");
+        foreach (var edge in node.edges)
         {
-            for (int x = 0; x < 5; x++)
-            {
-                if (mapData[y, x] == 1)
-                    sb.Append("■ "); // 벽
-                else
-                    sb.Append("□ "); // 길
-            }
-            sb.AppendLine();
+            Debug.Log($" - 연결된 곳: **{edge.target.name}** (이동 비용: **{edge.weight}**)");
         }
-
-        Debug.Log(sb.ToString());
     }
 }
 ```
