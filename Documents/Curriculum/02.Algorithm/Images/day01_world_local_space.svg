@@ -1,0 +1,25 @@
+<svg width="450" height="320" viewBox="0 0 450 320" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="a-r" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" /></marker>
+      <marker id="a-g" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
+      <marker id="a-b" markerWidth="8" markerHeight="8" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3498db" /></marker>
+    </defs>
+    <circle cx="80" cy="240" r="4" fill="#34495e" />
+    <line x1="80" y1="240" x2="140" y2="240" stroke="#e74c3c" stroke-width="2" marker-end="url(#a-r)" />
+    <line x1="80" y1="240" x2="80" y2="180" stroke="#2ecc71" stroke-width="2" marker-end="url(#a-g)" />
+    <line x1="80" y1="240" x2="50" y2="280" stroke="#3498db" stroke-width="2" marker-end="url(#a-b)" />
+    <text x="40" y="230" fill="#34495e" font-size="11" font-weight="bold">World Origin (0,0,0)</text>
+    <path d="M 220 120 L 260 120 L 260 160 L 220 160 Z" fill="#95a5a6" stroke="#2c3e50" />
+    <path d="M 220 120 L 240 100 L 280 100 L 260 120 Z" fill="#bdc3c7" stroke="#2c3e50" />
+    <path d="M 260 120 L 280 100 L 280 140 L 260 160 Z" fill="#7f8c8d" stroke="#2c3e50" />
+    <text x="180" y="180" fill="#2c3e50" font-size="12" font-weight="bold">Parent (World Pos)</text>
+    <line x1="240" y1="140" x2="310" y2="140" stroke="#e74c3c" stroke-width="2" stroke-dasharray="3" marker-end="url(#a-r)" />
+    <line x1="240" y1="140" x2="240" y2="70" stroke="#2ecc71" stroke-width="2" stroke-dasharray="3" marker-end="url(#a-g)" />
+    <line x1="240" y1="140" x2="200" y2="190" stroke="#3498db" stroke-width="2" stroke-dasharray="3" marker-end="url(#a-b)" />
+    <circle cx="340" cy="110" r="15" fill="#f1c40f" stroke="#d35400" stroke-width="2" />
+    <text x="330" y="145" fill="#d35400" font-size="12" font-weight="bold">Child</text>
+    <line x1="240" y1="140" x2="330" y2="115" stroke="#3498db" stroke-width="3" marker-end="url(#a-b)" />
+    <text x="250" y="115" fill="#2980b9" font-size="11" font-weight="bold" transform="rotate(-15, 250, 115)">상대 위치 (Local Pos)</text>
+    <path d="M 80 240 Q 150 240 235 155" fill="none" stroke="#95a5a6" stroke-width="1" stroke-dasharray="4" marker-end="url(#a-r)" />
+    <text x="90" y="210" fill="#7f8c8d" font-size="11" font-style="italic">World Pos = Parent + Local</text>
+  </svg>

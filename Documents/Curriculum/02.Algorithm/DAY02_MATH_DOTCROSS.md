@@ -1,6 +1,6 @@
 # 🚀 Day 02: 게임 수학 심화 (내적/외적과 회전)
 
-오늘의 목표는 **"벡터의 내적과 외적을 통해 적의 시야를 판별하고, 쿼터니언(Quaternion)을 이용해 짐벌락 현상 없이 물체를 회전시키는 법을 마스터한다"**입니다.
+오늘의 목표는 "**벡터의 내적과 외적을 통해 적의 시야를 판별하고, 쿼터니언 (Quaternion)을 이용해 짐벌락 현상 없이 물체를 회전시키는 법을 마스터한다**"입니다.
 
 ---
 
@@ -41,47 +41,9 @@
 | **-1** | $180^\circ$ | **반대 방향** | 내 뒤에 있음 |
 
 <div align="center">
-<svg width="800" height="400" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg">
-  <!-- 가이드 라인 (원형 레이더) -->
-  <circle cx="200" cy="160" r="100" fill="none" stroke="#f0f0f0" stroke-width="2" />
-  <line x1="200" y1="60" x2="200" y2="260" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4" />
-  <line x1="100" y1="160" x2="300" y2="160" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="4" />
-  <!-- 몬스터 본체 및 정면 벡터 -->
-  <circle cx="200" cy="160" r="20" fill="#34495e" />
-  <text x="182" y="165" fill="white" font-size="10" font-weight="bold">Monster</text>
-  <line x1="200" y1="160" x2="200" y2="80" stroke="#3498db" stroke-width="6" marker-end="url(#arrow-blue)" />
-  <text x="210" y="85" fill="#3498db" font-weight="bold">Forward (A)</text>
-  <!-- Case 1: 정면 (Dot = 1) -->
-  <circle cx="200" cy="60" r="10" fill="#2ecc71" />
-  <text x="180" y="50" fill="#27ae60" font-weight="bold">Dot: 1 (정면)</text>
-  <!-- Case 2: 오른쪽 (Dot = 0) -->
-  <circle cx="300" cy="160" r="10" fill="#f1c40f" />
-  <text x="315" y="165" fill="#f39c12" font-weight="bold">Dot: 0 (우)</text>
-  <!-- Case 3: 왼쪽 (Dot = 0) -->
-  <circle cx="100" cy="160" r="10" fill="#f1c40f" />
-  <text x="45" y="165" fill="#f39c12" font-weight="bold">Dot: 0 (좌)</text>
-  <!-- Case 4: 후면 (Dot = -1) -->
-  <circle cx="200" cy="260" r="10" fill="#e74c3c" />
-  <text x="175" y="285" fill="#c0392b" font-weight="bold">Dot: -1 (후면)</text>
-  <!-- 샘플 플레이어와 방향 벡터 B -->
-  <line x1="200" y1="160" x2="270" y2="90" stroke="#e74c3c" stroke-width="3" stroke-dasharray="2" marker-end="url(#arrow-red)" />
-  <circle cx="270" cy="90" r="8" fill="#e74c3c" />
-  <text x="280" y="85" fill="#e74c3c" font-weight="bold">Player (Target)</text>
-  <text x="240" y="135" fill="#e74c3c" font-size="12" font-weight="bold">B</text>
-  <!-- Formula Overlay -->
-  <rect x="10" y="10" width="160" height="40" rx="5" fill="#f9f9f9" stroke="#ddd" />
-  <text x="20" y="35" fill="#2c3e50" font-size="14" font-weight="bold">A · B = cos θ</text>
-  <defs>
-    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#3498db" />
-    </marker>
-    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" />
-    </marker>
-  </defs>
-</svg>
+  ![타겟 위치에 따른 내적 결과값 변화](Images/day02_dot_product_radar.svg)
 
-<p><i>[그림 2-1] 타겟 위치에 따른 내적 결과값 변화</i></p>
+  <p><i>[그림 2-1] 타겟 위치에 따른 내적 결과값 변화</i></p>
 </div>
 
 - **활용**: 몬스터 전방 벡터($A$)와 플레이어 방향 벡터($B$)의 내적값이 **0.5 이상이면 시야각 60도 이내**로 판단할 수 있습니다.
@@ -104,40 +66,9 @@
 | **0** | **정면 또는 후면** | 두 벡터가 평행함 (내적값이 1 또는 -1인 상태) |
 
 <div align="center">
-<svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
-  <!-- 바닥 평면 가이드 -->
-  <path d="M 100 220 L 500 220 L 550 170 L 150 170 Z" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" />
-  <!-- 몬스터 위치 -->
-  <circle cx="300" cy="195" r="15" fill="#34495e" />
-  <text x="282" y="200" fill="white" font-size="10" font-weight="bold">M</text>
-  <!-- 벡터 A (Forward) - 검지 -->
-  <line x1="300" y1="195" x2="350" y2="145" stroke="#3498db" stroke-width="4" marker-end="url(#cross-blue)" />
-  <text x="355" y="140" fill="#3498db" font-weight="bold">A (정면 / 검지)</text>
-  <!-- Case 1: 오른쪽 타겟 (B) - 중지 -->
-  <line x1="300" y1="195" x2="420" y2="195" stroke="#e74c3c" stroke-width="4" marker-end="url(#cross-red)" />
-  <text x="430" y="200" fill="#e74c3c" font-weight="bold">B (타겟 / 중지)</text>
-  <!-- Case 1 결과: Up (C) - 엄지 -->
-  <line x1="300" y1="195" x2="300" y2="70" stroke="#2ecc71" stroke-width="5" marker-end="url(#cross-green)" />
-  <text x="310" y="80" fill="#27ae60" font-weight="bold">C (결과 / 엄지 👍)</text>
-  <text x="310" y="100" fill="#27ae60" font-size="11">엄지가 위를 향함 (+)</text>
-  <!-- Case 2: 왼쪽 타겟 (B') -->
-  <line x1="300" y1="195" x2="180" y2="195" stroke="#e74c3c" stroke-width="4" stroke-dasharray="4" marker-end="url(#cross-red)" />
-  <text x="90" y="200" fill="#c0392b" font-weight="bold">B' (왼쪽 타겟)</text>
-  <!-- Case 2 결과: Down (C') -->
-  <line x1="300" y1="195" x2="300" y2="300" stroke="#27ae60" stroke-width="3" stroke-dasharray="4" marker-end="url(#cross-green-down)" />
-  <text x="310" y="315" fill="#27ae60" font-weight="bold">C' (결과 / 엄지 👎)</text>
-  <text x="310" y="335" fill="#27ae60" font-size="11">엄지가 아래를 향함 (-)</text>
-  <!-- Formula Overlay -->
-  <rect x="10" y="10" width="180" height="40" rx="5" fill="#f9f9f9" stroke="#ddd" />
-  <text x="20" y="35" fill="#2c3e50" font-size="14" font-weight="bold">왼손 법칙 (Left-Hand)</text>
-  <defs>
-    <marker id="cross-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3498db" /></marker>
-    <marker id="cross-red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" /></marker>
-    <marker id="cross-green" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
-    <marker id="cross-green-down" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#27ae60" /></marker>
-  </defs>
-</svg>
-<p><i>[그림 2-2] 왼손 법칙을 이용한 외적 결과 방향(엄지) 판별</i></p>
+  ![왼손 법칙을 이용한 외적 결과 방향(엄지) 판별](Images/day02_cross_product_left_hand.svg)
+
+  <p><i>[그림 2-2] 왼손 법칙을 이용한 외적 결과 방향(엄지) 판별</i></p>
 </div>
 
 

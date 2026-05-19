@@ -1,0 +1,17 @@
+<svg width="300" height="250" viewBox="0 0 300 250" xmlns="http://www.w3.org/2000/svg">
+    <path d="M 50 180 L 250 180" stroke="#ccc" stroke-dasharray="2" />
+    <path d="M 150 50 L 150 200" stroke="#ccc" stroke-dasharray="2" />
+    <line x1="150" y1="150" x2="150" y2="30" stroke="#2ecc71" stroke-width="4" marker-end="url(#arrow-green)" />
+    <text x="155" y="40" fill="#2ecc71" font-weight="bold">Y (Up)</text>
+    <line x1="150" y1="150" x2="270" y2="150" stroke="#e74c3c" stroke-width="4" marker-end="url(#arrow-red)" />
+    <text x="250" y="145" fill="#e74c3c" font-weight="bold">X (Right)</text>
+    <line x1="150" y1="150" x2="100" y2="210" stroke="#3498db" stroke-width="4" marker-end="url(#arrow-blue)" />
+    <text x="70" y="225" fill="#3498db" font-weight="bold">Z (Forward)</text>
+    <defs>
+      <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z"  fill="#e74c3c" /></marker>
+      <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z"  fill="#2ecc71" /></marker>
+      <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z"   fill="#3498db" /></marker>
+    </defs>
+    <circle cx="150" cy="150" r="5" fill="#34495e" />
+    <text x="135" y="165" fill="#34495e" font-size="12">Origin (0,0,0)</text>
+  </svg>

@@ -1,0 +1,12 @@
+<svg width="300" height="200" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arr" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#34495e" /></marker>
+      <marker id="arr-res" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
+    </defs>
+    <line x1="50" y1="150" x2="130" y2="100" stroke="#f1c40f" stroke-width="3" marker-end="url(#arr)" />
+    <text x="80" y="120" fill="#d35400" font-weight="bold">A</text>
+    <line x1="130" y1="100" x2="230" y2="120" stroke="#f1c40f" stroke-width="3" marker-end="url(#arr)" />
+    <text x="180" y="105" fill="#d35400" font-weight="bold">B</text>
+    <line x1="50" y1="150" x2="223" y2="123" stroke="#2ecc71" stroke-width="4" stroke-dasharray="4" marker-end="url(#arr-res)" />
+    <text x="130" y="160" fill="#27ae60" font-weight="bold">A + B</text>
+  </svg>

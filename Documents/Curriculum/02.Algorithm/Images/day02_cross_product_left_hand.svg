@@ -1,0 +1,33 @@
+<svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+  <!-- 바닥 평면 가이드 -->
+  <path d="M 100 220 L 500 220 L 550 170 L 150 170 Z" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" />
+  <!-- 몬스터 위치 -->
+  <circle cx="300" cy="195" r="15" fill="#34495e" />
+  <text x="282" y="200" fill="white" font-size="10" font-weight="bold">M</text>
+  <!-- 벡터 A (Forward) - 검지 -->
+  <line x1="300" y1="195" x2="350" y2="145" stroke="#3498db" stroke-width="4" marker-end="url(#cross-blue)" />
+  <text x="355" y="140" fill="#3498db" font-weight="bold">A (정면 / 검지)</text>
+  <!-- Case 1: 오른쪽 타겟 (B) - 중지 -->
+  <line x1="300" y1="195" x2="420" y2="195" stroke="#e74c3c" stroke-width="4" marker-end="url(#cross-red)" />
+  <text x="430" y="200" fill="#e74c3c" font-weight="bold">B (타겟 / 중지)</text>
+  <!-- Case 1 결과: Up (C) - 엄지 -->
+  <line x1="300" y1="195" x2="300" y2="70" stroke="#2ecc71" stroke-width="5" marker-end="url(#cross-green)" />
+  <text x="310" y="80" fill="#27ae60" font-weight="bold">C (결과 / 엄지 👍)</text>
+  <text x="310" y="100" fill="#27ae60" font-size="11">엄지가 위를 향함 (+)</text>
+  <!-- Case 2: 왼쪽 타겟 (B') -->
+  <line x1="300" y1="195" x2="180" y2="195" stroke="#e74c3c" stroke-width="4" stroke-dasharray="4" marker-end="url(#cross-red)" />
+  <text x="90" y="200" fill="#c0392b" font-weight="bold">B' (왼쪽 타겟)</text>
+  <!-- Case 2 결과: Down (C') -->
+  <line x1="300" y1="195" x2="300" y2="300" stroke="#27ae60" stroke-width="3" stroke-dasharray="4" marker-end="url(#cross-green-down)" />
+  <text x="310" y="315" fill="#27ae60" font-weight="bold">C' (결과 / 엄지 👎)</text>
+  <text x="310" y="335" fill="#27ae60" font-size="11">엄지가 아래를 향함 (-)</text>
+  <!-- Formula Overlay -->
+  <rect x="10" y="10" width="180" height="40" rx="5" fill="#f9f9f9" stroke="#ddd" />
+  <text x="20" y="35" fill="#2c3e50" font-size="14" font-weight="bold">왼손 법칙 (Left-Hand)</text>
+  <defs>
+    <marker id="cross-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3498db" /></marker>
+    <marker id="cross-red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" /></marker>
+    <marker id="cross-green" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
+    <marker id="cross-green-down" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#27ae60" /></marker>
+  </defs>
+</svg>
