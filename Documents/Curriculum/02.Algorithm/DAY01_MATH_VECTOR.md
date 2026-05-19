@@ -10,9 +10,11 @@
 유니티는 **왼손 좌표계**(Left-handed)를 사용하며, 각 축은 고유한 색상으로 구분됩니다.
 
 <div align="center">
+
   ![유니티 엔진의 표준 좌표축 (X:빨강, Y:초록, Z:파랑)](Images/day01_vector_axes.svg)
 
   *[그림 1-1] 유니티 엔진의 표준 좌표축 (X:빨강, Y:초록, Z:파랑)*
+
 </div>
 
 ### 📍 절대 좌표 vs 상대 좌표
@@ -26,9 +28,11 @@
    - **특징**: 부모가 움직이면 나도 따라 움직이지만, 부모와의 거리는 변하지 않습니다. `transform.localPosition`으로 접근합니다.
 
 <div align="center">
+
   ![3D 공간에서의 절대 좌표와 상대 좌표의 관계](Images/day01_world_local_space.svg)
 
   *[그림 1-2] 3D 공간에서의 절대 좌표와 상대 좌표의 관계*
+
 </div>
 
 > 🚌 **비유**: 달리는 버스 안에서 내가 앞으로 한 걸음(Local +1m) 걸어갔을 때, 나의 실제 위치(World)는 버스가 달린 거리까지 포함한 값이 됩니다.
@@ -40,9 +44,11 @@
 - **예시**: (2, 3, 4) 벡터는 "원점에서 X축으로 2, Y축으로 3, Z축으로 4만큼 이동한 지점을 가리키는 화살표"입니다.
 
 <div align="center">
+
   ![공간상의 한 점(2, 3, 4)을 가리키는 벡터 화살표](Images/day01_vector_point.svg)
 
   *[그림 1-3] 공간상의 한 점(2, 3, 4)을 가리키는 벡터 화살표*
+
 </div>
 
 ### 📍 벡터의 주요 연산 (Vector Operations)
@@ -53,7 +59,9 @@
 - **의미**: **연속적인 이동**. A만큼 이동한 후 B만큼 더 이동했을 때의 최종 위치를 나타냅니다.
 
 <div align="center">
+
   ![vector addition](Images/day01_vector_addition.svg)
+
 </div>
 
 #### 2. 벡터의 뺄셈 (Subtraction) ⭐️ 핵심 중의 핵심
@@ -63,7 +71,9 @@
 - **암기법**: **"타겟(Target) - 나(Self)"** 또는 **"나중 - 처음"**
 
 <div align="center">
+
   ![vector subtraction](Images/day01_vector_subtraction.svg)
+
 </div>
 
 > 🎯 **직관적 이해**: "내가(A) 목표(B)를 맞추기 위해 쏴야 하는 화살표가 바로 **B - A**입니다." 거꾸로 **A - B**를 하면 목표가 나를 쏘는 방향(도망쳐야 할 방향)이 됩니다.
@@ -78,7 +88,9 @@
 - **유니티**: `Vector3.normalized` 속성을 사용합니다.
 
 <div align="center">
+
   ![vector normalization](Images/day01_vector_normalization.svg)
+
 </div>
 
 ---
