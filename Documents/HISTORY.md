@@ -134,3 +134,12 @@
    - 각 컬렉션(List, Dictionary, Stack, Queue)의 필수 메소드 및 프로퍼티 상세 설명 추가.
    - `Insert`, `RemoveAt`, `TryGetValue`, `Peek`, `Count` 등 실무 핵심 기능을 초보자용 비유와 함께 업데이트.
    - 모든 설명된 메소드와 프로퍼티가 포함되도록 **샘플 코드 전면 개선** (실용적인 활용 사례 중심).
+
+## 📅 2026-05-20 (오늘 - 현재 세션)
+### ✅ 완료된 작업
+1. **제미나이CLI 프로젝트 마이그레이션 완료**
+   - 기존 제미나이CLI 기반의 설정을 Antigravity 에이전트 환경으로 안전하게 전환.
+   - `.gemini/settings.json`에서 더 이상 사용되지 않는 `context-mode` MCP 서버 및 훅(`BeforeTool`, `AfterTool`, `PreCompress`, `SessionStart`)을 완전히 정제하여 성능 최적화.
+2. **기존 프로젝트 메모리 보존**
+   - 기존에 작성된 강의 계획 및 핵심 컨텍스트(`GEMINI.md`)와 강의 개발 히스토리(`Documents/HISTORY.md`)를 누락 없이 온전히 보존.
+   - 향후 새로운 아티팩트 관리 방식을 적용하기 위한 기본 환경 설정 마련.
