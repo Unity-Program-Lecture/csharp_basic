@@ -1,0 +1,114 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <!-- 배경: 다크/라이트 테마 모두 대응하기 위해 투명으로 하되, 요소를 고대비로 설계 -->
+  <defs>
+    <!-- 그라디언트 설정 -->
+    <linearGradient id="gradEuler" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff5e62" />
+      <stop offset="100%" stop-color="#ff9966" />
+    </linearGradient>
+    <linearGradient id="gradQuat" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00c6ff" />
+      <stop offset="100%" stop-color="#0072ff" />
+    </linearGradient>
+    <linearGradient id="gradSphere" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2a2e3d" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#151821" stop-opacity="0.8" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- 전체 레이아웃 테두리 및 배경 카드 -->
+  <rect x="10" y="10" width="780" height="430" rx="15" fill="#1e222b" stroke="#333842" stroke-width="2" filter="url(#shadow)"/>
+  
+  <!-- 타이틀 -->
+  <text x="400" y="45" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="22" font-weight="bold" fill="#ffffff" letter-spacing="1">
+    오일러 각도(Euler Angles) vs 쿼터니언(Quaternion) 회전 비교
+  </text>
+  <line x1="100" y1="60" x2="700" y2="60" stroke="#444b5a" stroke-width="1.5" />
+
+  <!-- ================= LEFT: EULER ANGLES ================= -->
+  <g transform="translate(40, 70)">
+    <!-- 제목 -->
+    <rect x="30" y="15" width="280" height="35" rx="8" fill="#ff5e62" fill-opacity="0.15" stroke="#ff5e62" stroke-width="1" />
+    <text x="170" y="38" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#ff8c8f">
+      1. 오일러 회전 &amp; 짐벌락 (Gimbal Lock)
+    </text>
+
+    <!-- 짐벌 구조 시각화 (두 축이 겹쳐서 자유도가 상실된 상태) -->
+    <!-- 외부 링 (X축) -->
+    <ellipse cx="170" cy="210" rx="110" ry="110" fill="none" stroke="#ff5e62" stroke-width="4" stroke-dasharray="6,4" />
+    <text x="170" y="90" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#ff8c8f" font-weight="bold">Pitch (X-Axis)</text>
+
+    <!-- 중간 링 (Y축) - 90도 회전하여 내부 링과 겹침 -->
+    <ellipse cx="170" cy="210" rx="85" ry="30" fill="none" stroke="#ff9966" stroke-width="4" transform="rotate(45, 170, 210)" />
+    <text x="100" y="160" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#ffb088" font-weight="bold">Yaw (Y-Axis)</text>
+
+    <!-- 내부 링 (Z축) - Y축과 정렬(겹침)되어 자유도 상실 -->
+    <ellipse cx="170" cy="210" rx="85" ry="30" fill="none" stroke="#ffcc00" stroke-width="4" transform="rotate(45, 170, 210)" />
+    <text x="245" y="260" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#ffe066" font-weight="bold">Roll (Z-Axis) [LOCK]</text>
+
+    <!-- 겹침 표시 하이라이트 -->
+    <path d="M 110,150 Q 170,210 230,270" stroke="#ff3333" stroke-width="2" stroke-dasharray="4,4" fill="none" />
+    <circle cx="110" cy="150" r="6" fill="#ff3333" />
+    <circle cx="230" cy="270" r="6" fill="#ff3333" />
+
+    <rect x="25" y="315" width="290" height="45" rx="6" fill="#2d1e21" stroke="#ff5e62" stroke-width="1" />
+    <text x="170" y="333" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" fill="#ff8c8f" font-weight="bold">
+      특정 회전(Pitch 90도) 시,
+    </text>
+    <text x="170" y="350" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" fill="#ffffff">
+      Yaw 축과 Roll 축이 일치하여 1개 축의 자유도 상실!
+    </text>
+  </g>
+
+  <!-- 구분선 -->
+  <line x1="400" y1="90" x2="400" y2="410" stroke="#444b5a" stroke-width="1.5" stroke-dasharray="5,5" />
+
+  <!-- ================= RIGHT: QUATERNION ================= -->
+  <g transform="translate(420, 70)">
+    <!-- 제목 -->
+    <rect x="30" y="15" width="280" height="35" rx="8" fill="#00c6ff" fill-opacity="0.15" stroke="#00c6ff" stroke-width="1" />
+    <text x="170" y="38" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#00e5ff">
+      2. 쿼터니언 회전 (임의 축 &amp; 단일 회전)
+    </text>
+
+    <!-- 3D 구체 및 회전 축 시각화 -->
+    <!-- 구체 실루엣 -->
+    <circle cx="170" cy="210" r="95" fill="url(#gradSphere)" stroke="#3f475a" stroke-width="1" />
+    <!-- 구체 그리드(위도/경도선) -->
+    <ellipse cx="170" cy="210" rx="95" ry="35" fill="none" stroke="#333c52" stroke-width="1.5" />
+    <ellipse cx="170" cy="210" rx="35" ry="95" fill="none" stroke="#333c52" stroke-width="1.5" />
+
+    <!-- 임의의 단일 회전 축 벡터 u -->
+    <line x1="170" y1="210" x2="235" y2="130" stroke="#00e5ff" stroke-width="3" marker-end="url(#arrow)" />
+    <!-- 화살표 정의 -->
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 10 5 L 0 9 z" fill="#00e5ff" />
+      </marker>
+      <marker id="arrowRed" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 1 L 10 5 L 0 9 z" fill="#ff5e62" />
+      </marker>
+    </defs>
+    
+    <text x="245" y="125" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#00e5ff" font-weight="bold">회전 축 u (ux, uy, uz)</text>
+
+    <!-- 회전 방향 호 (Arc) -->
+    <path d="M 130,170 A 55,55 0 0,1 210,180" fill="none" stroke="#00c6ff" stroke-width="3.5" marker-end="url(#arrow)" />
+    <text x="170" y="160" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="12" fill="#a0e9ff" font-weight="bold">회전각 θ</text>
+    
+    <!-- 구체 중심 원점 -->
+    <circle cx="170" cy="210" r="5" fill="#ffffff" />
+    
+    <!-- 쿼터니언 요약 설명 카드 -->
+    <rect x="25" y="315" width="290" height="45" rx="6" fill="#1b2a3a" stroke="#00c6ff" stroke-width="1" />
+    <text x="170" y="333" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" fill="#00e5ff" font-weight="bold">
+      임의의 축(u)과 각도(θ)를 이용한
+    </text>
+    <text x="170" y="350" text-anchor="middle" font-family="'Segoe UI', Roboto, sans-serif" font-size="11.5" fill="#ffffff">
+      4차원 단일 결합 회전으로, 짐벌락 원천 차단!
+    </text>
+  </g>
+</svg>
