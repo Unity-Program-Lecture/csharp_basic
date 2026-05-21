@@ -177,3 +177,4 @@
     - 학생 공개용 학습문서에서 시험 관련 내부 경로와 평가 산출물 상세 안내를 제거하고, 비공개 교사용 운영 메모(`Documents/Exam/02.Algorithm/INSTRUCTOR_NOTES.md`)로 분리함.
     - `Documents/Exam`의 과정별 폴더명을 `Documents/Curriculum`의 과정 폴더명과 일치하도록 정리함.
     - `DAY02_MATH_DOTCROSS.md`에서 쿼터니언 학습 목표, Slerp 예제, 쿼터니언 퀴즈를 제거하고 내적/외적 기반 시야 및 좌우 판별 흐름으로 정리함.
+    - `DAY02_MATH_DOTCROSS.md`의 내적/외적 기하학적 의미 설명을 보강하고, 그림자 투영 및 평행사변형 넓이 관점이 드러나도록 관련 SVG 2종을 개선함.
