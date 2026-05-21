@@ -157,3 +157,23 @@
    - 오일러/쿼터니언 차이의 실생활 비유 및 FPS 실전 팁을 쿼터니언 본문 설명 직후로 자연스럽게 배치하고, 그 흐름이 부드럽게 이어지도록 Lerp/Slerp 보간 개념 비교 단락을 그 뒤에 재배치하여 학습자의 논리적 이해도를 최적화함.
 6. **5일차 게임 물리 교재 등속 직선 운동 기초 단락 보강 (DAY05_PHYSICS_MOTION.md)**
    - 등가속도 운동을 학습하기 전에 등속 직선 운동의 기본적인 정의, 변위 공식, 게임 내 활용 예시(캐릭터 이동, 기본 투사체) 및 C# 예제 코드를 선제적으로 추가하여 기초적인 물리 빌드업을 촘촘히 보강함.
+## 2026-05-21
+
+1. **Codex 마이그레이션 및 학습 문서 작성 규칙 정리**
+   - Gemini CLI의 프로젝트 지침을 Codex용 `AGENTS.md`로 이관함.
+   - 과정별 학습 문서 작성 기준을 `Documents/LEARNING_DOCUMENT_GUIDE.md`로 문서화함.
+   - 새 학습 문서 생성 시 파일명, 구조, 설명 방식, 실습 예제, 퀴즈 작성 기준을 우선 참조하도록 정리함.
+
+## 2026-05-22
+
+1. **Unity 6 기반 NCS 평가 산출물 작성 원칙 추가**
+   - `Documents/LEARNING_DOCUMENT_GUIDE.md`에 NCS 교재의 평가 준거와 평가 방법을 존중하는 작성 원칙을 추가함.
+   - 과정별 평가 산출물을 서술형 시험 10문제, 포트폴리오 과제, 평가자 체크리스트 확인 문제 1개로 구성하도록 정리함.
+   - 평가 산출물 기본 폴더를 `Documents/Exam/과정폴더명/` 구조로 정의함.
+   - Unity 6 학습/평가 문서에서 UI는 UGUI, 입력은 Input System을 기본으로 사용하도록 명시함.
+   - 새 학습 문서는 `Documents/Curriculum/01.CSharpBasic/DAY01_CS_BASICS_METHODS.md`처럼 과정별 폴더 아래에 생성하도록 위치와 파일명 규칙을 변경함.
+   - `Documents/Curriculum/02.Algorithm/`의 15개 학습 문서에 Unity 6/NCS 지침 보강 섹션을 추가함.
+   - 게임 알고리즘 평가 산출물을 `Documents/Exam/02.Algorithm/` 아래의 서술형, 포트폴리오, 체크리스트 문서로 분리함.
+    - 학생 공개용 학습문서에서 시험 관련 내부 경로와 평가 산출물 상세 안내를 제거하고, 비공개 교사용 운영 메모(`Documents/Exam/02.Algorithm/INSTRUCTOR_NOTES.md`)로 분리함.
+    - `Documents/Exam`의 과정별 폴더명을 `Documents/Curriculum`의 과정 폴더명과 일치하도록 정리함.
+    - `DAY02_MATH_DOTCROSS.md`에서 쿼터니언 학습 목표, Slerp 예제, 쿼터니언 퀴즈를 제거하고 내적/외적 기반 시야 및 좌우 판별 흐름으로 정리함.

@@ -1,6 +1,6 @@
-# 🚀 Day 02: 게임 수학 심화 (내적/외적과 회전)
+# 🚀 Day 02: 게임 수학 심화 (내적/외적)
 
-오늘의 목표는 "**벡터의 내적과 외적을 통해 적의 시야를 판별하고, 쿼터니언 (Quaternion)을 이용해 짐벌락 현상 없이 물체를 회전시키는 법을 마스터한다**"입니다.
+오늘의 목표는 "**벡터의 내적과 외적을 통해 적의 시야를 판별하고, 타겟이 왼쪽/오른쪽 중 어디에 있는지 판단하는 법을 마스터한다**"입니다.
 
 ---
 
@@ -22,7 +22,7 @@
 
 ---
 
-## 2. 벡터 연산과 쿼터니언
+## 2. 벡터 연산
 
 ### 📍 내적 (Dot Product): "너 내 시야에 있니?"
 두 벡터의 내적은 타겟이 나의 정면을 기준으로 어느 각도에 있는지 판별하는 데 사용됩니다.
@@ -78,8 +78,8 @@
 
 ---
 
-## 2. 적 시야 판별 및 부드러운 회전
-**미션:** 몬스터가 플레이어를 향해 부드럽게 회전하고, 플레이어가 몬스터의 시야각(전방 60도) 내에 들어왔는지 내적(`Vector3.Dot`)을 이용해 판별하세요.
+## 3. 적 시야 판별 및 좌우 판별
+**미션:** 플레이어가 몬스터의 시야각(전방 60도) 내에 들어왔는지 내적(`Vector3.Dot`)으로 판별하고, 외적(`Vector3.Cross`)으로 플레이어가 왼쪽/오른쪽 중 어디에 있는지 판단하세요.
 
 <details>
 <summary>코드 보기</summary>
@@ -91,7 +91,6 @@ public class MonsterSight : MonoBehaviour
 {
     public Transform player;
     public float sightAngle = 60f; // 시야각 (좌우 합쳐 120도)
-    public float rotSpeed = 3f;
 
     void Update()
     {
@@ -104,10 +103,18 @@ public class MonsterSight : MonoBehaviour
         if (angle < sightAngle)
         {
             Debug.Log("플레이어 발견!");
-            
-            // 2. 쿼터니언을 이용한 부드러운 회전(Slerp)
-            Quaternion targetRot = Quaternion.LookRotation(dirToPlayer);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotSpeed * Time.deltaTime);
+
+            // 2. 외적을 이용한 좌우 판별
+            Vector3 cross = Vector3.Cross(transform.forward, dirToPlayer);
+
+            if (cross.y > 0)
+            {
+                Debug.Log("플레이어는 오른쪽에 있음");
+            }
+            else if (cross.y < 0)
+            {
+                Debug.Log("플레이어는 왼쪽에 있음");
+            }
         }
     }
 }
@@ -120,5 +127,5 @@ public class MonsterSight : MonoBehaviour
 ## ✍️ 평가 문항 대비 퀴즈
 1. **문제:** 두 벡터 사이의 각도를 구하거나, 타겟이 내 앞/뒤 어디에 있는지 판별할 때 주로 쓰이는 수학 연산은?
    - **정답:** 내적 (Dot Product)
-2. **문제:** 3D 회전 시 축이 겹쳐 회전 자유도를 잃는 현상을 방지하기 위해 유니티 엔진에서 내부적으로 사용하는 회전 체계는?
-   - **정답:** 쿼터니언 (Quaternion)
+2. **문제:** 두 벡터가 만드는 평면에 수직인 방향을 구하거나, 타겟이 내 왼쪽/오른쪽 어디에 있는지 판별할 때 쓰이는 수학 연산은?
+   - **정답:** 외적 (Cross Product)
