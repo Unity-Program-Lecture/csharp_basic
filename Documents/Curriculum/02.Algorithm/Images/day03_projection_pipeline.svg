@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="420" viewBox="0 0 1180 420" role="img" aria-labelledby="title desc">
+  <title id="title">Perspective projection pipeline diagram</title>
+  <desc id="desc">A camera frustum is transformed into clip space, divided by w, then mapped to screen pixels.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#263238"/>
+    </marker>
+    <style>
+      .box { fill: #f8fbfd; stroke: #455a64; stroke-width: 2; rx: 14; }
+      .title { fill: #263238; font-family: Arial, sans-serif; font-size: 19px; font-weight: 700; }
+      .label { fill: #37474f; font-family: Arial, sans-serif; font-size: 14px; }
+      .formula { fill: #263238; font-family: Consolas, monospace; font-size: 15px; }
+      .line { stroke: #455a64; stroke-width: 2; fill: none; }
+      .strong { stroke: #1565c0; stroke-width: 3; fill: none; }
+      .dash { stroke: #6a1b9a; stroke-width: 3; fill: none; stroke-dasharray: 8 6; }
+      .arrowLine { stroke: #263238; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .near { fill: #ffcc80; stroke: #bf5f00; stroke-width: 2; }
+      .far { fill: #90caf9; stroke: #1565c0; stroke-width: 2; }
+      .ndc { fill: #e8f5e9; stroke: #2e7d32; stroke-width: 3; }
+      .screen { fill: #ede7f6; stroke: #6a1b9a; stroke-width: 3; }
+      .pointNear { fill: #e65100; }
+      .pointFar { fill: #0d47a1; }
+    </style>
+  </defs>
+
+  <rect x="16" y="20" width="1148" height="360" fill="#ffffff" stroke="#90a4ae" stroke-width="2" rx="18"/>
+
+  <g transform="translate(44 58)">
+    <rect class="box" width="250" height="250"/>
+    <text class="title" x="18" y="32">1. View Space</text>
+    <text class="label" x="18" y="56">카메라 앞 절두체</text>
+    <polygon points="42,136 198,58 198,214" fill="#e3f2fd" stroke="#1565c0" stroke-width="3"/>
+    <line class="line" x1="42" y1="136" x2="220" y2="136"/>
+    <rect class="near" x="92" y="112" width="28" height="48"/>
+    <rect class="far" x="174" y="96" width="36" height="80"/>
+    <circle class="pointNear" cx="106" cy="112" r="5"/>
+    <circle class="pointFar" cx="192" cy="96" r="5"/>
+    <text class="label" x="78" y="190">near</text>
+    <text class="label" x="178" y="190">far</text>
+    <text class="formula" x="18" y="232">P_view</text>
+  </g>
+
+  <path class="arrowLine" d="M 312 180 L 372 180"/>
+  <text class="formula" x="312" y="150">Projection</text>
+  <text class="label" x="310" y="206">피라미드를 상자로 압축</text>
+
+  <g transform="translate(392 58)">
+    <rect class="box" width="250" height="250"/>
+    <text class="title" x="18" y="32">2. Clip Space</text>
+    <text class="label" x="18" y="56">x, y는 중심 쪽으로 모임</text>
+    <polygon class="ndc" points="74,82 178,82 178,190 74,190"/>
+    <line class="strong" x1="126" y1="55" x2="126" y2="210"/>
+    <line class="strong" x1="50" y1="136" x2="202" y2="136"/>
+    <rect class="near" x="82" y="112" width="34" height="48"/>
+    <rect class="far" x="142" y="116" width="28" height="40"/>
+    <path class="dash" d="M 192 96 C 174 112, 160 120, 156 136"/>
+    <path class="dash" d="M 106 112 C 114 122, 120 130, 126 136"/>
+    <text class="label" x="63" y="215">클리핑 계산용 상자</text>
+    <text class="formula" x="18" y="232">P_clip = M_projection * P_view</text>
+  </g>
+
+  <path class="arrowLine" d="M 660 180 L 720 180"/>
+  <text class="formula" x="664" y="150">/ w</text>
+  <text class="label" x="650" y="206">거리로 나누어 크기 확정</text>
+
+  <g transform="translate(740 58)">
+    <rect class="box" width="360" height="250"/>
+    <text class="title" x="18" y="32">3. Screen</text>
+    <text class="label" x="18" y="56">NDC -> Pixel</text>
+    <rect class="screen" x="38" y="78" width="96" height="112"/>
+    <line class="line" x1="86" y1="78" x2="86" y2="190"/>
+    <line class="line" x1="38" y1="134" x2="134" y2="134"/>
+    <rect class="near" x="54" y="104" width="34" height="48"/>
+    <rect class="far" x="94" y="117" width="18" height="24"/>
+    <circle class="pointNear" cx="71" cy="104" r="5"/>
+    <circle class="pointFar" cx="103" cy="117" r="5"/>
+    <text class="formula" x="18" y="216">P_ndc = (x/w, y/w, z/w)</text>
+    <text class="label" x="18" y="238">가까운 물체는 크게, 먼 물체는 작게</text>
+  </g>
+
+  <text class="label" x="46" y="350">철길 비유: 멀리 있는 점일수록 화면 중심으로 모이고, 마지막에 w로 나누면서 실제 화면 크기가 작아집니다.</text>
+</svg>
