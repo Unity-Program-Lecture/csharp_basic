@@ -1,33 +1,40 @@
-<svg width="600" height="360" viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
-  <!-- 바닥 평면 가이드 -->
-  <path d="M 100 220 L 500 220 L 550 170 L 150 170 Z" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1" />
-  <!-- 몬스터 위치 -->
-  <circle cx="300" cy="195" r="15" fill="#34495e" />
-  <text x="282" y="200" fill="white" font-size="10" font-weight="bold">M</text>
-  <!-- 벡터 A (Forward) - 검지 -->
-  <line x1="300" y1="195" x2="350" y2="145" stroke="#3498db" stroke-width="4" marker-end="url(#cross-blue)" />
-  <text x="355" y="140" fill="#3498db" font-weight="bold">A (정면 / 검지)</text>
-  <!-- Case 1: 오른쪽 타겟 (B) - 중지 -->
-  <line x1="300" y1="195" x2="420" y2="195" stroke="#e74c3c" stroke-width="4" marker-end="url(#cross-red)" />
-  <text x="430" y="200" fill="#e74c3c" font-weight="bold">B (타겟 / 중지)</text>
-  <!-- Case 1 결과: Up (C) - 엄지 -->
-  <line x1="300" y1="195" x2="300" y2="70" stroke="#2ecc71" stroke-width="5" marker-end="url(#cross-green)" />
-  <text x="310" y="80" fill="#27ae60" font-weight="bold">C (결과 / 엄지 👍)</text>
-  <text x="310" y="100" fill="#27ae60" font-size="11">엄지가 위를 향함 (+)</text>
-  <!-- Case 2: 왼쪽 타겟 (B') -->
-  <line x1="300" y1="195" x2="180" y2="195" stroke="#e74c3c" stroke-width="4" stroke-dasharray="4" marker-end="url(#cross-red)" />
-  <text x="90" y="200" fill="#c0392b" font-weight="bold">B' (왼쪽 타겟)</text>
-  <!-- Case 2 결과: Down (C') -->
-  <line x1="300" y1="195" x2="300" y2="300" stroke="#27ae60" stroke-width="3" stroke-dasharray="4" marker-end="url(#cross-green-down)" />
-  <text x="310" y="315" fill="#27ae60" font-weight="bold">C' (결과 / 엄지 👎)</text>
-  <text x="310" y="335" fill="#27ae60" font-size="11">엄지가 아래를 향함 (-)</text>
-  <!-- Formula Overlay -->
-  <rect x="10" y="10" width="180" height="40" rx="5" fill="#f9f9f9" stroke="#ddd" />
-  <text x="20" y="35" fill="#2c3e50" font-size="14" font-weight="bold">왼손 법칙 (Left-Hand)</text>
+<svg width="800" height="460" viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="460" fill="#ffffff" />
+  <text x="32" y="38" fill="#263238" font-size="22" font-weight="bold">외적: 두 벡터가 펼친 넓이와 수직 방향</text>
+  <text x="32" y="65" fill="#546e7a" font-size="14">A x B는 평행사변형의 넓이를 크기로 가지고, 그 평면에 수직인 방향을 결과 벡터로 만듭니다.</text>
+
+  <path d="M 110 315 L 520 315 L 610 225 L 200 225 Z" fill="#f7fafc" stroke="#cfd8dc" stroke-width="2" />
+  <path d="M 250 285 L 460 285 L 550 195 L 340 195 Z" fill="#ffe0b2" opacity="0.65" stroke="#ef6c00" stroke-width="3" />
+  <text x="472" y="274" fill="#ef6c00" font-size="14" font-weight="bold">넓이 = |A x B|</text>
+
+  <circle cx="250" cy="285" r="17" fill="#37474f" />
+  <text x="244" y="291" fill="#ffffff" font-size="13" font-weight="bold">M</text>
+  <line x1="250" y1="285" x2="340" y2="195" stroke="#1976d2" stroke-width="6" marker-end="url(#cross-blue)" />
+  <text x="305" y="187" fill="#1976d2" font-size="15" font-weight="bold">A: 정면</text>
+  <line x1="250" y1="285" x2="460" y2="285" stroke="#d84315" stroke-width="6" marker-end="url(#cross-red)" />
+  <text x="465" y="290" fill="#d84315" font-size="15" font-weight="bold">B: 타겟</text>
+  <line x1="340" y1="195" x2="550" y2="195" stroke="#ef6c00" stroke-width="2" stroke-dasharray="6 5" />
+  <line x1="460" y1="285" x2="550" y2="195" stroke="#ef6c00" stroke-width="2" stroke-dasharray="6 5" />
+
+  <line x1="250" y1="285" x2="250" y2="115" stroke="#00897b" stroke-width="8" marker-end="url(#cross-green)" />
+  <text x="267" y="128" fill="#00897b" font-size="15" font-weight="bold">C = A x B</text>
+  <text x="267" y="151" fill="#00897b" font-size="13">평면에 수직인 방향</text>
+
+  <line x1="250" y1="285" x2="250" y2="405" stroke="#7b1fa2" stroke-width="4" stroke-dasharray="7 6" marker-end="url(#cross-purple)" />
+  <text x="267" y="402" fill="#7b1fa2" font-size="14" font-weight="bold">B x A는 반대 방향</text>
+
+  <rect x="565" y="120" width="195" height="225" rx="8" fill="#f7f9fb" stroke="#d5dde3" />
+  <text x="588" y="154" fill="#263238" font-size="17" font-weight="bold">기하학적 해석</text>
+  <text x="588" y="188" fill="#37474f" font-size="14">|A x B| = |A||B| sin θ</text>
+  <text x="588" y="222" fill="#37474f" font-size="14">직각이면 넓이가 가장 큼</text>
+  <text x="588" y="247" fill="#37474f" font-size="14">평행하면 넓이가 0</text>
+  <text x="588" y="282" fill="#00897b" font-size="14" font-weight="bold">결과 방향으로 좌우 판단</text>
+  <text x="588" y="307" fill="#7b1fa2" font-size="14" font-weight="bold">순서를 바꾸면 방향 반대</text>
+
   <defs>
-    <marker id="cross-blue" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3498db" /></marker>
-    <marker id="cross-red" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#e74c3c" /></marker>
-    <marker id="cross-green" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#2ecc71" /></marker>
-    <marker id="cross-green-down" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#27ae60" /></marker>
+    <marker id="cross-blue" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#1976d2" /></marker>
+    <marker id="cross-red" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#d84315" /></marker>
+    <marker id="cross-green" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#00897b" /></marker>
+    <marker id="cross-purple" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto"><path d="M0,0 L0,8 L11,4 z" fill="#7b1fa2" /></marker>
   </defs>
 </svg>

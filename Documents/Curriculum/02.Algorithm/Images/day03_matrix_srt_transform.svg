@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="360" viewBox="0 0 1180 360" role="img" aria-labelledby="title desc">
+  <title id="title">SRT transform order diagram</title>
+  <desc id="desc">Scale, Rotation, Translation steps show how a local shape is transformed into world space.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#263238"/>
+    </marker>
+    <style>
+      .panel { fill: #f7fafc; stroke: #41505a; stroke-width: 2; rx: 14; }
+      .axis { stroke: #546e7a; stroke-width: 2; marker-end: url(#arrow); }
+      .grid { stroke: #c9d6df; stroke-width: 1; }
+      .shape { fill: #ffcc80; stroke: #bf5f00; stroke-width: 3; }
+      .shape2 { fill: #90caf9; stroke: #1565c0; stroke-width: 3; }
+      .shape3 { fill: #a5d6a7; stroke: #2e7d32; stroke-width: 3; }
+      .shape4 { fill: #ce93d8; stroke: #6a1b9a; stroke-width: 3; }
+      .caption { fill: #263238; font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; }
+      .small { fill: #37474f; font-family: Arial, sans-serif; font-size: 14px; }
+      .formula { fill: #263238; font-family: Consolas, monospace; font-size: 16px; }
+      .arrowLine { stroke: #263238; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+      .origin { fill: #d32f2f; }
+    </style>
+  </defs>
+
+  <rect x="16" y="20" width="1148" height="320" fill="#ffffff" stroke="#90a4ae" stroke-width="2" rx="18"/>
+
+  <g transform="translate(44 54)">
+    <rect class="panel" width="190" height="230"/>
+    <text class="caption" x="18" y="30">1. Local</text>
+    <text class="small" x="18" y="54">내 중심이 원점</text>
+    <line class="grid" x1="35" y1="130" x2="155" y2="130"/>
+    <line class="grid" x1="95" y1="70" x2="95" y2="190"/>
+    <line class="axis" x1="95" y1="130" x2="165" y2="130"/>
+    <line class="axis" x1="95" y1="130" x2="95" y2="60"/>
+    <circle class="origin" cx="95" cy="130" r="5"/>
+    <rect class="shape" x="72" y="106" width="46" height="48"/>
+    <text class="formula" x="50" y="215">P_local</text>
+  </g>
+
+  <path class="arrowLine" d="M 248 168 L 300 168"/>
+  <text class="formula" x="254" y="144">Scale</text>
+
+  <g transform="translate(314 54)">
+    <rect class="panel" width="190" height="230"/>
+    <text class="caption" x="18" y="30">2. Scale</text>
+    <text class="small" x="18" y="54">먼저 몸집만 조절</text>
+    <line class="grid" x1="35" y1="130" x2="155" y2="130"/>
+    <line class="grid" x1="95" y1="70" x2="95" y2="190"/>
+    <line class="axis" x1="95" y1="130" x2="165" y2="130"/>
+    <line class="axis" x1="95" y1="130" x2="95" y2="60"/>
+    <circle class="origin" cx="95" cy="130" r="5"/>
+    <rect class="shape2" x="52" y="112" width="86" height="36"/>
+    <text class="formula" x="42" y="215">S * P</text>
+  </g>
+
+  <path class="arrowLine" d="M 518 168 L 570 168"/>
+  <text class="formula" x="526" y="144">Rotate</text>
+
+  <g transform="translate(584 54)">
+    <rect class="panel" width="190" height="230"/>
+    <text class="caption" x="18" y="30">3. Rotation</text>
+    <text class="small" x="18" y="54">제자리에서 방향 전환</text>
+    <line class="grid" x1="35" y1="130" x2="155" y2="130"/>
+    <line class="grid" x1="95" y1="70" x2="95" y2="190"/>
+    <line class="axis" x1="95" y1="130" x2="165" y2="130"/>
+    <line class="axis" x1="95" y1="130" x2="95" y2="60"/>
+    <circle class="origin" cx="95" cy="130" r="5"/>
+    <rect class="shape3" x="-43" y="-18" width="86" height="36" transform="translate(95 130) rotate(-32)"/>
+    <path d="M 120 85 A 54 54 0 0 1 150 125" fill="none" stroke="#2e7d32" stroke-width="3" marker-end="url(#arrow)"/>
+    <text class="formula" x="36" y="215">R * S * P</text>
+  </g>
+
+  <path class="arrowLine" d="M 788 168 L 832 168"/>
+  <text class="formula" x="790" y="144">Move</text>
+
+  <g transform="translate(846 54)">
+    <rect class="panel" width="250" height="230"/>
+    <text class="caption" x="18" y="30">4. World</text>
+    <text class="small" x="18" y="54">마지막에 목적지로 이동</text>
+    <line class="grid" x1="60" y1="170" x2="205" y2="170"/>
+    <line class="grid" x1="105" y1="70" x2="105" y2="200"/>
+    <line class="axis" x1="105" y1="170" x2="210" y2="170"/>
+    <line class="axis" x1="105" y1="170" x2="105" y2="105"/>
+    <circle class="origin" cx="105" cy="170" r="5"/>
+    <path d="M 105 170 L 160 113" stroke="#6a1b9a" stroke-width="3" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+    <rect class="shape4" x="-34" y="-14" width="68" height="28" transform="translate(160 113) rotate(-32)"/>
+    <text class="formula" x="42" y="215">T * R * S * P</text>
+  </g>
+
+  <text class="small" x="46" y="318">핵심: 크기와 방향은 오브젝트의 로컬 원점에서 정리한 뒤, 마지막에 월드 좌표의 목적지로 옮깁니다.</text>
+</svg>
