@@ -1,6 +1,6 @@
-# 🚀 Day 15: 고급 길찾기 알고리즘 (A* Algorithm)과 예외 처리
+# 🚀 Day 14: 고급 길찾기 알고리즘 (A* Algorithm)과 예외 처리
 
-오늘의 목표는 **"A* 길찾기 알고리즘의 비용 계산 원리(F = G + H)와 가중치 지형 탐색을 이해하고, FSM(유한 상태 머신)과의 연동 설계 및 길찾기 시스템 구현 시 발생 가능한 무한 루프와 널 포인터 결함을 분석하고 해결하는 디버깅 능력을 완수한다"**입니다.
+오늘의 목표는 **"A* 길찾기 알고리즘의 비용 계산 원리(F = G + H)와 가중치 지형 탐색을 이해하고, Day 12에서 배운 FSM의 추적 상태에 경로 갱신 로직을 연결하며, 길찾기 시스템 구현 시 발생 가능한 무한 루프와 널 포인터 결함을 분석하고 해결하는 디버깅 능력을 완수한다"**입니다.
 
 ---
 
@@ -32,9 +32,9 @@ graph TD
 
 ---
 
-## 2. 🤖 FSM (유한 상태 머신)과의 연동 설계
+## 2. 🤖 A* 경로 갱신 연동 설계
 
-몬스터 AI의 행동 트리나 상태 머신에서 A* 알고리즘은 주로 **[Chase(추적)]** 상태에서 실행됩니다. 
+Day 12에서 FSM의 상태 전환 원리는 이미 다루었으므로, 여기서는 몬스터가 **[Chase(추적)]** 상태에 들어온 뒤 A*를 언제 다시 실행할지만 설계합니다.
 
 ```mermaid
 stateDiagram-v2
@@ -116,6 +116,7 @@ public class RobustAStar : MonoBehaviour
         // 널 포인터 예외 예방 조치
         if (grid == null || startNode == null || targetNode == null)
         {
+            // Debug.LogError는 실행을 막아야 할 수준의 오류 메시지를 콘솔에 출력합니다.
             Debug.LogError("[A*] 탐색 인자가 null입니다. 경로 탐색을 취소합니다.");
             return null;
         }
@@ -203,6 +204,7 @@ public class RobustAStar : MonoBehaviour
 
     private int GetDistance(PathNode nodeA, PathNode nodeB)
     {
+        // Mathf.Abs는 음수일 수 있는 차이값을 절댓값으로 바꿔 거리 계산에 사용합니다.
         int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
         int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
         return 10 * (dstX + dstY); // 맨해튼 거리 공식

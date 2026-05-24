@@ -68,16 +68,21 @@
 | :--- | :--- | :--- |
 | **반응** | 튕겨 나감 (물리적 실체) | 그냥 통과 (영역 감지) |
 | **설정** | `Is Trigger` 체크 해제 | `Is Trigger` 체크 필수 |
-| **필수 조건** | \- | 적어도 한쪽은 "**Rigidbody**"가 있어야 함 |
+
+> **공통 조건:** `OnCollision...`과 `OnTrigger...` 이벤트는 모두 Collider만 두 개 있다고 항상 호출되는 것이 아닙니다. 충돌하는 두 오브젝트 중 적어도 한쪽이 `Rigidbody`를 가지고 있어야 유니티 물리 엔진이 움직이는 물체로 추적하고 이벤트를 보내줍니다.
 
 ### 📍 주요 이벤트 메서드
 ```csharp
 // 1. 물리적 충돌 발생 시
+// OnCollisionEnter/Stay/Exit는 Collider끼리 실제로 부딪힐 때 호출되는 유니티 메시지 메서드입니다.
+// 두 Collider 중 적어도 한쪽에는 Rigidbody가 있어야 합니다.
 private void OnCollisionEnter(Collision collision) { /* 충돌 시작 */ }
 private void OnCollisionStay(Collision collision) { /* 충돌 중 */ }
 private void OnCollisionExit(Collision collision) { /* 충돌 종료 */ }
 
 // 2. 트리거 영역 진입 시 (isTrigger ON)
+// OnTriggerEnter/Stay/Exit는 isTrigger가 켜진 Collider 영역에 들어오거나 머무르거나 나갈 때 호출됩니다.
+// 트리거 이벤트도 두 Collider 중 적어도 한쪽에는 Rigidbody가 있어야 합니다.
 private void OnTriggerEnter(Collider other) { /* 영역 진입 */ }
 private void OnTriggerStay(Collider other) { /* 영역 내부 */ }
 private void OnTriggerExit(Collider other) { /* 영역 퇴장 */ }
@@ -103,9 +108,11 @@ public class SimpleCollision : MonoBehaviour
         Vector3 diff = transform.position - other.position;
 
         // 2. 거리의 제곱 계산 (Magnitude보다 빠름)
+        // sqrMagnitude는 벡터 길이의 제곱값으로, 제곱근 계산 없이 거리 비교를 할 때 유용합니다.
         float distanceSq = diff.sqrMagnitude;
         
         // 3. 반지름 합의 제곱 계산
+        // Mathf.Pow는 숫자의 거듭제곱을 계산하는 메서드입니다.
         float radiusSumSq = Mathf.Pow(radiusA + radiusB, 2);
 
         // 4. 비교 (두 중심점 사이 거리가 반지름 합보다 작으면 충돌)
@@ -136,26 +143,6 @@ public class SimpleCollision : MonoBehaviour
    - **정답**: AABB (Axis-Aligned Bounding Box)
 2. **문제**: 원(구) 충돌 판정 시 성능 최적화를 위해 비교하는 두 값의 거리는 어떻게 처리하는 것이 좋습니까?
    - **정답**: 제곱근 계산을 피하기 위해 "**거리의 제곱**" 값을 사용합니다.
-
----
-
-## 📎 별첨: 운동량 보존 법칙과 반발 계수 (e) 충돌 연산 (심화)
-
-물체끼리 부딪혔을 때 서로 튕겨 나가는 강도는 **반발 계수 (Coefficient of Restitution, $e$)**와 **운동량 보존 법칙**에 의해 물리적으로 정교하게 계산됩니다.
-
-### 1. 반발 계수 ($e$)
-반발 계수는 충돌 전후 두 물체의 **상대 속도의 비율**입니다.
-$$e = -\frac{v_{2f} - v_{1f}}{v_{2i} - v_{1i}}$$
-* $e = 1$ (완전 탄성 충돌): 충돌 후 에너지가 완벽히 보존되어 속도가 그대로 튕겨 나갑니다. (당구공)
-* $0 < e < 1$ (비탄성 충돌): 에너지 일부가 열이나 소리로 손실되며 속도가 다소 감쇠되어 튕겨 나갑니다. (현실의 대다수 충돌)
-* $e = 0$ (완전 비탄성 충돌): 두 물체가 한 덩어리가 되어 달라붙어 이동합니다. (진흙 더미)
-
-### 2. 1차원 충돌 후의 속도 유도 수식 (질량 $m_1, m_2$)
-운동량 보존 법칙($m_1v_{1i} + m_2v_{2i} = m_1v_{1f} + m_2v_{2f}$)과 반발 계수 공식을 연립하면 충돌 후 최종 속도 $v_{1f}$와 $v_{2f}$를 직접 구할 수 있습니다:
-$$v_{1f} = \frac{(m_1 - e \cdot m_2)v_{1i} + (1 + e)m_2v_{2i}}{m_1 + m_2}$$
-$$v_{2f} = \frac{(m_2 - e \cdot m_1)v_{2i} + (1 + e)m_1v_{1i}}{m_1 + m_2}$$
-
-> 💡 **실무적 팁**: 유니티 6 내부 Physic Material의 Bounciness 값이 바로 이 반발 계수($e$) 역할을 담당하며, 두 물체의 반발 계수가 다를 경우 설정(Average, Multiply 등)에 따라 병합 연산됩니다.
 
 ---
 

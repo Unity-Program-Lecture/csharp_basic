@@ -55,9 +55,11 @@ public class PhysicsMove : MonoBehaviour
 
     void Start()
     {
+        // GetComponent<T>()는 같은 게임 오브젝트에 붙은 T 타입 컴포넌트를 가져오는 메서드입니다.
         rb = GetComponent<Rigidbody>();
     }
 
+    // FixedUpdate는 물리 계산 주기에 맞춰 자동 호출되므로 Rigidbody 이동에 적합합니다.
     void FixedUpdate()
     {
         float h = 0;
@@ -73,34 +75,13 @@ public class PhysicsMove : MonoBehaviour
 
         Vector3 forceDir = new Vector3(h, 0, v).normalized;
         
+        // Rigidbody.AddForce는 Rigidbody에 힘을 가해 물리 엔진이 속도를 바꾸게 하는 메서드입니다.
         rb.AddForce(forceDir * pushForce, ForceMode.Force);
     }
 }
 ```
 
 </details>
-
----
-
-## 4. 등가속도 직선 운동 (Constant Acceleration)
-현실적인 점프와 낙하를 구현하기 위해 가장 많이 사용하는 공식입니다.
-
-### 📍 핵심 공식
-1. **나중 속도 구하기**: $v = v_0 + at$
-   - (현재 속도 = 초기 속도 + 가속도 × 시간)
-2. **이동 거리 (변위) 구하기**: $s = v_0t + \frac{1}{2}at^2$
-   - (이동 거리 = 초기 속도 × 시간 + 0.5 × 가속도 × 시간의 제곱)
-
-### 🎮 유니티 실무 활용: 낙하 시간 계산
-가속도 ($a$) 자리에 중력 가속도 ($g \approx 9.81$)를 대입하면 물체가 바닥에 떨어질 때까지의 시간을 예측할 수 있습니다.
-
-**예시: 높이 10m에서 자유 낙하할 때 걸리는 시간 ($t$)?**
-- 공식: $10 = 0 \times t + \frac{1}{2} \times 9.81 \times t^2$
-- 결과: $t = \sqrt{20 / 9.81} \approx 1.42$초
-
-> 💡 **Tip**: 유니티 엔진 내부의 `Rigidbody`는 매 프레임 이 공식을 미분하여 계산합니다. 하지만 수류탄의 궤적을 미리 그리거나, 특정 높이까지 점프하기 위한 초기 속도를 계산할 때는 이 공식이 직접적으로 필요합니다.
-
----
 
 ## 🎯 [심화 미션] 몬스터 사냥 시스템: 힘과 질량에 따른 넉백 구현
 ### [요구 사항]
@@ -115,5 +96,5 @@ public class PhysicsMove : MonoBehaviour
 ## ✍️ 평가 문항 대비 퀴즈
 1. **문제:** 유니티에서 물리 엔진 연산을 처리할 때 프레임 드랍의 영향을 받지 않기 위해 코드를 작성해야 하는 생명주기 메서드 이름은 무엇인가요?
    - **정답:** `FixedUpdate()`
-2. **문제:** 공기의 저항이 없는 상태에서 속도/가속도가 0인 물체에 Force만큼 힘을 주었을 때, 시간에 따라 속도가 누적되어 점점 빨라지는 이유는 무슨 운동을 하기 때문인가요?
-   - **정답:** 등가속도 운동
+2. **문제:** 같은 힘으로 일반 몬스터와 보스 몬스터를 밀었을 때, 질량이 더 큰 보스 몬스터가 덜 밀려나는 이유는 무엇인가요?
+   - **정답:** 힘이 같다면 질량이 클수록 가속도가 작아지기 때문입니다. ($F = ma$)

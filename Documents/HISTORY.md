@@ -157,6 +157,27 @@
    - 오일러/쿼터니언 차이의 실생활 비유 및 FPS 실전 팁을 쿼터니언 본문 설명 직후로 자연스럽게 배치하고, 그 흐름이 부드럽게 이어지도록 Lerp/Slerp 보간 개념 비교 단락을 그 뒤에 재배치하여 학습자의 논리적 이해도를 최적화함.
 6. **5일차 게임 물리 교재 등속 직선 운동 기초 단락 보강 (DAY05_PHYSICS_MOTION.md)**
    - 등가속도 운동을 학습하기 전에 등속 직선 운동의 기본적인 정의, 변위 공식, 게임 내 활용 예시(캐릭터 이동, 기본 투사체) 및 C# 예제 코드를 선제적으로 추가하여 기초적인 물리 빌드업을 촘촘히 보강함.
+## 2026-05-24
+
+1. **알고리즘 5~15일차 학습 문서 중복 내용 정리**
+   - `DAY06_PHYSICS_FORCE.md`에서 Day 05와 중복되는 등가속도 공식 설명을 제거하고, 퀴즈를 힘과 질량 관계 중심으로 정리함.
+   - `DAY07_PHYSICS_COLLISION.md`에서 Day 08의 운동량/충격량 학습 내용과 겹치는 반발 계수 심화 별첨을 제거함.
+   - `DAY15_ALGO_ASTAR.md`의 FSM 연동 문구를 Day 13 개념 반복이 아닌 A* 경로 갱신 설계 중심으로 조정함.
+2. **8일차 ForceMode 힘 전달 방식 설명 보강**
+   - `DAY08_PHYSICS_ADVANCED.md`에 `Rigidbody.AddForce(direction, ForceMode.Impulse)`와 함께 `Force`, `Acceleration`, `Impulse`, `VelocityChange`의 차이를 질량 영향, 호출 패턴, 사용 예시 중심으로 추가함.
+3. **알고리즘 1~15일차 샘플 코드 Unity API 주석 보강**
+   - 1~15일차 샘플 코드에서 UnityEngine/Unity Input System 메서드와 프로퍼티가 처음 등장하는 지점에만 초보자용 설명 주석을 추가함.
+   - 앞 일차에서 이미 설명된 API는 뒤 일차 코드에서 반복 주석을 달지 않도록 정리함.
+4. **7일차 Unity 물리 이벤트 Rigidbody 필수 조건 정정**
+   - `DAY07_PHYSICS_COLLISION.md`의 Collision/Trigger 이벤트 표에서 중복 조건을 제거하고, 두 경우 모두 두 Collider 중 적어도 한쪽에 `Rigidbody`가 필요하다는 내용을 공통 조건으로 분리함.
+5. **9일차 기본 포물선 운동의 3D 수평 이동 설명 보강**
+   - `DAY09_PHYSICS_PROJECTILE.md`의 기본 포물선 운동 공식에 `z(t)`를 추가하고, 유니티 3D의 수평 이동이 XZ 평면에서 이루어진다는 설명을 보강함.
+6. **9일차 중력 가속도 부호 표기 명확화**
+   - `DAY09_PHYSICS_PROJECTILE.md`에서 중력 벡터를 $\vec{a} = (0, -g, 0)$로 표기하고, $g$는 양수인 중력 크기이며 실제 Y축 가속도는 $a_y = -g$라는 설명을 추가함.
+7. **알고리즘 10~14일차 학습 문서 재편성**
+   - `DAY11_DATASTRUCTURE_DICT.md`의 Dictionary 검색 내용을 `DAY10_DATASTRUCTURE_BASIC.md`에 통합하고 기존 11일차 문서를 삭제함.
+   - 기존 `DAY12_ALGO_GRAPH.md`~`DAY15_ALGO_ASTAR.md`를 각각 `DAY11_ALGO_GRAPH.md`~`DAY14_ALGO_ASTAR.md`로 하루씩 당기고, 문서 제목과 A* 문서의 FSM 참조 일차를 함께 갱신함.
+
 ## 2026-05-21
 
 1. **Codex 마이그레이션 및 학습 문서 작성 규칙 정리**

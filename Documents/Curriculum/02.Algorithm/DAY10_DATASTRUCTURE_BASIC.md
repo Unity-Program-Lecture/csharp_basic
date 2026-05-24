@@ -1,6 +1,6 @@
-# 🚀 Day 10: 게임 자료구조 - 선형 구조 (List, Stack, Queue) 및 기획서 데이터 모델링
+# 🚀 Day 10: 게임 자료구조 - 선형 구조와 키 기반 검색
 
-오늘의 목표는 **"자연어로 기술된 게임 기획서를 분석하여 핵심 아이템/몬스터 데이터를 추출하고, 이를 C# 클래스 구조와 자료구조 도면(UML)으로 변환 및 최적의 선형 자료구조를 선택하여 게임 시스템을 설계하는 능력을 배양한다"**입니다.
+오늘의 목표는 **"자연어로 기술된 게임 기획서를 분석하여 핵심 아이템/몬스터 데이터를 추출하고, 이를 C# 클래스 구조와 자료구조 도면(UML)으로 변환한 뒤, 선형 자료구조와 키 기반 검색 자료구조를 게임 상황에 맞게 선택하는 능력을 배양한다"**입니다.
 
 ---
 
@@ -135,6 +135,7 @@ public class BossSkillController : MonoBehaviour
         }
         else
         {
+            // Debug.LogWarning은 일반 로그보다 눈에 띄는 경고 메시지를 콘솔에 출력합니다.
             Debug.LogWarning("취소할 예약 스킬이 없습니다.");
         }
     }
@@ -160,4 +161,75 @@ public class BossSkillController : MonoBehaviour
 
 ---
 
+## 5. 💡 키 기반 검색 구조: Dictionary
+자료를 순서대로 저장하는 것만큼 중요한 것이 "필요한 데이터를 빠르게 찾는 것"입니다. 아이템 이름, 몬스터 ID, 퀘스트 번호처럼 고유한 이름표가 있다면 `Dictionary`가 좋은 선택이 됩니다.
 
+- **자료구조 (Data Structure)**: 데이터를 메모리에 효율적으로 저장하고 관리하는 방법입니다.
+- **List vs Dictionary**:
+  - `List`: 순서대로 데이터를 쌓을 때 유리하지만, 특정 데이터를 찾으려면 처음부터 끝까지 뒤져야 합니다. (순차 탐색)
+  - `Dictionary`: 이름표(Key)를 붙여 데이터를 저장합니다. 아이템 이름으로 아이템 정보를 찾을 때 검색 속도가 월등히 빠릅니다. (해시 테이블 기반)
+
+---
+
+## 6. 💻 실습: 아이템 도감 시스템
+**미션:** C#의 자료구조를 사용하여, 아이템 이름(Key)을 입력하면 해당 아이템의 설명(Value)을 즉시 찾아 출력하는 아이템 도감을 만드세요.
+
+<details>
+<summary>코드 보기</summary>
+
+```csharp
+using UnityEngine;
+using System.Collections.Generic; // 제네릭 자료구조를 위해 필수!
+
+public class ItemEncyclopedia : MonoBehaviour
+{
+    // Key(문자열: 이름)와 Value(문자열: 설명)를 매칭하는 딕셔너리 선언
+    private Dictionary<string, string> itemDB = new Dictionary<string, string>();
+
+    void Start()
+    {
+        // 1. 자료 저장
+        itemDB.Add("빨간포션", "체력을 50 회복시켜 줍니다.");
+        itemDB.Add("강철검", "공격력이 10 증가합니다.");
+
+        // 2. 자료 검색
+        SearchItem("강철검");
+        SearchItem("없는아이템");
+    }
+
+    void SearchItem(string itemName)
+    {
+        // Key가 존재하는지 확인 후 Value 가져오기
+        if (itemDB.ContainsKey(itemName))
+        {
+            Debug.Log($"{itemName} 설명: {itemDB[itemName]}");
+        }
+        else
+        {
+            Debug.Log("해당 아이템을 찾을 수 없습니다.");
+        }
+    }
+}
+```
+
+</details>
+
+---
+
+## 🎯 [심화 미션] 몬스터 사냥 시스템: 전리품 도감 시스템
+### [요구 사항]
+- 몬스터를 사냥하고 얻은 전리품들의 정보를 관리하는 '전리품 도감'을 `Dictionary`를 사용하여 기획하세요.
+- 아이템의 고유 ID(int)를 키로 사용하고, 아이템의 이름과 설명, 획득 개수를 포함하는 구조체를 값으로 저장해야 합니다.
+- 새로운 아이템을 획득했을 때 도감에 이미 있는 아이템이라면 개수만 늘리고, 없다면 새로 추가하는 로직을 구상하세요.
+
+### [프로그래밍 힌트]
+- `Dictionary.ContainsKey()`를 사용하여 중복 아이템 여부를 빠르게 확인할 수 있습니다.
+- `foreach` 문을 사용하여 도감 전체 내용을 출력하는 방법을 생각해 보세요.
+
+## ✍️ 평가 문항 대비 퀴즈
+1. **문제:** 자료를 순서대로 처리해야 하는 스킬 예약 시스템에는 어떤 선형 자료구조가 어울리나요?
+   - **정답:** `Queue`, `LinkedList`처럼 순서를 유지하며 처리할 수 있는 자료구조가 어울립니다. 마지막 예약 취소가 중요하다면 `LinkedList`를 사용할 수 있습니다.
+2. **문제:** 자료를 저장하는 중에 Key를 사용하여 Value를 찾아야 하는 경우 사용할 수 있는 C#의 자료구조를 써주세요.
+   - **정답:** Dictionary (딕셔너리)
+3. **문제:** 게임 내 수많은 아이템 중에서 '특정 이름의 아이템'을 찾을 때 List보다 Dictionary를 사용하는 것이 좋은 이유는 무엇입니까?
+   - **정답:** List는 처음부터 끝까지 검색해야 하지만, Dictionary는 Key를 통해 즉시 데이터를 찾아낼 수 있어 검색 속도가 훨씬 빠르기 때문입니다.

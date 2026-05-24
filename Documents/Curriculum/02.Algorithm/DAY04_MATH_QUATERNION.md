@@ -63,9 +63,11 @@ public class SmoothRotation : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
 
         // 2. 방향을 쿼터니언 회전값으로 변환
+        // Quaternion.LookRotation은 지정한 방향을 바라보는 회전값을 만들어 주는 메서드입니다.
         Quaternion targetRotation = Quaternion.LookRotation(direction);
 
         // 3. 현재 회전에서 목표 회전까지 부드럽게 보간 (Slerp)
+        // transform.rotation은 현재 오브젝트의 회전값이고, Quaternion.Slerp는 두 회전 사이를 부드럽게 섞습니다.
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 }
@@ -136,6 +138,7 @@ public class SmoothRotation : MonoBehaviour
     ```csharp
     Vector3 relA = a - center;
     Vector3 relB = b - center;
+    // Vector3.Slerp는 두 위치 벡터를 구면 보간하지만, 기준 중심이 월드 원점이라는 점에 주의해야 합니다.
     Vector3 relResult = Vector3.Slerp(relA, relB, t);
     Vector3 finalPos = relResult + center;
     ```

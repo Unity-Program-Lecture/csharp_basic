@@ -11,6 +11,26 @@
 - **충격량 (Impulse)**: 운동량의 변화량입니다. ($F \times \Delta t$)
 - **유니티 적용**: `Rigidbody.AddForce(direction, ForceMode.Impulse)`를 사용하면 폭발이나 타격처럼 한 프레임에 모든 힘을 즉시 전달합니다.
 
+### ForceMode에 따른 힘 전달 방식
+`Rigidbody.AddForce(direction, mode)`에서 `direction`은 힘을 줄 방향과 크기이고, `mode`는 그 힘을 물리 엔진이 어떻게 해석할지 정하는 옵션입니다. 같은 `direction` 값을 넣어도 `ForceMode`에 따라 "계속 밀기"가 될 수도 있고, "순간적으로 튕기기"가 될 수도 있습니다.
+
+| ForceMode | 힘이 전달되는 방식 | 질량 영향 | 자주 쓰는 호출 패턴 | 사용 예시 |
+| --- | --- | --- | --- | --- |
+| `ForceMode.Force` | 매 물리 프레임마다 힘을 계속 누적해서 전달합니다. | 받음 | `FixedUpdate`에서 일정 기간 반복 호출 | 로켓 추진, 바람, 계속 미는 힘 |
+| `ForceMode.Acceleration` | 질량을 무시하고 일정한 가속도를 계속 전달합니다. | 받지 않음 | `FixedUpdate`에서 일정 기간 반복 호출 | 캐릭터 이동 보정, 동일한 가속도 적용 |
+| `ForceMode.Impulse` | 짧은 순간에 충격량을 한 번 전달합니다. | 받음 | 점프/피격/폭발 이벤트 순간에 단발 호출 | 점프, 폭발, 피격 넉백 |
+| `ForceMode.VelocityChange` | 질량을 무시하고 속도 변화량을 즉시 더합니다. | 받지 않음 | 대시/보정 이벤트 순간에 단발 호출 | 대시, 순간 이동 보정, 일정한 점프감 |
+
+초보자 관점에서는 이렇게 구분하면 쉽습니다.
+
+- `Force`와 `Acceleration`은 손으로 계속 밀고 있는 느낌입니다.
+- `Impulse`와 `VelocityChange`는 한 번 툭 치는 느낌입니다.
+- `Force`와 `Impulse`는 질량이 큰 물체일수록 덜 움직입니다.
+- `Acceleration`과 `VelocityChange`는 질량이 달라도 같은 정도로 움직입니다.
+- 일반적으로 지속적인 힘은 `FixedUpdate`에서 여러 번 호출하고, 순간적인 힘은 입력이나 충돌 같은 이벤트가 발생한 프레임에 한 번만 호출합니다.
+
+따라서 `rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse)`는 "위쪽으로 한 번 강하게 밀어 올리는 충격"입니다. 캐릭터의 `Rigidbody.mass`가 커지면 같은 `jumpForce`라도 더 낮게 점프합니다.
+
 ---
 
 ## 2. 레이캐스트 (Raycast): "수학적 화살 쏘기"
@@ -36,13 +56,18 @@ public class RaycastJump : MonoBehaviour
 
     void Update()
     {
+        // Physics.Raycast는 시작점에서 방향으로 보이지 않는 선을 쏴 충돌 여부를 검사하는 메서드입니다.
+        // Vector3.down은 월드 기준 아래 방향인 (0, -1, 0) 벡터입니다.
         bool isGrounded = Physics.Raycast(transform.position, Vector3.down, checkDistance);
 
+        // Debug.DrawRay는 씬 뷰에 디버그용 광선을 그려 Raycast 방향을 눈으로 확인하게 해 줍니다.
         Debug.DrawRay(transform.position, Vector3.down * checkDistance, isGrounded ? Color.green : Color.red);
 
         // Input System: 스페이스바를 누른 순간 확인
+        // wasPressedThisFrame은 해당 키가 이번 프레임에 막 눌렸을 때만 true가 되는 프로퍼티입니다.
         if (isGrounded && Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
+            // Vector3.up은 월드 기준 위 방향인 (0, 1, 0) 벡터입니다.
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }

@@ -1,18 +1,25 @@
 # 🚀 Day 09: 게임 물리 심화 (중력과 투사체 운동)
 
-오늘의 목표는 **"중력과 공기 저항(항력)의 물리적 작용을 이해하고, 이를 결합한 운동 방정식을 기반으로 투사체(Projectile)의 실시간 포물선 궤적을 수학적으로 예측하고 구현하는 능력을 배양한다"**입니다.
+오늘의 목표는 "**중력과 공기 저항(항력)의 물리적 작용을 이해하고, 이를 결합한 운동 방정식을 기반으로 투사체(Projectile)의 실시간 포물선 궤적을 수학적으로 예측하고 구현하는 능력을 배양한다**"입니다.
 
 ---
 
 ## 1. 💡 이론 (30%): 중력과 공기 저항이 결합된 포물선 운동
 
 ### 1) 기본 포물선 운동 (공기 저항이 없을 때)
-중력 가속도 $\vec{g} = (0, -g, 0)$만 작용하는 이상적인 환경에서, 초기 속도 $\vec{v}_0 = (v_{0x}, v_{0y}, v_{0z})$로 발사된 투사체의 $t$초 후 위치 $\vec{p}(t)$는 다음과 같습니다.
+유니티 3D에서 위쪽은 보통 +Y 방향입니다. 따라서 중력 가속도는 아래 방향으로 작용하므로, 가속도 벡터를 $\vec{a} = (0, -g, 0)$로 둡니다. 여기서 $g$는 `9.81`처럼 양수인 "중력의 크기"이고, 실제 Y축 가속도는 $a_y = -g$입니다.
+
+초기 위치 $\vec{p}_0 = (x_0, y_0, z_0)$, 초기 속도 $\vec{v}_0 = (v_{0x}, v_{0y}, v_{0z})$로 발사된 투사체의 $t$초 후 위치 $\vec{p}(t)$는 다음과 같습니다.
+
+$$\vec{p}(t) = \vec{p}_0 + \vec{v}_0t + \frac{1}{2}\vec{a}t^2$$
 
 $$x(t) = x_0 + v_{0x}t$$
+$$z(t) = z_0 + v_{0z}t$$
 $$y(t) = y_0 + v_{0y}t - \frac{1}{2}gt^2$$
 
-- **수평 도달 거리 ($R$)**: 발사 각도가 $\theta$일 때, $R = \frac{v_0^2 \sin(2\theta)}{g}$ 이며, $\theta = 45^\circ$일 때 최대 거리를 가집니다.
+- **부호 해석**: 위치 공식의 기본형은 $y(t) = y_0 + v_{0y}t + \frac{1}{2}a_yt^2$입니다. 여기에 $a_y = -g$를 대입했기 때문에 $-\frac{1}{2}gt^2$가 됩니다.
+- **수평 이동**: 유니티 3D에서는 땅바닥이 보통 XZ 평면이므로, `x(t)`와 `z(t)`가 수평 이동을 담당합니다. 즉, 발사체는 앞뒤/좌우로는 일정한 속도로 이동하고, 높이인 `y(t)`만 중력 때문에 휘어집니다.
+- **수평 도달 거리 ($R$)**: 한 방향 단면에서 발사 각도가 $\theta$일 때, $R = \frac{v_0^2 \sin(2\theta)}{g}$ 이며, $\theta = 45^\circ$일 때 최대 거리를 가집니다.
 - **최고점 높이 ($H$)**: 수직 속도가 0이 되는 지점으로, $H = \frac{v_{0y}^2}{2g}$ 입니다.
 
 ---
@@ -61,9 +68,11 @@ public class ProjectilePredictor : MonoBehaviour
     
     private LineRenderer lineRenderer;
 
+    // Awake는 오브젝트가 활성화될 때 Start보다 먼저 호출되는 초기화용 유니티 메서드입니다.
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        // LineRenderer.useWorldSpace가 true이면 선의 점 좌표를 월드 좌표 기준으로 해석합니다.
         lineRenderer.useWorldSpace = true;
     }
 
@@ -73,8 +82,10 @@ public class ProjectilePredictor : MonoBehaviour
         AimAtMouse();
 
         // 2. 마우스를 누르고 있는 동안 실시간 궤적 렌더링
+        // Mouse.current는 현재 연결된 마우스 장치를 가져오는 프로퍼티입니다.
         if (Mouse.current != null && Mouse.current.leftButton.isPressed)
         {
+            // enabled는 컴포넌트의 동작 여부를 켜고 끄는 프로퍼티입니다.
             lineRenderer.enabled = true;
             PredictTrajectory();
         }
@@ -84,6 +95,7 @@ public class ProjectilePredictor : MonoBehaviour
         }
 
         // 3. 마우스 클릭 해제 시 발사
+        // wasReleasedThisFrame은 해당 버튼을 이번 프레임에 막 뗐을 때만 true가 됩니다.
         if (Mouse.current != null && Mouse.current.leftButton.wasReleasedThisFrame)
         {
             Fire();
@@ -92,13 +104,17 @@ public class ProjectilePredictor : MonoBehaviour
 
     private void AimAtMouse()
     {
+        // Camera.main은 MainCamera 태그가 붙은 카메라를 가져오는 프로퍼티입니다.
         if (Camera.main == null) return;
         
+        // ReadValue()는 입력 컨트롤이 가진 현재 값을 읽어 오는 메서드입니다.
         Vector2 mousePos = Mouse.current.position.ReadValue();
+        // ScreenPointToRay는 화면 좌표를 카메라에서 나가는 월드 광선으로 바꿉니다.
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
+            // RaycastHit.point는 Ray가 실제로 부딪힌 월드 좌표입니다.
             Vector3 targetDir = (hit.point - firePoint.position).normalized;
             // 피치(Pitch)와 요(Yaw)를 적용하여 발사대 정렬
             firePoint.forward = targetDir;
@@ -112,9 +128,12 @@ public class ProjectilePredictor : MonoBehaviour
     {
         Vector3 currentPosition = firePoint.position;
         Vector3 currentVelocity = firePoint.forward * launchForce;
+        // Physics.gravity는 프로젝트 물리 설정에 지정된 중력 벡터입니다.
         Vector3 gravity = Physics.gravity;
         
+        // LineRenderer.positionCount는 선을 구성할 점의 개수를 정하는 프로퍼티입니다.
         lineRenderer.positionCount = maxSteps;
+        // LineRenderer.SetPosition은 지정한 인덱스의 선 점 위치를 설정하는 메서드입니다.
         lineRenderer.SetPosition(0, currentPosition);
 
         for (int i = 1; i < maxSteps; i++)
@@ -134,6 +153,8 @@ public class ProjectilePredictor : MonoBehaviour
             lineRenderer.SetPosition(i, currentPosition);
 
             // 지면(Collider)에 부딪치면 예측을 중단하여 선이 땅을 뚫고 들어가지 않게 함
+            // LineRenderer.GetPosition은 지정한 인덱스의 선 점 위치를 가져오는 메서드입니다.
+            // Vector3.Distance는 두 위치 사이의 실제 거리를 계산하는 메서드입니다.
             if (Physics.Raycast(lineRenderer.GetPosition(i - 1), (currentPosition - lineRenderer.GetPosition(i - 1)).normalized, out RaycastHit hit, Vector3.Distance(currentPosition, lineRenderer.GetPosition(i - 1))))
             {
                 lineRenderer.SetPosition(i, hit.point);
@@ -145,13 +166,16 @@ public class ProjectilePredictor : MonoBehaviour
 
     private void Fire()
     {
+        // Instantiate는 프리팹을 씬에 복제하여 새 게임 오브젝트를 만드는 메서드입니다.
         GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = projectile.GetComponent<Rigidbody>();
         
         if (rb != null)
         {
             // 예측에 사용한 Drag 값과 반드시 일치시킵니다.
+            // Rigidbody.drag는 공기 저항처럼 속도를 서서히 줄이는 감쇠값입니다.
             rb.drag = projectileDrag;
+            // Rigidbody.useGravity는 유니티 중력을 받을지 결정하는 프로퍼티입니다.
             rb.useGravity = true;
             rb.AddForce(firePoint.forward * launchForce, ForceMode.VelocityChange);
         }
