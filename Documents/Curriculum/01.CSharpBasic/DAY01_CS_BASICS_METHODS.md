@@ -85,7 +85,8 @@ public class Day01_Practice : MonoBehaviour
         int a = 100;
         int b = a; 
         b -= 50;
-        Debug.Log($"a: {a}, b: {b}"); // 결과: a=100, b=50 (원본 a는 유지됨)
+        Debug.Log($"a: {a}, b: {b}"); // a: 100, b: 50
+        //  (원본 a는 유지됨)
     }
 }
 ```
