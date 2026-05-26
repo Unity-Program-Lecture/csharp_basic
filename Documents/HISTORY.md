@@ -1,5 +1,23 @@
 # 📜 프로젝트 교육과정 개발 히스토리
 
+## 2026-05-26
+
+1. **GitHub Desktop 참고 문서 추가**
+   - `Documents/Reference/GITHUB_DESKTOP_GUIDE.md`를 생성하여 설치, 로그인, 저장소 생성, Clone, Commit, Push, Pull, Branch, Conflict 대응, C# 프로젝트 `.gitignore` 주의사항을 입문자용 비유 중심으로 정리함.
+   - `Documents/Reference/` 참고 문서 폴더를 신설하여 공통 도구 사용 가이드를 분리 보관할 수 있도록 구성함.
+2. **Unity 프로젝트 저장소 추가 주의사항 보강**
+   - GitHub Desktop 가이드에 Unity 프로젝트에서 Git에 포함할 항목(`Assets`, `Packages`, `ProjectSettings`)과 제외할 항목(`Library`, `Temp`, `Obj`, `Build`, `Logs`)을 추가함.
+   - Unity용 `.gitignore`, `.meta` 파일 관리, 씬/프리팹 충돌, 대용량 에셋 주의사항을 입문자용 비유와 체크리스트로 정리함.
+3. **Unity 대용량 에셋 Git LFS 설정 설명 추가**
+   - GitHub Desktop 설치 시 Git LFS 도구는 함께 설치되지만, 파일 추적 규칙은 자동 설정되지 않으므로 `git lfs track`과 `.gitattributes` 커밋이 필요하다는 내용을 보강함.
+   - `.psd`, `.fbx`, `.wav`, `.mp4`, `.zip` 등 Unity 대용량 에셋 예시와 `.gitattributes` 작성 예시를 추가함.
+4. **GitHub Desktop과 명령줄 Git 설치 관계 설명 추가**
+   - GitHub Desktop만 사용하는 경우 기본 Git 작업은 가능하지만, 터미널의 `git` 명령어, 외부 도구 연동, `git lfs track` 사용을 위해서는 Git for Windows 설치 여부를 확인하도록 안내함.
+   - `git --version` 확인 명령과 Git for Windows 다운로드 경로를 가이드에 추가함.
+5. **Unity Git 설정 템플릿 다운로드 링크 추가**
+   - GitHub 공식 Unity `.gitignore` 템플릿의 보기 링크와 Raw 다운로드 링크를 GitHub Desktop 가이드에 추가함.
+   - Unity `.gitattributes` 템플릿의 보기 링크와 Raw 다운로드 링크를 Git LFS 설명 섹션에 추가함.
+
 ## 📅 2026-04-12 (어제)
 - 1일차 수업 진행: 변수, 데이터 타입, 값/참조 형식, 함수 기초, if, for 학습.
 - 초보 학생들이 메모리 구조와 박싱/언박싱 개념을 어려워함 확인.
