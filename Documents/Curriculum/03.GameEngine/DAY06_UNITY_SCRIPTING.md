@@ -10,24 +10,9 @@
 
 ### 📍 생명주기 핵심 단계 및 실행 순서 (Lifecycle Diagram)
 
-```mermaid
-chronological-diagram
-    title MonoBehaviour 핵심 생명주기 흐름
-    section 초기화 (Initialization)
-        Awake: 씬이 시작되거나 오브젝트 활성화 시 최초 1회 호출 (컴포넌트 참조 초기화에 적합)
-        OnEnable: 오브젝트가 활성화될 때마다 매번 호출
-        Start: 첫 번째 프레임 업데이트 직전 최초 1회 호출 (타 오브젝트 데이터 참조에 적합)
-    section 물리 루프 (Physics Loop)
-        FixedUpdate: 프레임 레이트와 상관없이 매 고정 물리 프레임(기본 0.02초)마다 호출 (물리 힘 연산 전용)
-        네이티브 물리 연산: 콜라이더 충돌 연산 및 리지드바디 갱신
-        OnCollision/OnTrigger: 충돌 판정 및 이벤트 메소드 발동
-    section 게임 로직 & 렌더링 (Game Logic & Rendering)
-        Update: 매 화면 렌더링 프레임마다 호출 (경과시간 Time.deltaTime과 연계)
-        LateUpdate: 모든 Update가 종료된 후 프레임마다 호출 (카메라 추적에 주로 사용)
-    section 비활성화 & 소멸 (Decommissioning)
-        OnDisable: 오브젝트가 비활성화될 때 호출
-        OnDestroy: 오브젝트가 영구적으로 파괴될 때 호출
-```
+![MonoBehaviour 핵심 생명주기 흐름](Images/day06_unity_lifecycle.svg)
+
+그림을 읽을 때는 `Awake -> OnEnable -> Start`를 "**수업 시작 전 준비**"로 보고, 가운데 반복 구간을 "**수업이 진행되는 동안 계속 도는 엔진의 시계**"로 보면 됩니다. 입력 확인은 `Update`, 물리 이동과 점프 힘 적용은 `FixedUpdate`에 두면 두 시계의 역할을 분리해서 이해하기 쉽습니다.
 
 ---
 

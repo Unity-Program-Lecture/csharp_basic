@@ -228,3 +228,9 @@
    - `Documents/Exam/01.CSharpBasic/RETAKE_EXAM_CSHARP.md`를 추가함.
    - 1일차부터 9일차까지의 C# 기초 출제 범위를 기준으로 서술형 10문항을 구성함.
    - 본평가의 평가자 체크리스트 유형을 유지하되, 재시험용으로 클래스 수와 제네릭 제약 난도를 낮춘 미니 몬스터 관리 프로그램 과제를 추가함.
+
+## 2026-05-27
+
+1. **게임엔진 6일차 생명주기 그림 오류 수정**
+   - `DAY06_UNITY_SCRIPTING.md`의 렌더링되지 않는 Mermaid `chronological-diagram` 블록을 제거함.
+   - MonoBehaviour 생명주기 흐름을 별도 SVG 파일 `Images/day06_unity_lifecycle.svg`로 작성해 GitHub Markdown에서 안정적으로 표시되도록 교체함.

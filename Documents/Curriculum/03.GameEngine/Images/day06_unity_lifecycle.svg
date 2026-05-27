@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="500" viewBox="0 0 980 500" role="img" aria-labelledby="title desc">
+  <title id="title">Unity MonoBehaviour lifecycle flow</title>
+  <desc id="desc">A high contrast diagram showing the main execution order from Awake to OnDestroy.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2f4f6f"/>
+    </marker>
+    <style>
+      .bg { fill: #f7fafc; }
+      .title { font: 700 28px Arial, sans-serif; fill: #18324a; }
+      .subtitle { font: 400 15px Arial, sans-serif; fill: #49677f; }
+      .band-title { font: 700 16px Arial, sans-serif; fill: #18324a; }
+      .box-title { font: 700 17px Arial, sans-serif; fill: #102a43; }
+      .box-desc { font: 400 13px Arial, sans-serif; fill: #334e68; }
+      .note { font: 700 14px Arial, sans-serif; fill: #7c2d12; }
+      .stroke { stroke: #2f4f6f; stroke-width: 3; marker-end: url(#arrow); fill: none; }
+      .loop { stroke: #8a4b15; stroke-width: 3; stroke-dasharray: 8 6; marker-end: url(#arrow); fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="980" height="500"/>
+  <text class="title" x="40" y="48">MonoBehaviour 핵심 생명주기 흐름</text>
+  <text class="subtitle" x="40" y="74">처음 켜질 때 1회 초기화하고, 게임 중에는 프레임 루프와 물리 루프가 반복됩니다.</text>
+
+  <rect x="38" y="108" width="260" height="280" rx="8" fill="#e0f2fe" stroke="#2f7da8" stroke-width="2"/>
+  <text class="band-title" x="60" y="138">1. 초기화</text>
+  <rect x="62" y="160" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f7da8" stroke-width="2"/>
+  <text class="box-title" x="84" y="184">Awake</text>
+  <text class="box-desc" x="84" y="204">컴포넌트 참조 준비</text>
+  <rect x="62" y="240" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f7da8" stroke-width="2"/>
+  <text class="box-title" x="84" y="264">OnEnable</text>
+  <text class="box-desc" x="84" y="284">활성화될 때마다 호출</text>
+  <rect x="62" y="320" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f7da8" stroke-width="2"/>
+  <text class="box-title" x="84" y="344">Start</text>
+  <text class="box-desc" x="84" y="364">첫 Update 직전 1회</text>
+
+  <rect x="360" y="108" width="260" height="280" rx="8" fill="#ecfdf5" stroke="#2f855a" stroke-width="2"/>
+  <text class="band-title" x="382" y="138">2. 반복 실행 루프</text>
+  <rect x="384" y="160" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f855a" stroke-width="2"/>
+  <text class="box-title" x="406" y="184">FixedUpdate</text>
+  <text class="box-desc" x="406" y="204">물리 계산, 기본 0.02초</text>
+  <rect x="384" y="240" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f855a" stroke-width="2"/>
+  <text class="box-title" x="406" y="264">Physics Step</text>
+  <text class="box-desc" x="406" y="284">충돌과 Rigidbody 갱신</text>
+  <rect x="384" y="320" width="210" height="58" rx="6" fill="#ffffff" stroke="#2f855a" stroke-width="2"/>
+  <text class="box-title" x="406" y="344">Update / LateUpdate</text>
+  <text class="box-desc" x="406" y="364">입력, 로직, 카메라 추적</text>
+
+  <rect x="682" y="108" width="260" height="280" rx="8" fill="#fff7ed" stroke="#c05621" stroke-width="2"/>
+  <text class="band-title" x="704" y="138">3. 종료 처리</text>
+  <rect x="706" y="200" width="210" height="58" rx="6" fill="#ffffff" stroke="#c05621" stroke-width="2"/>
+  <text class="box-title" x="728" y="224">OnDisable</text>
+  <text class="box-desc" x="728" y="244">비활성화될 때 정리</text>
+  <rect x="706" y="300" width="210" height="58" rx="6" fill="#ffffff" stroke="#c05621" stroke-width="2"/>
+  <text class="box-title" x="728" y="324">OnDestroy</text>
+  <text class="box-desc" x="728" y="344">파괴될 때 마지막 정리</text>
+
+  <path class="stroke" d="M 167 218 L 167 235"/>
+  <path class="stroke" d="M 167 298 L 167 315"/>
+  <path class="stroke" d="M 272 349 C 318 349 330 189 379 189"/>
+  <path class="stroke" d="M 489 218 L 489 235"/>
+  <path class="stroke" d="M 489 298 L 489 315"/>
+  <path class="loop" d="M 594 349 C 660 430 318 430 384 349"/>
+  <path class="stroke" d="M 594 349 C 640 349 660 229 701 229"/>
+  <path class="stroke" d="M 811 258 L 811 295"/>
+
+  <text class="note" x="420" y="425">반복 구간: 게임이 실행되는 동안 계속 돌아가는 엔진의 시계</text>
+  <text class="subtitle" x="40" y="462">수업 포인트: 입력 읽기는 Update, Rigidbody 이동과 힘 적용은 FixedUpdate에 두면 타이밍을 구분하기 쉽습니다.</text>
+</svg>
