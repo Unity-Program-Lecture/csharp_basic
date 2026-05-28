@@ -83,6 +83,98 @@ public class MatrixTest : MonoBehaviour
 
 ---
 
+## 💻 추가 실습 예제: `TransformPoint` 계열 메서드 한 번에 비교하기
+앞 예제는 행렬로 로컬 좌표를 월드 좌표로 직접 바꾸는 방법을 확인했습니다. 유니티에서는 이 작업을 더 쉽게 하기 위해 `TransformPoint`, `TransformDirection`, `TransformVector`와 그 반대 방향인 `Inverse...` 메서드를 제공합니다.
+
+이름이 비슷해서 헷갈리기 쉽지만, 기준은 간단합니다. **점(Point)** 은 "어디에 있는가", **방향(Direction)** 은 "어느 쪽을 보는가", **벡터(Vector)** 는 "얼마나 밀리는가"를 뜻합니다.
+
+| 메서드 | 변환 방향 | 위치 이동 반영 | 회전 반영 | 크기 반영 | 언제 쓰나요? |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| `TransformPoint` | 로컬 -> 월드 | O | O | O | 내 기준 `(2, 0, 0)` 지점에 이펙트 생성 |
+| `InverseTransformPoint` | 월드 -> 로컬 | O | O | O | 대상이 내 기준 앞/뒤/좌/우 어디에 있는지 판정 |
+| `TransformDirection` | 로컬 -> 월드 | X | O | X | 내 앞 방향을 월드 방향으로 변환 |
+| `InverseTransformDirection` | 월드 -> 로컬 | X | O | X | 월드 방향 입력을 내 기준 방향으로 변환 |
+| `TransformVector` | 로컬 -> 월드 | X | O | O | 내 기준 밀림량, 넉백량, 오프셋 벡터 변환 |
+| `InverseTransformVector` | 월드 -> 로컬 | X | O | O | 월드 속도나 이동량을 내 기준 값으로 분석 |
+
+위 메서드들은 모두 `Vector3`를 넣는 방식과 `x, y, z` 값을 따로 넣는 방식 두 가지를 지원합니다. 예를 들어 `transform.TransformPoint(new Vector3(2f, 0f, 0f))`와 `transform.TransformPoint(2f, 0f, 0f)`는 같은 의미입니다.
+
+> 💡 **기억법:** `Point`는 지도 위의 핀이라서 위치 이동까지 영향을 받습니다. `Direction`은 화살표의 방향만 보는 것이므로 크기와 위치 이동은 무시합니다. `Vector`는 이동량 화살표라서 위치 이동은 무시하지만, 크기 배율은 영향을 받습니다.
+
+<details>
+<summary>코드 보기</summary>
+
+```csharp
+using UnityEngine;
+
+public class TransformSpaceMethodTest : MonoBehaviour
+{
+    public Transform target;
+
+    void Update()
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        // 1. Point: 위치 좌표를 변환합니다. 이동, 회전, 크기의 영향을 모두 받습니다.
+        Vector3 localSpawnPoint = new Vector3(2f, 0f, 0f);
+        Vector3 worldSpawnPoint = transform.TransformPoint(localSpawnPoint);
+        Vector3 targetLocalPoint = transform.InverseTransformPoint(target.position);
+
+        // 2. Direction: 방향만 변환합니다. 위치와 크기는 무시하고 회전만 반영합니다.
+        Vector3 localForwardDirection = Vector3.forward;
+        Vector3 worldForwardDirection = transform.TransformDirection(localForwardDirection);
+        Vector3 targetDirectionInWorld = (target.position - transform.position).normalized;
+        Vector3 targetDirectionInLocal = transform.InverseTransformDirection(targetDirectionInWorld);
+
+        // 3. Vector: 이동량이나 힘의 크기를 변환합니다. 위치 이동은 무시하고 회전과 크기를 반영합니다.
+        Vector3 localKnockbackVector = new Vector3(0f, 0f, 3f);
+        Vector3 worldKnockbackVector = transform.TransformVector(localKnockbackVector);
+        Vector3 localVelocityVector = transform.InverseTransformVector(worldKnockbackVector);
+
+        string forwardState = targetLocalPoint.z >= 0f ? "앞" : "뒤";
+        string sideState = targetLocalPoint.x >= 0f ? "오른쪽" : "왼쪽";
+
+        Debug.Log($"TransformPoint: 로컬 {localSpawnPoint} -> 월드 {worldSpawnPoint}");
+        Debug.Log($"InverseTransformPoint: 대상은 내 기준 {forwardState}, {sideState} / 로컬 좌표 {targetLocalPoint}");
+        Debug.Log($"TransformDirection: 내 앞 방향 -> 월드 방향 {worldForwardDirection}");
+        Debug.Log($"InverseTransformDirection: 대상 방향 -> 내 기준 방향 {targetDirectionInLocal}");
+        Debug.Log($"TransformVector: 로컬 넉백량 {localKnockbackVector} -> 월드 넉백량 {worldKnockbackVector}");
+        Debug.Log($"InverseTransformVector: 월드 넉백량 -> 로컬 이동량 {localVelocityVector}");
+    }
+
+    void OnDrawGizmos()
+    {
+        Vector3 worldSpawnPoint = transform.TransformPoint(2f, 0f, 0f);
+        Vector3 worldForwardDirection = transform.TransformDirection(Vector3.forward);
+        Vector3 worldKnockbackVector = transform.TransformVector(0f, 0f, 3f);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(worldSpawnPoint, 0.12f);
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, transform.position + worldForwardDirection * 2f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position + worldKnockbackVector);
+    }
+}
+```
+
+</details>
+
+### 실행해 볼 것
+1. 빈 GameObject를 만들고 `TransformSpaceMethodTest` 스크립트를 붙입니다.
+2. `target` 칸에 플레이어나 다른 큐브 Transform을 연결합니다.
+3. 이 오브젝트의 Position, Rotation, Scale을 바꿔 보며 Console과 Scene 뷰의 노란 점, 파란 선, 빨간 선이 어떻게 달라지는지 확인합니다.
+4. Scale을 `(2, 1, 1)`처럼 바꿨을 때 `Direction` 결과와 `Vector` 결과가 어떻게 다르게 반응하는지 비교합니다.
+
+> 💡 **핵심:** 무언가의 "**위치**"를 바꾸면 `Point`, "**방향**"만 바꾸면 `Direction`, "**이동량이나 힘의 크기**"를 바꾸면 `Vector`를 고릅니다. 반대로 되돌릴 때는 이름 앞에 `Inverse`가 붙습니다.
+
+---
+
 ## 🎯 [심화 미션] 몬스터 사냥 시스템: 공간 변환과 위치 추적
 ### [요구 사항]
 - 보스 몬스터가 소환하는 '마법진'의 위치를 월드 좌표가 아닌 보스 몬스터의 로컬 좌표계를 기준으로 배치하는 시스템을 설계하세요.
@@ -91,6 +183,7 @@ public class MatrixTest : MonoBehaviour
 
 ### [프로그래밍 힌트]
 - `transform.localToWorldMatrix`를 사용하여 로컬 좌표의 점을 월드 좌표로 변환할 수 있습니다.
+- 반대로 이미 월드에 있는 대상의 위치를 보스 기준 로컬 좌표로 확인하려면 `transform.InverseTransformPoint(target.position)`를 사용할 수 있습니다.
 - 자식 오브젝트로 등록하지 않고 코드상에서 행렬 연산만으로 위치를 계산해 보세요.
 
 ## ✍️ 평가 문항 대비 퀴즈
@@ -98,6 +191,8 @@ public class MatrixTest : MonoBehaviour
    - **정답:** 행렬 (Matrix)
 2. **문제:** 유니티에서 자식 오브젝트의 좌표를 월드 좌표로 변환할 때 사용하는 행렬 프로퍼티 이름은?
    - **정답:** `transform.localToWorldMatrix`
+3. **문제:** 월드 좌표의 대상을 현재 오브젝트 기준 로컬 좌표로 바꿀 때 사용하는 Transform 메서드 이름은?
+   - **정답:** `transform.InverseTransformPoint`
 
 ---
 
