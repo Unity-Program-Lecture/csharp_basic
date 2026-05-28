@@ -1,49 +1,66 @@
-# 🚀 Day 08: 엔진 물리 시스템 (Physics & Rigidbodies)
+# DAY 08: Unity 물리 엔진 기초
 
-오늘의 목표는 "**유니티 물리 엔진의 핵심 구성 요소인 Rigidbody와 Collider의 상호작용을 이해하고, 실무적인 물리 감지 로직을 구현한다**"입니다.
+오늘의 목표는 Unity 물리를 "**게임 세상 안의 간단한 운동 법칙**"으로 이해하고, Collider와 Rigidbody가 충돌과 중력을 어떻게 담당하는지 확인하는 것입니다.
 
----
+## 1. 핵심 개념: "보이지 않는 충돌 상자"
 
-## 1. 리지드바디 (Rigidbody)
-오브젝트가 유니티 물리 엔진의 통제를 받게 만드는 컴포넌트입니다.
-- **Mass**: 질량.
-- **Drag**: 공기 저항.
-- **Use Gravity**: 중력 적용 여부.
-- **Is Kinematic**: 체크하면 물리 연산(힘)을 무시하고 스크립트로만 이동시킵니다.
+화면에 보이는 모델과 실제 충돌 판정은 다를 수 있습니다. Collider는 오브젝트 주변에 놓인 보이지 않는 충돌 상자이고, Rigidbody는 물체가 힘과 중력에 반응하게 만드는 부품입니다. 둘을 함께 쓰면 바닥에 떨어지고, 부딪히고, 밀리는 동작을 만들 수 있습니다.
 
----
+### 이 단어는 무슨 뜻인가요?
 
-## 2. 콜라이더 (Collider): "물리적 피부"
-물체의 충돌 범위를 결정합니다.
-- **Is Trigger**: 체크하면 물리적인 충돌(튕겨 나감)은 없지만, 겹침 이벤트(`OnTriggerEnter`)를 감지할 수 있습니다. (센서 용도)
+- **Collider**: 충돌 범위를 나타내는 컴포넌트입니다.
+- **Rigidbody**: 중력, 힘, 속도 같은 물리 계산을 받는 컴포넌트입니다.
+- **Is Trigger**: 물리적으로 막지는 않고 겹침 이벤트만 받는 Collider 옵션입니다.
+- **Collision**: 서로 막고 튕기는 충돌입니다.
+- **Trigger**: 통과는 가능하지만 들어옴과 나감을 감지하는 충돌입니다.
 
----
+## 실습 예제: Trigger로 문 열기
 
-## 💻 실습 예제: 트리거(Trigger)를 이용한 아이템 획득 시스템
+**미션:** 플레이어가 특정 구역에 들어오면 문 오브젝트가 위로 올라가도록 만듭니다.
+
+1. 플레이어 오브젝트에 `Rigidbody`와 `Collider`를 붙입니다.
+2. 구역용 큐브를 만들고 `Collider`의 `Is Trigger`를 켭니다.
+3. 문 역할의 큐브를 하나 만들고, 구역용 큐브에 아래 스크립트를 붙입니다.
+4. Inspector에서 `door`에 문 큐브를 연결합니다.
+
+<details>
+<summary>코드 보기</summary>
+
 ```csharp
 using UnityEngine;
 
-public class ItemPickup : MonoBehaviour
+public class TriggerDoorOpener : MonoBehaviour
 {
-    // 콜라이더의 Is Trigger가 체크되어 있어야 호출됨
-    private void OnTriggerEnter(Collider other)
+    [SerializeField] private Transform door;
+    [SerializeField] private float openHeight = 3f;
+
+    private Vector3 closedPosition;
+
+    void Awake()
     {
-        // 1. 충돌한 대상이 플레이어인지 확인
-        if (other.CompareTag("Player"))
-        {
-            Debug.Log("<color=green>아이템을 획득했습니다!</color>");
-            
-            // 2. 아이템 오브젝트 파괴 (또는 풀로 반환)
-            Destroy(gameObject);
-        }
+        closedPosition = door.position;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        door.position = closedPosition + Vector3.up * openHeight;
     }
 }
 ```
 
----
+</details>
 
-## ✍️ 평가 문항 대비 퀴즈
-1. **문제:** 유니티에서 물리적인 반작용(튕겨나감) 없이 물체가 겹쳐진 순간만을 감지하고 싶을 때 Collider에서 설정해야 하는 옵션은?
-   - **정답:** Is Trigger
-2. **문제:** 오브젝트에 중력이나 마찰력 같은 물리 법칙을 적용하기 위해 필수적으로 추가해야 하는 컴포넌트는?
-   - **정답:** 리지드바디 (Rigidbody)
+### 실행해보면
+
+플레이어가 Trigger 구역에 들어가는 순간 문 큐브가 위로 올라갑니다. Trigger 구역은 플레이어를 물리적으로 막지 않고, 들어왔다는 사건만 스크립트에 알려 줍니다.
+
+### 생각해보기
+
+1. 문 앞 감지 구역에는 Collision과 Trigger 중 무엇이 더 어울릴까요?
+2. Rigidbody가 없는 오브젝트끼리는 물리 이벤트가 왜 잘 발생하지 않을까요?
+
+## 오늘의 정리
+
+- Collider는 충돌 범위, Rigidbody는 물리 반응을 담당합니다.
+- Trigger는 겹침 감지용 구역을 만들 때 유용합니다.
+- 물리 이벤트를 안정적으로 받으려면 충돌하는 쪽 중 적어도 한쪽에 Rigidbody가 필요합니다.

@@ -17,6 +17,9 @@
 5. **Unity Git 설정 템플릿 다운로드 링크 추가**
    - GitHub 공식 Unity `.gitignore` 템플릿의 보기 링크와 Raw 다운로드 링크를 GitHub Desktop 가이드에 추가함.
    - Unity `.gitattributes` 템플릿의 보기 링크와 Raw 다운로드 링크를 Git LFS 설명 섹션에 추가함.
+6. **C# 기초 재시험 대비 학습 요약 추가**
+   - `Documents/Exam/01.CSharpBasic/RETAKE_EXAM_CSHARP_STUDY_GUIDE.md`를 생성하여 재시험 문항을 직접 노출하지 않고 핵심 개념, 코드 독해법, 실습형 대비 방법을 정리함.
+   - 비공개 평가자료와 연결되는 보충 문서이므로 `Documents/Exam/01.CSharpBasic/` 내부에 보관함.
 
 ## 📅 2026-04-12 (어제)
 - 1일차 수업 진행: 변수, 데이터 타입, 값/참조 형식, 함수 기초, if, for 학습.
@@ -234,3 +237,11 @@
 1. **게임엔진 6일차 생명주기 그림 오류 수정**
    - `DAY06_UNITY_SCRIPTING.md`의 렌더링되지 않는 Mermaid `chronological-diagram` 블록을 제거함.
    - MonoBehaviour 생명주기 흐름을 별도 SVG 파일 `Images/day06_unity_lifecycle.svg`로 작성해 GitHub Markdown에서 안정적으로 표시되도록 교체함.
+2. **게임엔진 학습 문서 제작 규격 정리**
+   - `Documents/Curriculum/03.GameEngine/`의 1~15일차 문서를 `LEARNING_DOCUMENT_GUIDE.md`의 기본 흐름에 맞게 재구성함.
+   - 공개 학습문서에서 내부 평가 운영성 문구와 Mermaid 도식 의존을 제거하고, 비유 중심 설명, 용어 풀이, 실습 예제, 실행 관찰, 생각해보기, 오늘의 정리 구조로 통일함.
+   - Unity 6 기본값에 맞춰 입력 예제는 Input System 기준으로 정리함.
+   - 규격을 맞추기 위해 억지로 넣은 단순 로그 출력형 샘플을 제거하거나 실제 동작을 만드는 실습으로 교체함.
+3. **게임엔진 5일차 머티리얼 설명 보강**
+   - 쉐이더와 머티리얼의 관계를 조리법과 재료표 비유로 설명함.
+   - URP Lit 머티리얼의 Surface Options, Surface Inputs, Base Map, Metallic, Smoothness, Normal Map, Emission 등 기본 프로퍼티 설명과 비교 실습을 추가함.

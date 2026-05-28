@@ -1,34 +1,64 @@
-# 🚀 Day 02: 오브젝트와 컴포넌트 (Hierarchy & Component)
+# DAY 02: Hierarchy와 Component 구조
 
-오늘의 목표는 "**유니티의 핵심 철학인 컴포넌트 기반 설계(Component-Based Design)를 이해하고, 게임 오브젝트의 부모-자식 관계를 제어한다**"입니다.
+오늘의 목표는 Unity 씬을 "**책상 위에 쌓인 도구 상자들**"처럼 보고, 부모-자식 GameObject 구조와 Component 조합 방식을 익히는 것입니다.
 
----
+## 1. 핵심 개념: "상자 안의 작은 상자"
 
-## 1. 게임 오브젝트(GameObject)와 컴포넌트(Component)
-유니티의 모든 물체는 빈 껍데기인 **GameObject**입니다. 여기에 어떤 기능을 가진 **Component**를 붙이느냐에 따라 정체성이 결정됩니다.
-- **Transform**: 모든 오브젝트가 반드시 가지는 컴포넌트. (위치, 회전, 크기)
-- **Mesh Filter/Renderer**: 물체의 모양을 결정하고 화면에 그립니다.
-- **Box Collider**: 충돌 영역을 설정합니다.
+Hierarchy는 씬에 놓인 오브젝트 목록입니다. 오브젝트를 부모-자식으로 묶으면 부모를 움직일 때 자식도 함께 움직입니다. 캐릭터 몸통 아래에 무기, 이름표, 이펙트를 넣어 두면 캐릭터가 이동할 때 모두 같이 따라가는 식입니다.
 
----
+Component는 오브젝트의 기능입니다. 같은 GameObject라도 `Rigidbody`를 붙이면 물리 오브젝트가 되고, `Light`를 붙이면 조명이 됩니다.
 
-## 2. 계층 구조 (Hierarchy)
-물체들끼리 부모-자식(Parent-Child) 관계를 맺어 구조화할 수 있습니다.
-- **특징**: 부모가 움직이거나 회전하면 자식도 상대적인 위치를 유지하며 함께 변화합니다.
-- **용도**: 캐릭터의 손에 무기 들려주기, 건물의 창문 배치하기 등.
+### 이 단어는 무슨 뜻인가요?
 
----
+- **Hierarchy**: 씬 안의 GameObject 목록과 부모-자식 관계를 보여주는 창입니다.
+- **Parent**: 다른 오브젝트를 품고 함께 움직이는 상위 오브젝트입니다.
+- **Child**: 부모를 기준으로 위치가 계산되는 하위 오브젝트입니다.
+- **Prefab**: 반복해서 배치할 수 있도록 저장해 둔 GameObject 묶음입니다.
 
-## 💻 실습 예제: 컴포넌트 조작과 계층 구조 실습
-1. **Empty GameObject**를 생성하고 이름을 'Player'로 변경합니다.
-2. 'Player'의 자식으로 **Cube**와 **Sphere**를 배치합니다.
-3. 부모인 'Player'를 이동시켜 보며 자식들이 어떻게 따라오는지 확인합니다.
-4. **Light** 컴포넌트를 추가하여 플레이어가 빛을 내게 만들어 봅니다.
+## 실습 예제: 캐릭터 구조 만들기
 
----
+**미션:** 빈 GameObject를 캐릭터 루트로 만들고, 몸체와 이름표 역할을 하는 자식 오브젝트를 붙입니다.
 
-## ✍️ 평가 문항 대비 퀴즈
-1. **문제:** 유니티에서 게임 오브젝트에 특정 기능(물리, 스크립트, 렌더링 등)을 추가하기 위해 사용하는 개별 모듈의 명칭은?
-   - **정답:** 컴포넌트 (Component)
-2. **문제:** 부모 오브젝트의 위치 변화에 따라 자식 오브젝트가 함께 이동하는 이유는 무엇입니까?
-   - **정답:** 자식 오브젝트가 부모의 Transform 행렬을 상속받아 자신의 Local 좌표를 World 좌표로 변환하기 때문입니다.
+1. `Create Empty`로 `PlayerRoot`를 만듭니다.
+2. `PlayerRoot` 아래에 `Body` 큐브를 자식으로 둡니다.
+3. `PlayerRoot` 아래에 `NameAnchor` 빈 오브젝트를 자식으로 둡니다.
+4. 아래 스크립트를 `PlayerRoot`에 붙여 부모를 회전시켰을 때 자식들이 함께 움직이는지 확인합니다.
+
+<details>
+<summary>코드 보기</summary>
+
+```csharp
+using UnityEngine;
+
+public class CharacterTurntable : MonoBehaviour
+{
+    [SerializeField] private float rotateSpeed = 45f;
+
+    void Start()
+    {
+        Debug.Log("부모 오브젝트가 회전하면 자식 오브젝트도 함께 따라갑니다.");
+    }
+
+    void Update()
+    {
+        transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
+    }
+}
+```
+
+</details>
+
+### 실행해보면
+
+Play를 누르면 `PlayerRoot`가 천천히 회전하고, 자식인 `Body`와 `NameAnchor`도 함께 회전합니다. 자식을 부모 밖으로 꺼내면 더 이상 같은 방식으로 따라가지 않는 점을 비교할 수 있습니다.
+
+### 생각해보기
+
+1. 무기를 캐릭터의 자식으로 두면 어떤 점이 편할까요?
+2. 부모의 크기를 바꾸면 자식의 화면 크기는 어떻게 바뀔까요?
+
+## 오늘의 정리
+
+- Hierarchy는 오브젝트의 배치와 포함 관계를 보여줍니다.
+- 부모 Transform이 움직이면 자식 Transform도 함께 영향을 받습니다.
+- Prefab은 자주 쓰는 오브젝트 묶음을 재사용하기 위한 저장본입니다.
