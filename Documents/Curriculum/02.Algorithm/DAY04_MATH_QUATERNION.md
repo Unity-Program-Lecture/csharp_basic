@@ -46,32 +46,121 @@
 
 ---
 
-## 💻 실습 예제: 대상을 향해 부드럽게 고개 돌리기
+## 💻 실습 예제: 입력으로 목표점을 움직이며 Slerp 체감하기
+키보드로 노란 목표점을 움직이면 오브젝트가 그 방향을 향해 부드럽게 돌아갑니다. Scene 뷰에서는 **파란 선**이 현재 앞 방향, **노란 점**이 바라봐야 할 목표점, **빨간 선**이 목표 방향입니다.
+
+### 준비
+1. 빈 GameObject를 만들고 이름을 `QuaternionPractice`로 바꿉니다.
+2. 아래 스크립트를 붙입니다.
+3. Unity가 Input System을 사용하도록 설정되어 있어야 합니다. `Project Settings > Player > Active Input Handling`이 `Input System Package (New)` 또는 `Both`인지 확인합니다.
+4. Play Mode에서 `W/A/S/D` 또는 방향키로 목표점을 움직이고, `Space`로 목표점을 가운데로 되돌립니다.
+
 ```csharp
 using UnityEngine;
+// UnityEngine.InputSystem은 Unity 6 기준 새 입력 시스템의 키보드, 마우스, 게임패드 입력을 사용하기 위한 네임스페이스입니다.
+using UnityEngine.InputSystem;
 
-public class SmoothRotation : MonoBehaviour
+public class QuaternionInputGizmoPractice : MonoBehaviour
 {
-    public Transform target;
-    public float rotationSpeed = 2f;
+    public float rotationSpeed = 4f;
+    public float targetMoveSpeed = 3f;
+    public float targetDistance = 4f;
+    public float targetRange = 3f;
+
+    Vector3 targetOffset = new Vector3(0f, 0f, 4f);
 
     void Update()
     {
-        if (target == null) return;
+        // Keyboard.current는 Input System에서 현재 키보드 장치를 가져오는 프로퍼티입니다.
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null)
+        {
+            return;
+        }
 
-        // 1. 목표 방향 계산 (Target - Me)
-        Vector3 direction = (target.position - transform.position).normalized;
+        // Vector2.zero는 (0, 0)을 뜻하는 2D 벡터 기본값입니다.
+        Vector2 input = Vector2.zero;
 
-        // 2. 방향을 쿼터니언 회전값으로 변환
+        // aKey, leftArrowKey는 각각 A 키와 왼쪽 방향키를 나타내는 입력 버튼입니다.
+        // isPressed는 해당 키가 지금 눌려 있는 동안 true가 되는 프로퍼티입니다.
+        if (keyboard.aKey.isPressed || keyboard.leftArrowKey.isPressed)
+        {
+            input.x -= 1f;
+        }
+
+        // dKey, rightArrowKey는 각각 D 키와 오른쪽 방향키를 나타냅니다.
+        if (keyboard.dKey.isPressed || keyboard.rightArrowKey.isPressed)
+        {
+            input.x += 1f;
+        }
+
+        // sKey, downArrowKey는 각각 S 키와 아래 방향키를 나타냅니다.
+        if (keyboard.sKey.isPressed || keyboard.downArrowKey.isPressed)
+        {
+            input.y -= 1f;
+        }
+
+        // wKey, upArrowKey는 각각 W 키와 위 방향키를 나타냅니다.
+        if (keyboard.wKey.isPressed || keyboard.upArrowKey.isPressed)
+        {
+            input.y += 1f;
+        }
+
+        // spaceKey는 스페이스바 입력 버튼입니다.
+        // wasPressedThisFrame은 이번 프레임에 막 눌렸을 때만 true가 되는 프로퍼티입니다.
+        if (keyboard.spaceKey.wasPressedThisFrame)
+        {
+            targetOffset = new Vector3(0f, 0f, targetDistance);
+        }
+
+        // Time.deltaTime은 이전 프레임에서 현재 프레임까지 걸린 시간입니다. 프레임 속도가 달라도 이동 속도를 일정하게 맞출 때 사용합니다.
+        targetOffset += new Vector3(input.x, input.y, 0f) * targetMoveSpeed * Time.deltaTime;
+        // Mathf.Clamp는 값을 최소값과 최대값 사이로 제한하는 메서드입니다.
+        targetOffset.x = Mathf.Clamp(targetOffset.x, -targetRange, targetRange);
+        targetOffset.y = Mathf.Clamp(targetOffset.y, -targetRange, targetRange);
+        targetOffset.z = targetDistance;
+
+        // normalized는 벡터의 방향은 유지하고 길이만 1로 만든 값을 돌려주는 프로퍼티입니다.
+        Vector3 targetDirection = targetOffset.normalized;
+
         // Quaternion.LookRotation은 지정한 방향을 바라보는 회전값을 만들어 주는 메서드입니다.
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        // Vector3.up은 월드 기준 위쪽 방향인 (0, 1, 0)을 뜻합니다.
+        Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
 
-        // 3. 현재 회전에서 목표 회전까지 부드럽게 보간 (Slerp)
         // transform.rotation은 현재 오브젝트의 회전값이고, Quaternion.Slerp는 두 회전 사이를 부드럽게 섞습니다.
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
+
+    void OnDrawGizmos()
+    {
+        // transform.position은 현재 오브젝트의 월드 위치입니다.
+        Vector3 origin = transform.position;
+        Vector3 targetPosition = origin + targetOffset;
+        Vector3 targetDirection = targetOffset.normalized;
+
+        // Gizmos.color는 이후에 그릴 기즈모 도형의 색상을 지정하는 프로퍼티입니다.
+        // Color.yellow는 유니티가 미리 제공하는 노란색 값입니다.
+        Gizmos.color = Color.yellow;
+        // Gizmos.DrawSphere는 Scene 뷰에 구체를 그려 특정 위치를 표시하는 메서드입니다.
+        Gizmos.DrawSphere(targetPosition, 0.15f);
+
+        // Color.blue는 유니티가 미리 제공하는 파란색 값입니다.
+        Gizmos.color = Color.blue;
+        // Gizmos.DrawLine은 Scene 뷰에 두 점을 잇는 선을 그리는 메서드입니다.
+        // transform.forward는 현재 오브젝트가 바라보는 앞 방향입니다.
+        Gizmos.DrawLine(origin, origin + transform.forward * targetDistance);
+
+        // Color.red는 유니티가 미리 제공하는 빨간색 값입니다.
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(origin, origin + targetDirection * targetDistance);
+    }
 }
 ```
+
+### 관찰 포인트
+- `rotationSpeed`를 낮추면 목표 방향을 천천히 따라가고, 높이면 빠르게 따라갑니다.
+- `Slerp`는 현재 회전에서 목표 회전까지 한 번에 꺾지 않고, 둥근 공 표면을 미끄러지듯 부드럽게 이동합니다.
+- 목표점이 위아래로 움직여도 `Quaternion.LookRotation(targetDirection, Vector3.up)` 덕분에 앞 방향과 위 방향 기준이 함께 잡혀 회전이 안정적으로 유지됩니다.
 
 ---
 
