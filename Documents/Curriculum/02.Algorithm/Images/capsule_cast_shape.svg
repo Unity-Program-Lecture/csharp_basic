@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="520" height="260" viewBox="0 0 520 260">
+  <rect width="520" height="260" fill="#ffffff" />
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2c3e50" />
+    </marker>
+  </defs>
+
+  <text x="24" y="32" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#2c3e50">CapsuleCast shape</text>
+
+  <line x1="180" y1="70" x2="180" y2="190" stroke="#2c3e50" stroke-width="3" />
+  <circle cx="180" cy="70" r="7" fill="#e74c3c" />
+  <circle cx="180" cy="190" r="7" fill="#e74c3c" />
+  <text x="194" y="75" font-family="Arial, sans-serif" font-size="14" fill="#e74c3c">point2</text>
+  <text x="194" y="195" font-family="Arial, sans-serif" font-size="14" fill="#e74c3c">point1</text>
+
+  <path d="M140 70
+           A40 40 0 0 1 220 70
+           L220 190
+           A40 40 0 0 1 140 190
+           Z"
+        fill="rgba(52, 152, 219, 0.16)"
+        stroke="#3498db"
+        stroke-width="3" />
+
+  <line x1="180" y1="130" x2="220" y2="130" stroke="#3498db" stroke-width="3" />
+  <text x="226" y="135" font-family="Arial, sans-serif" font-size="14" fill="#3498db">radius</text>
+
+  <line x1="70" y1="220" x2="300" y2="220" stroke="#7f8c8d" stroke-width="2" stroke-dasharray="6,5" />
+  <text x="86" y="242" font-family="Arial, sans-serif" font-size="13" fill="#7f8c8d">The capsule is built around the line from point1 to point2.</text>
+
+  <line x1="310" y1="130" x2="450" y2="130" stroke="#2c3e50" stroke-width="4" marker-end="url(#arrow)" />
+  <text x="326" y="112" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">cast direction</text>
+
+  <path d="M330 70
+           A40 40 0 0 1 410 70
+           L410 190
+           A40 40 0 0 1 330 190
+           Z"
+        fill="none"
+        stroke="#95a5a6"
+        stroke-width="2"
+        stroke-dasharray="7,6" />
+  <text x="330" y="212" font-family="Arial, sans-serif" font-size="13" fill="#7f8c8d">swept capsule path</text>
+</svg>

@@ -210,6 +210,10 @@ bool isHit = Physics.BoxCast(transform.position, halfExtents, Vector3.forward, o
 
 캡슐 모양을 특정 방향으로 밀어봅니다. 사람형 캐릭터처럼 위아래로 긴 충돌체가 이동할 수 있는지 확인할 때 사용하기 좋습니다.
 
+![CapsuleCast shape](Images/capsule_cast_shape.svg)
+
+캡슐은 `point1`과 `point2`를 잇는 선분을 중심축으로 삼고, 그 주변을 `radius`만큼 부풀린 모양입니다. 이 캡슐 전체를 `direction` 방향으로 밀어보며, 이동 경로에 Collider가 있는지 검사합니다.
+
 ```csharp
 Vector3 point1 = transform.position + Vector3.up * 0.5f;
 Vector3 point2 = transform.position + Vector3.up * 1.8f;
