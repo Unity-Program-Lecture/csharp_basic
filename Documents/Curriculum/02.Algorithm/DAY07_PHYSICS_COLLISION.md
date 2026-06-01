@@ -111,7 +111,73 @@ private void OnTriggerEnter(Collider other)
 }
 ```
 
-## 실습 예제: 거리 제곱으로 구 충돌 판정하기
+## 실습 예제 1: Trigger와 Collision 이벤트 확인하기
+
+**미션:** `Trigger`와 `Collision`이 언제 시작되고 끝나는지 Scene 뷰에서 확인합니다.
+
+Unity에서는 영역에서 나가는 순간을 `Leave`가 아니라 `Exit`라는 이름으로 표현합니다. 그래서 메서드 이름도 `OnTriggerExit`, `OnCollisionExit`입니다.
+
+### 준비하기
+
+1. Unity 씬에 `Player` 오브젝트를 만들고 `Rigidbody`와 `Collider`를 붙입니다.
+2. `Wall` 오브젝트를 만들고 `Collider`를 붙입니다. 이 Collider는 `Is Trigger`를 끕니다.
+3. `SensorZone` 오브젝트를 만들고 `Collider`를 붙입니다. 이 Collider는 `Is Trigger`를 켭니다.
+4. `Player`에 아래 스크립트를 붙입니다.
+5. Scene 뷰 오른쪽 위의 `Gizmos` 버튼이 켜져 있는지 확인합니다.
+
+```csharp
+using UnityEngine;
+
+public class PhysicsEventViewer : MonoBehaviour
+{
+    public string currentState = "대기 중";
+    private Color gizmoColor = Color.gray;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // 실제로 부딪히는 충돌이 시작될 때 호출됩니다.
+        currentState = "Collision Enter: " + collision.gameObject.name;
+        gizmoColor = Color.red;
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        // 실제 물리 충돌이 끝나서 떨어졌을 때 호출됩니다.
+        currentState = "Collision Exit: " + collision.gameObject.name;
+        gizmoColor = Color.yellow;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // 통과 가능한 감지 영역에 들어왔을 때 호출됩니다.
+        currentState = "Trigger Enter: " + other.gameObject.name;
+        gizmoColor = Color.cyan;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // 통과 가능한 감지 영역에서 나갔을 때 호출됩니다.
+        currentState = "Trigger Exit: " + other.gameObject.name;
+        gizmoColor = Color.blue;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = gizmoColor;
+        Gizmos.DrawWireSphere(transform.position, 1.2f);
+    }
+}
+```
+
+### 실행해보면
+
+`Player`가 `Wall`에 부딪히면 와이어 구체가 빨간색으로 바뀝니다. `Wall`에서 떨어지면 노란색으로 바뀝니다.
+
+`Player`가 `SensorZone` 안으로 들어가면 하늘색으로 바뀝니다. `SensorZone` 밖으로 나가면 파란색으로 바뀝니다.
+
+이 예제에서 `currentState`는 Inspector의 Debug 모드나 디버거로 확인할 수 있는 상태 값입니다. 화면에 꼭 보이지 않아도, 어떤 이벤트가 마지막으로 호출됐는지 코드 흐름을 남기기 위한 변수입니다.
+
+## 실습 예제 2: 거리 제곱으로 구 충돌 판정하기
 
 **미션:** 두 오브젝트의 중심점 사이 거리를 이용해 구 충돌을 직접 판정합니다.
 
