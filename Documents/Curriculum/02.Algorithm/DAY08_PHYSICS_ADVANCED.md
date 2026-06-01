@@ -119,6 +119,40 @@ if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f
 }
 ```
 
+### `RaycastHit`
+
+`RaycastHit`은 Raycast가 무언가에 맞았을 때 그 결과 정보를 담는 상자입니다. 단순히 "맞았다"에서 끝나는 것이 아니라, 무엇을 맞혔는지, 어디를 맞혔는지, 어떤 방향의 표면을 맞혔는지까지 알 수 있습니다.
+
+자주 쓰는 정보는 다음과 같습니다.
+
+| 멤버 | 의미 | 사용 예시 |
+| --- | --- | --- |
+| `hit.collider` | 맞은 Collider | 맞은 물체의 태그나 레이어 확인 |
+| `hit.transform` | 맞은 Collider가 붙은 Transform | 맞은 오브젝트 위치나 이름 확인 |
+| `hit.point` | Ray가 실제로 닿은 월드 좌표 | 총알 이펙트, 클릭 위치 표시 |
+| `hit.normal` | 맞은 표면이 바라보는 방향 | 튕김 방향, 표면에 붙는 이펙트 회전 |
+| `hit.distance` | Ray 시작점에서 맞은 지점까지의 거리 | 사거리 판정, 가까운 대상 우선 처리 |
+| `hit.rigidbody` | 맞은 Collider에 연결된 Rigidbody | 맞은 물체에 힘 주기 |
+
+```csharp
+if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f))
+{
+    // 맞은 Collider가 붙은 오브젝트 이름입니다.
+    string hitName = hit.collider.gameObject.name;
+
+    // Ray가 실제로 닿은 위치입니다.
+    Vector3 hitPoint = hit.point;
+
+    // 맞은 표면의 바깥 방향입니다.
+    Vector3 surfaceDirection = hit.normal;
+
+    // 시작점에서 맞은 지점까지의 거리입니다.
+    float distance = hit.distance;
+}
+```
+
+`hit.point`와 `hit.normal`은 함께 쓰는 경우가 많습니다. 예를 들어 벽에 총알 자국을 붙일 때는 `hit.point`에 이펙트를 놓고, `hit.normal` 방향을 기준으로 회전시키면 표면에 자연스럽게 붙일 수 있습니다.
+
 ### `Physics.RaycastAll`
 
 직선이 지나가며 만나는 모든 Collider를 배열로 반환합니다. 관통 총알, 일직선 범위 스킬처럼 여러 대상을 한 번에 확인할 때 사용할 수 있습니다.
