@@ -207,8 +207,10 @@ public class AStarGizmoVisualizer : MonoBehaviour
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
-    private IEnumerable<Vector2Int> GetNeighbors(Vector2Int node)
+    private List<Vector2Int> GetNeighbors(Vector2Int node)
     {
+        List<Vector2Int> neighbors = new List<Vector2Int>();
+
         Vector2Int[] directions =
         {
             Vector2Int.up,
@@ -223,9 +225,11 @@ public class AStarGizmoVisualizer : MonoBehaviour
 
             if (IsInsideGrid(next))
             {
-                yield return next;
+                neighbors.Add(next);
             }
         }
+
+        return neighbors;
     }
 
     private void BuildPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)

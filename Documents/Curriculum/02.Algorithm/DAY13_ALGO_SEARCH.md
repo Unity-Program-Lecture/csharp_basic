@@ -130,8 +130,10 @@ public class BfsGizmoVisualizer : MonoBehaviour
         }
     }
 
-    private IEnumerable<Vector2Int> GetNeighbors(Vector2Int node)
+    private List<Vector2Int> GetNeighbors(Vector2Int node)
     {
+        List<Vector2Int> neighbors = new List<Vector2Int>();
+
         Vector2Int[] directions =
         {
             Vector2Int.up,
@@ -149,8 +151,10 @@ public class BfsGizmoVisualizer : MonoBehaviour
                 continue;
             }
 
-            yield return next;
+            neighbors.Add(next);
         }
+
+        return neighbors;
     }
 
     private void OnDrawGizmos()
@@ -199,6 +203,158 @@ public class BfsGizmoVisualizer : MonoBehaviour
 1. BFS가 가까운 칸부터 방문하는 이유는 Queue의 어떤 특징 때문일까요?
 2. DFS로 바꾸려면 Queue 대신 어떤 자료구조를 사용하면 좋을까요?
 3. 이동 비용이 모두 같을 때 BFS가 짧은 단계의 경로를 찾기 쉬운 이유는 무엇일까요?
+
+## 별첨: Gizmos로 보는 DFS 방문 순서
+
+BFS 예제에서 `Queue`를 사용했다면, DFS는 `Stack`을 사용하면 됩니다. `Queue`는 먼저 들어온 칸을 먼저 꺼내지만, `Stack`은 나중에 넣은 칸을 먼저 꺼냅니다. 그래서 DFS는 한 방향으로 더 깊게 들어가는 흐름이 됩니다.
+
+아래 예제는 BFS 예제와 거의 같은 구조이지만, `frontier`의 자료구조만 `Stack<Vector2Int>`로 바꾼 버전입니다.
+
+```csharp
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class DfsGizmoVisualizer : MonoBehaviour
+{
+    [Header("Grid")]
+    [Tooltip("가로 칸 수입니다.")]
+    [SerializeField] private int width = 3;
+
+    [Tooltip("세로 칸 수입니다.")]
+    [SerializeField] private int height = 3;
+
+    [Tooltip("Scene 뷰에 그릴 칸 크기입니다.")]
+    [SerializeField] private float cellSize = 1f;
+
+    private readonly Stack<Vector2Int> frontier = new Stack<Vector2Int>();
+    private readonly HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+    private Vector2Int currentNode;
+
+    private void Start()
+    {
+        ResetSearch();
+    }
+
+    private void Update()
+    {
+        if (Keyboard.current == null)
+        {
+            return;
+        }
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            StepSearch();
+        }
+
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            ResetSearch();
+        }
+    }
+
+    private void ResetSearch()
+    {
+        frontier.Clear();
+        visited.Clear();
+
+        currentNode = new Vector2Int(0, 0);
+        frontier.Push(currentNode);
+        visited.Add(currentNode);
+    }
+
+    private void StepSearch()
+    {
+        if (frontier.Count == 0)
+        {
+            return;
+        }
+
+        // Stack.Pop은 가장 나중에 넣은 칸을 먼저 꺼냅니다.
+        currentNode = frontier.Pop();
+
+        foreach (Vector2Int neighbor in GetNeighbors(currentNode))
+        {
+            if (visited.Contains(neighbor))
+            {
+                continue;
+            }
+
+            visited.Add(neighbor);
+
+            // Stack.Push는 다음에 방문할 후보 칸을 위에 쌓습니다.
+            frontier.Push(neighbor);
+        }
+    }
+
+    private List<Vector2Int> GetNeighbors(Vector2Int node)
+    {
+        List<Vector2Int> neighbors = new List<Vector2Int>();
+
+        Vector2Int[] directions =
+        {
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left
+        };
+
+        foreach (Vector2Int direction in directions)
+        {
+            Vector2Int next = node + direction;
+
+            if (next.x < 0 || next.x >= width || next.y < 0 || next.y >= height)
+            {
+                continue;
+            }
+
+            neighbors.Add(next);
+        }
+
+        return neighbors;
+    }
+
+    private void OnDrawGizmos()
+    {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Vector2Int node = new Vector2Int(x, y);
+                Vector3 position = transform.position + new Vector3(x * cellSize, 0f, y * cellSize);
+
+                Gizmos.color = GetNodeColor(node);
+                Gizmos.DrawCube(position, Vector3.one * (cellSize * 0.8f));
+
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(position, Vector3.one * (cellSize * 0.8f));
+            }
+        }
+    }
+
+    private Color GetNodeColor(Vector2Int node)
+    {
+        if (Application.isPlaying && node == currentNode)
+        {
+            return Color.yellow;
+        }
+
+        if (Application.isPlaying && visited.Contains(node))
+        {
+            return Color.magenta;
+        }
+
+        return Color.gray;
+    }
+}
+```
+
+### 비교해보면
+
+같은 3x3 그리드라도 BFS와 DFS는 노란색 현재 칸이 움직이는 순서가 달라집니다.
+
+BFS는 시작점 주변으로 넓게 퍼지는 느낌이고, DFS는 최근에 발견한 칸을 먼저 따라가면서 한쪽으로 깊게 들어가는 느낌입니다.
 
 ## 오늘의 정리
 
