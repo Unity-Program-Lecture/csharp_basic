@@ -39,8 +39,6 @@
 - **원리**: 직선 방정식과 물체의 도형 방정식(상자, 구 등) 사이의 해를 구하는 수학적 과정입니다.
 - **용도**: 총기 발사, 바닥 체크, 시야 판별 등.
 
----
-
 ## 💻 실습 예제: 레이캐스트를 이용한 바닥 감지 점프
 ```csharp
 using UnityEngine;
@@ -88,6 +86,134 @@ public class RaycastJump : MonoBehaviour
 
 ## ✍️ 평가 문항 대비 퀴즈
 1. **문제:** 유니티 `AddForce` 모드 중, 폭발이나 타격처럼 짧은 순간에 급격한 속도 변화를 주고 싶을 때 사용하는 모드는?
-   - **정답:** `ForceMode.Impulse`
 2. **문제:** 시작점에서 특정 방향으로 선을 쏘아 충돌 여부를 판단하는 물리 기술의 명칭은?
-   - **정답:** 레이캐스트 (Raycast)
+
+---
+
+## 별첨: Physics Raycast 계열 메서드
+
+Raycast 계열 메서드는 보이지 않는 탐지 도구를 공간에 던져서 물체와 닿는지 확인합니다. 초보자 관점에서는 다음처럼 구분하면 됩니다.
+
+- `Raycast`: 가느다란 직선 하나를 쏩니다.
+- `SphereCast`: 두께가 있는 공을 굴리듯 검사합니다.
+- `BoxCast`: 상자를 밀어보듯 검사합니다.
+- `CapsuleCast`: 캡슐 모양을 밀어보듯 검사합니다.
+- `Linecast`: 시작점과 끝점 사이에 막힌 물체가 있는지 검사합니다.
+
+### `Physics.Raycast`
+
+가장 기본적인 직선 검사입니다. 총알, 클릭 선택, 바닥 체크처럼 "한 방향으로 선을 쏴서 맞았는지" 확인할 때 사용합니다.
+
+```csharp
+bool isHit = Physics.Raycast(transform.position, Vector3.forward, 10f);
+```
+
+맞은 물체의 정보가 필요하면 `out RaycastHit`을 함께 사용합니다.
+
+```csharp
+if (Physics.Raycast(transform.position, Vector3.forward, out RaycastHit hit, 10f))
+{
+    Transform hitTarget = hit.transform;
+    Vector3 hitPoint = hit.point;
+    float hitDistance = hit.distance;
+}
+```
+
+### `Physics.RaycastAll`
+
+직선이 지나가며 만나는 모든 Collider를 배열로 반환합니다. 관통 총알, 일직선 범위 스킬처럼 여러 대상을 한 번에 확인할 때 사용할 수 있습니다.
+
+```csharp
+RaycastHit[] hits = Physics.RaycastAll(transform.position, Vector3.forward, 10f);
+
+foreach (RaycastHit hit in hits)
+{
+    Transform hitTarget = hit.transform;
+}
+```
+
+### `Physics.RaycastNonAlloc`
+
+`RaycastAll`처럼 여러 결과를 얻지만, 미리 준비한 배열에 결과를 담습니다. 매 프레임 반복 검사처럼 메모리 할당을 줄이고 싶을 때 사용합니다.
+
+```csharp
+private RaycastHit[] hitBuffer = new RaycastHit[8];
+
+void Update()
+{
+    int hitCount = Physics.RaycastNonAlloc(transform.position, Vector3.forward, hitBuffer, 10f);
+
+    for (int i = 0; i < hitCount; i++)
+    {
+        Transform hitTarget = hitBuffer[i].transform;
+    }
+}
+```
+
+### `Physics.SphereCast`
+
+가느다란 선이 아니라 반지름을 가진 구를 앞으로 굴리듯 검사합니다. 캐릭터 전방 감지, 넓은 근접 공격, 땅과의 여유 있는 거리 체크에 어울립니다.
+
+```csharp
+float radius = 0.5f;
+float maxDistance = 3f;
+
+bool isHit = Physics.SphereCast(transform.position, radius, Vector3.forward, out RaycastHit hit, maxDistance);
+```
+
+### `Physics.BoxCast`
+
+상자 모양의 검사 영역을 특정 방향으로 밀어봅니다. 박스형 공격 범위, 넓은 발판 체크, 차량 전방 장애물 감지처럼 사각형 범위가 필요한 경우에 사용합니다.
+
+```csharp
+Vector3 halfExtents = new Vector3(0.5f, 0.5f, 0.5f);
+Quaternion rotation = transform.rotation;
+
+bool isHit = Physics.BoxCast(transform.position, halfExtents, Vector3.forward, out RaycastHit hit, rotation, 3f);
+```
+
+### `Physics.CapsuleCast`
+
+캡슐 모양을 특정 방향으로 밀어봅니다. 사람형 캐릭터처럼 위아래로 긴 충돌체가 이동할 수 있는지 확인할 때 사용하기 좋습니다.
+
+```csharp
+Vector3 point1 = transform.position + Vector3.up * 0.5f;
+Vector3 point2 = transform.position + Vector3.up * 1.8f;
+float radius = 0.4f;
+
+bool isHit = Physics.CapsuleCast(point1, point2, radius, Vector3.forward, out RaycastHit hit, 3f);
+```
+
+### `Physics.Linecast`
+
+시작점과 끝점 사이에 장애물이 있는지 확인합니다. "A 지점에서 B 지점이 보이는가?"를 검사할 때 직관적입니다.
+
+```csharp
+Vector3 start = transform.position;
+Vector3 end = target.position;
+
+bool isBlocked = Physics.Linecast(start, end);
+```
+
+### 자주 붙는 옵션
+
+Raycast 계열 메서드에는 검사 거리, 레이어, 트리거 포함 여부를 함께 지정할 수 있습니다.
+
+```csharp
+float maxDistance = 10f;
+LayerMask targetLayer = LayerMask.GetMask("Enemy");
+
+bool isHit = Physics.Raycast(
+    transform.position,
+    Vector3.forward,
+    out RaycastHit hit,
+    maxDistance,
+    targetLayer,
+    QueryTriggerInteraction.Ignore);
+```
+
+- `maxDistance`: 얼마나 멀리까지 검사할지 정합니다.
+- `LayerMask`: 어떤 레이어만 검사할지 정합니다.
+- `QueryTriggerInteraction`: Trigger Collider를 검사에 포함할지 정합니다.
+
+처음에는 `Raycast`로 시작하고, 선이 너무 얇아서 자주 빗나가면 `SphereCast`, 상자 범위가 필요하면 `BoxCast`, 캐릭터 몸통처럼 긴 형태가 필요하면 `CapsuleCast`를 떠올리면 됩니다.
