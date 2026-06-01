@@ -1,239 +1,352 @@
-# 🚀 Day 14: 고급 길찾기 알고리즘 (A* Algorithm)과 예외 처리
+# Day 14: 고급 길찾기 - A* 알고리즘
 
-오늘의 목표는 **"A* 길찾기 알고리즘의 비용 계산 원리(F = G + H)와 가중치 지형 탐색을 이해하고, Day 12에서 배운 FSM의 추적 상태에 경로 갱신 로직을 연결하며, 길찾기 시스템 구현 시 발생 가능한 무한 루프와 널 포인터 결함을 분석하고 해결하는 디버깅 능력을 완수한다"**입니다.
+오늘의 목표는 "**A*가 G 비용과 H 비용을 더해 다음에 볼 칸을 고르는 방식을 이해하고, 작은 그리드에서 경로와 안전장치를 눈으로 확인하는 것**"입니다.
 
----
+Day11에서는 몬스터의 상태를 나눴고, Day12에서는 맵을 그래프로 바꿨고, Day13에서는 그래프를 탐색하는 순서를 봤습니다. Day14에서는 목표 방향으로 더 똑똑하게 탐색하는 A*를 다룹니다.
 
-## 1. 💡 이론 (30%): A* 알고리즘의 수학적 이해와 거리 척도
+## 1. 핵심 개념: "지금까지 든 비용과 앞으로 남은 예상 비용"
 
-A* 알고리즘은 다익스트라(Dijkstra) 알고리즘에 **휴리스틱(Heuristic, 발견법)**을 결합하여 목적지 방향으로의 탐색 효율을 극대화한 최단 경로 알고리즘입니다.
+A*는 모든 길을 무작정 확인하지 않습니다. 현재까지 실제로 이동한 비용과 목표까지 남은 예상 비용을 함께 봅니다.
 
-### 1) 비용 함수: $F = G + H$
-- **$G$ (시작점으로부터의 누적 비용)**: 시작 노드에서 현재 노드까지 도달하는 데 소요된 실제 이동 비용의 합입니다.
-  - 평지 이동 비용은 `10`, 대각선 이동 비용은 `14`($\approx 10\sqrt{2}$)로 책정하는 것이 일반적입니다.
-  - **지형 가중치(Terrain Weight)**가 반영될 경우, 늪지대나 모래밭 노드는 $G$ 값에 가중치($+W$)를 더해 가급적 우회하도록 유도합니다.
-- **$H$ (휴리스틱 - 예상 남은 비용)**: 장애물을 고려하지 않고 현재 노드에서 목적지 노드까지 도달하는 데 걸릴 것으로 예상되는 추정 거리 비용입니다.
-
-### 2) 휴리스틱 거리 측정 방식 (Distance Metric)
-그리드 맵의 구조와 이동 규칙에 따라 적합한 휴리스틱 척도를 선택해야 최적 경로가 보장됩니다.
-
-```mermaid
-graph TD
-    A[휴리스틱 거리 측정 방식 선택] --> B{대각선 이동 허용?}
-    B -- "허용 안 함 (4방향)" --> C["맨해튼 거리 (Manhattan Distance)"]
-    B -- "허용 함 (8방향)" --> D["체비쇼프 거리 (Chebyshev) / 옥타일 거리 (Octile)"]
-    B -- "자유 각도 (3D)" --> E["유클리드 거리 (Euclidean Distance)"]
+```text
+F = G + H
 ```
 
-- **맨해튼 거리 (Manhattan Distance)**: 4방향(상하좌우) 이동만 허용되는 격자 지형에 적합합니다.
-  $$H = D \times (|dx| + |dy|)$$
-- **유클리드 거리 (Euclidean Distance)**: 장애물이 없는 3D 자유 각도 공간에 적합합니다.
-  $$H = D \times \sqrt{dx^2 + dy^2}$$
+- `G`: 시작점에서 현재 칸까지 실제로 이동한 비용
+- `H`: 현재 칸에서 목표까지 남았다고 예상하는 비용
+- `F`: 다음에 어떤 칸을 먼저 볼지 고르는 기준
 
----
+`F`가 낮은 칸은 "지금까지도 적게 들었고, 목표까지도 가까워 보이는 칸"입니다.
 
-## 2. 🤖 A* 경로 갱신 연동 설계
+### 이 단어는 무슨 뜻인가요?
 
-Day 12에서 FSM의 상태 전환 원리는 이미 다루었으므로, 여기서는 몬스터가 **[Chase(추적)]** 상태에 들어온 뒤 A*를 언제 다시 실행할지만 설계합니다.
+#### A*
 
-```mermaid
-stateDiagram-v2
-    [*] --> Patrol
-    Patrol --> Chase : 플레이어 감지 (시야 진입)
-    state Chase {
-        [*] --> Pathfinding : 타겟 변경 감지
-        Pathfinding --> Moving : 경로 탐색 완료
-        Moving --> Pathfinding : Dynamic Recalculation (1초 주기 재계산)
-    }
-    Chase --> Attack : 사거리 진입
-    Chase --> Patrol : 플레이어 놓침 (시야 이탈)
-```
+그래프에서 시작점부터 목표점까지 좋은 경로를 찾는 알고리즘입니다. 보통 "에이 스타"라고 읽습니다.
 
-### 📌 Dynamic Recalculation (동적 재계산) 최적화
-실시간으로 움직이는 플레이어를 몬스터가 쫓아갈 때, 매 프레임($60\text{Hz}$)마다 A* 알고리즘을 수행하면 CPU에 막대한 연산 과부하가 걸립니다.
-- **해결책**:
-  1. **주기적 재계산**: 0.5초~1.0초 간격으로 `Coroutine`을 활용해 연산 주기를 분산시킵니다.
-  2. **거리 임계값 설정**: 타겟(플레이어)의 현재 위치가 이전 탐색 목적지로부터 일정 거리(예: 2m) 이상 벗어났을 때만 경로를 갱신합니다.
+#### G Cost
 
----
+시작점부터 현재 노드까지 실제로 이동한 비용입니다.
 
-## 3. 🔍 길찾기 시스템의 결함 예방 및 디버깅 가이드
+#### H Cost
 
-A* 알고리즘 구현 시 가장 빈번하게 발생하는 **2대 치명적 결함**과 대처 방안을 반드시 숙지해야 합니다.
+현재 노드에서 목표까지 남았다고 예상하는 비용입니다. 장애물을 완벽하게 계산하지 않고 대략적인 거리로 추정합니다.
 
-### 1) 결함 A: 목적지 도달 불가능 시의 무한 루프 (Infinite Loop)
-- **증상**: 몬스터가 도달할 수 없는 꽉 막힌 방 안에 플레이어가 있거나 목적지가 벽 속에 위치한 경우, 오픈 리스트가 빌 때까지 탐색이 지속되거나 적절한 탈출 조건이 없어 유니티 에디터가 크래시(Freezing)됩니다.
-- **방어 프로그래밍**:
-  - 최대 루프 카운트(Max Safety Loop Count, 예: 2000회)를 설정하여 제한을 초과하면 탐색을 즉시 중단하고 실패 처리를 하도록 구현합니다.
+#### F Cost
 
-### 2) 결함 B: 경로 탐색 실패 시의 널 참조 예외 (NullReferenceException)
-- **증상**: 경로 탐색이 불가능하여 `null`이 반환되었음에도 불구하고, AI가 이동을 시도하며 `path[0]` 혹은 `parentNode`를 참조할 때 참조 오류가 발생하여 전체 AI 시스템이 먹통이 됩니다.
-- **방어 프로그래밍**:
-  - 경로 추적을 시작하기 전, 반환된 경로 리스트가 `null`이거나 `Count == 0` 인지 유효성 검사(Null Guard)를 철저히 수행합니다.
+`G + H`입니다. A*는 보통 F 비용이 가장 낮은 노드를 먼저 확인합니다.
 
----
+#### Open Set
 
-## 💻 4. 실습 (70%): 견고한 A* 길찾기 컴포넌트 스크립트
+앞으로 확인할 후보 노드 모음입니다.
 
-**미션:** 무한 루프 차단(Safety Loop) 기능과 예외 처리가 반영된 견고한 A* 탐색 스크립트(`RobustAStar.cs`)를 분석하고 이해하세요.
+#### Closed Set
+
+이미 확인을 끝낸 노드 모음입니다.
+
+## 2. 안전장치가 필요한 이유
+
+목표가 벽으로 막혀 있거나, 코드에 실수가 있으면 탐색이 너무 오래 계속될 수 있습니다. 그래서 실제 구현에서는 최대 반복 횟수 같은 안전장치를 둡니다.
+
+`maxIterations`는 경로를 반드시 찾게 만드는 값이 아닙니다. 탐색이 끝없이 이어지지 않도록 막는 상한선입니다.
+
+## 실습 예제: Gizmos로 보는 A* 비용과 경로
+
+**미션:** 작은 그리드에서 시작점, 목표점, 장애물, 경로를 색으로 확인합니다.
+
+### 준비하기
+
+1. Unity 씬에 빈 오브젝트 `AStarVisualizer`를 만듭니다.
+2. 아래 스크립트를 붙입니다.
+3. Scene 뷰 오른쪽 위의 `Gizmos` 버튼을 켭니다.
+4. Inspector에서 `Start`, `Goal`, `Walls` 값을 바꿔 경로가 어떻게 달라지는지 확인합니다.
 
 ```csharp
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PathNode
+public class AStarGizmoVisualizer : MonoBehaviour
 {
-    public bool isWalkable;
-    public int gridX;
-    public int gridY;
-    public int penalty; // 지형 가중치 (0 = 평지, 10 = 진흙탕 등)
+    [Header("Grid")]
+    [Tooltip("가로 칸 수입니다.")]
+    [SerializeField] private int width = 6;
 
-    public int gCost;
-    public int hCost;
-    public int fCost => gCost + hCost;
+    [Tooltip("세로 칸 수입니다.")]
+    [SerializeField] private int height = 4;
 
-    public PathNode parent;
+    [Tooltip("Scene 뷰에 그릴 칸 크기입니다.")]
+    [SerializeField] private float cellSize = 1f;
 
-    public PathNode(bool walkable, int x, int y, int penaltyCost = 0)
+    [Header("Path")]
+    [Tooltip("경로 탐색을 시작할 칸입니다.")]
+    [SerializeField] private Vector2Int start = new Vector2Int(0, 0);
+
+    [Tooltip("경로 탐색의 목표 칸입니다.")]
+    [SerializeField] private Vector2Int goal = new Vector2Int(5, 3);
+
+    [Tooltip("이동할 수 없는 벽 칸 목록입니다.")]
+    [SerializeField] private Vector2Int[] walls =
     {
-        isWalkable = walkable;
-        gridX = x;
-        gridY = y;
-        penalty = penaltyCost;
+        new Vector2Int(2, 0),
+        new Vector2Int(2, 1),
+        new Vector2Int(2, 2)
+    };
+
+    [Tooltip("탐색이 끝없이 반복되지 않도록 막는 최대 반복 횟수입니다.")]
+    [SerializeField] private int maxIterations = 100;
+
+    private readonly List<Vector2Int> path = new List<Vector2Int>();
+    private readonly HashSet<Vector2Int> closedSet = new HashSet<Vector2Int>();
+    private bool pathFound;
+    private bool stoppedBySafetyLimit;
+
+    private void OnValidate()
+    {
+        RebuildPath();
     }
-}
 
-public class RobustAStar : MonoBehaviour
-{
-    private const int MAX_LOOP_LIMIT = 1000; // 무한 루프(크래시) 방지용 안전 장치
-
-    /// <summary>
-    /// 안전 장치가 장착된 A* 경로 찾기 기능
-    /// </summary>
-    public List<PathNode> FindPath(PathNode[,] grid, PathNode startNode, PathNode targetNode)
+    private void Awake()
     {
-        // 널 포인터 예외 예방 조치
-        if (grid == null || startNode == null || targetNode == null)
+        RebuildPath();
+    }
+
+    private void RebuildPath()
+    {
+        path.Clear();
+        closedSet.Clear();
+        pathFound = false;
+        stoppedBySafetyLimit = false;
+
+        if (!IsInsideGrid(start) || !IsInsideGrid(goal) || IsWall(start) || IsWall(goal))
         {
-            // Debug.LogError는 실행을 막아야 할 수준의 오류 메시지를 콘솔에 출력합니다.
-            Debug.LogError("[A*] 탐색 인자가 null입니다. 경로 탐색을 취소합니다.");
-            return null;
+            return;
         }
 
-        if (!targetNode.isWalkable)
-        {
-            Debug.LogWarning("[A*] 목적지가 이동 불가능한 지형(벽)입니다.");
-            return null;
-        }
+        List<Vector2Int> openSet = new List<Vector2Int>();
+        Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+        Dictionary<Vector2Int, int> gCost = new Dictionary<Vector2Int, int>();
 
-        List<PathNode> openSet = new List<PathNode>();
-        HashSet<PathNode> closedSet = new HashSet<PathNode>();
-        openSet.Add(startNode);
+        openSet.Add(start);
+        gCost[start] = 0;
 
-        int safetyCounter = 0;
+        int iterationCount = 0;
 
         while (openSet.Count > 0)
         {
-            // 안전 장치: 연산 한계 돌파 시 강제 차단하여 크래시 방지
-            safetyCounter++;
-            if (safetyCounter > MAX_LOOP_LIMIT)
+            iterationCount++;
+
+            if (iterationCount > maxIterations)
             {
-                Debug.LogError($"[A* Critical] 무한 루프 의심 상태 감지! 탐색 횟수가 {MAX_LOOP_LIMIT}회를 초과하여 탐색을 강제 중단합니다.");
-                return null;
+                stoppedBySafetyLimit = true;
+                return;
             }
 
-            PathNode currentNode = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
+            Vector2Int current = GetLowestFCostNode(openSet, gCost);
+
+            if (current == goal)
             {
-                if (openSet[i].fCost < currentNode.fCost || 
-                    (openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost))
+                BuildPath(cameFrom, current);
+                pathFound = true;
+                return;
+            }
+
+            openSet.Remove(current);
+            closedSet.Add(current);
+
+            foreach (Vector2Int neighbor in GetNeighbors(current))
+            {
+                if (closedSet.Contains(neighbor) || IsWall(neighbor))
                 {
-                    currentNode = openSet[i];
-                }
-            }
-
-            openSet.Remove(currentNode);
-            closedSet.Add(currentNode);
-
-            // 목적지 도달 시 성공적으로 경로 생성 및 역추적 반환
-            if (currentNode == targetNode)
-            {
-                return RetracePath(startNode, targetNode);
-            }
-
-            // 주변 8방향 이웃 노드 탐색 (여기서는 편의상 4방향 상하좌우만 예시)
-            List<PathNode> neighbours = GetNeighbours(grid, currentNode);
-            foreach (var neighbour in neighbours)
-            {
-                if (!neighbour.isWalkable || closedSet.Contains(neighbour))
                     continue;
+                }
 
-                // 새로운 이동 비용에 지형 가중치(penalty)를 누적 결합
-                int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.penalty;
-                
-                if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                int newGCost = gCost[current] + 10;
+
+                if (!gCost.ContainsKey(neighbor) || newGCost < gCost[neighbor])
                 {
-                    neighbour.gCost = newMovementCostToNeighbour;
-                    neighbour.hCost = GetDistance(neighbour, targetNode); // 맨해튼 거리 사용
-                    neighbour.parent = currentNode;
+                    cameFrom[neighbor] = current;
+                    gCost[neighbor] = newGCost;
 
-                    if (!openSet.Contains(neighbour))
-                        openSet.Add(neighbour);
+                    if (!openSet.Contains(neighbor))
+                    {
+                        openSet.Add(neighbor);
+                    }
                 }
             }
         }
-
-        Debug.LogWarning("[A* Path Failed] 도달 가능한 최적 경로가 존재하지 않습니다.");
-        return null; // 널 가드 작동을 위해 null 반환
     }
 
-    private List<PathNode> RetracePath(PathNode startNode, PathNode endNode)
+    private Vector2Int GetLowestFCostNode(List<Vector2Int> openSet, Dictionary<Vector2Int, int> gCost)
     {
-        List<PathNode> path = new List<PathNode>();
-        PathNode currentNode = endNode;
+        Vector2Int bestNode = openSet[0];
+        int bestCost = GetFCost(bestNode, gCost);
 
-        while (currentNode != startNode)
+        for (int i = 1; i < openSet.Count; i++)
         {
-            path.Add(currentNode);
-            currentNode = currentNode.parent; // 부모 역추적
-        }
-        path.Reverse();
-        return path;
-    }
+            int cost = GetFCost(openSet[i], gCost);
 
-    private int GetDistance(PathNode nodeA, PathNode nodeB)
-    {
-        // Mathf.Abs는 음수일 수 있는 차이값을 절댓값으로 바꿔 거리 계산에 사용합니다.
-        int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
-        int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
-        return 10 * (dstX + dstY); // 맨해튼 거리 공식
-    }
-
-    private List<PathNode> GetNeighbours(PathNode[,] grid, PathNode node)
-    {
-        List<PathNode> neighbours = new List<PathNode>();
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
-
-        int[] dx = { 0, 0, -1, 1 };
-        int[] dy = { -1, 1, 0, 0 };
-
-        for (int i = 0; i < 4; i++)
-        {
-            int checkX = node.gridX + dx[i];
-            int checkY = node.gridY + dy[i];
-
-            if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
+            if (cost < bestCost)
             {
-                neighbours.Add(grid[checkX, checkY]);
+                bestNode = openSet[i];
+                bestCost = cost;
             }
         }
-        return neighbours;
+
+        return bestNode;
+    }
+
+    private int GetFCost(Vector2Int node, Dictionary<Vector2Int, int> gCost)
+    {
+        int g = gCost.ContainsKey(node) ? gCost[node] : 9999;
+        int h = GetManhattanDistance(node, goal) * 10;
+        return g + h;
+    }
+
+    private int GetManhattanDistance(Vector2Int a, Vector2Int b)
+    {
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    private IEnumerable<Vector2Int> GetNeighbors(Vector2Int node)
+    {
+        Vector2Int[] directions =
+        {
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left
+        };
+
+        foreach (Vector2Int direction in directions)
+        {
+            Vector2Int next = node + direction;
+
+            if (IsInsideGrid(next))
+            {
+                yield return next;
+            }
+        }
+    }
+
+    private void BuildPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
+    {
+        path.Clear();
+        path.Add(current);
+
+        while (cameFrom.ContainsKey(current))
+        {
+            current = cameFrom[current];
+            path.Add(current);
+        }
+
+        path.Reverse();
+    }
+
+    private bool IsInsideGrid(Vector2Int node)
+    {
+        return node.x >= 0 && node.x < width && node.y >= 0 && node.y < height;
+    }
+
+    private bool IsWall(Vector2Int node)
+    {
+        foreach (Vector2Int wall in walls)
+        {
+            if (wall == node)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        RebuildPath();
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                Vector2Int node = new Vector2Int(x, y);
+                Vector3 position = transform.position + new Vector3(x * cellSize, 0f, y * cellSize);
+
+                Gizmos.color = GetNodeColor(node);
+                Gizmos.DrawCube(position, Vector3.one * (cellSize * 0.85f));
+
+                Gizmos.color = Color.black;
+                Gizmos.DrawWireCube(position, Vector3.one * (cellSize * 0.85f));
+            }
+        }
+
+        DrawPathLines();
+    }
+
+    private Color GetNodeColor(Vector2Int node)
+    {
+        if (node == start)
+        {
+            return Color.green;
+        }
+
+        if (node == goal)
+        {
+            return Color.red;
+        }
+
+        if (IsWall(node))
+        {
+            return Color.black;
+        }
+
+        if (path.Contains(node))
+        {
+            return Color.yellow;
+        }
+
+        if (closedSet.Contains(node))
+        {
+            return stoppedBySafetyLimit ? Color.magenta : Color.cyan;
+        }
+
+        return Color.gray;
+    }
+
+    private void DrawPathLines()
+    {
+        if (!pathFound || path.Count < 2)
+        {
+            return;
+        }
+
+        Gizmos.color = Color.white;
+
+        for (int i = 1; i < path.Count; i++)
+        {
+            Vector3 from = transform.position + new Vector3(path[i - 1].x * cellSize, 0.55f, path[i - 1].y * cellSize);
+            Vector3 to = transform.position + new Vector3(path[i].x * cellSize, 0.55f, path[i].y * cellSize);
+            Gizmos.DrawLine(from, to);
+        }
     }
 }
 ```
 
----
+### 실행해보면
 
+초록색 칸은 시작점, 빨간색 칸은 목표점입니다. 검은색 칸은 지나갈 수 없는 벽입니다. 노란색 칸은 A*가 찾은 경로이고, 하늘색 칸은 탐색 중 확인했던 칸입니다.
 
+`Walls` 값을 바꾸면 경로가 우회됩니다. `maxIterations`를 너무 작게 줄이면 탐색이 안전장치에 걸려 하늘색 확인 칸이 보라색 계열로 표시됩니다.
+
+### 생각해보기
+
+1. `G` 비용만 사용하면 목표 방향을 고려하지 못하는 이유는 무엇일까요?
+2. `H` 비용이 너무 부정확하면 어떤 경로를 먼저 보게 될까요?
+3. `maxIterations`는 경로를 찾기 위한 값이 아니라 무엇을 막기 위한 값일까요?
+
+## 오늘의 정리
+
+- A*는 `F = G + H`로 다음에 확인할 노드를 고른다.
+- `G`는 실제로 이동한 비용이다.
+- `H`는 목표까지 남았다고 예상하는 비용이다.
+- Open Set은 앞으로 확인할 후보이고, Closed Set은 이미 확인한 노드이다.
+- `maxIterations` 같은 안전장치는 무한 반복이나 과도한 계산을 막기 위한 상한선이다.
