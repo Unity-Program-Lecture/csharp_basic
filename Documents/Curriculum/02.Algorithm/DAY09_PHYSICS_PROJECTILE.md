@@ -147,6 +147,8 @@ public class ProjectileGizmoPreview : MonoBehaviour
     private Vector3 GetLaunchVelocity()
     {
         // Quaternion.Euler는 각도 값을 회전으로 바꾸는 메서드입니다.
+        // Unity에서 X축 양수 회전은 앞 방향을 아래로 기울입니다.
+        // 그래서 "위로 launchAngle도"를 만들기 위해 X축에는 음수 각도를 넣습니다.
         Quaternion rotation = Quaternion.Euler(-launchAngle, yawAngle, 0f);
 
         // Vector3.forward는 월드 기준 앞 방향 벡터입니다.
