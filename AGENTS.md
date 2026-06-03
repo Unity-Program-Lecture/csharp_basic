@@ -30,7 +30,7 @@
 5. 추상적 용어보다는 실생활 비유(상자, 리모컨 등)를 사용합니다.
 6. 코드 설명은 코드 독해 3원칙인 `위->아래`, `오->왼`, `안->밖`을 기반으로 합니다.
 7. 학생들이 직접 타이핑할 수 있는 예제 코드를 제공합니다.
-8. 교육 과정의 상세 일정 및 일수 계산은 `Documents/COURSE_SCHEDULE_SUMMARY_202605141510.md`를 최우선으로 참조합니다.
+8. 교육 과정의 상세 일정 및 일수 계산은 `Documents/COURSE_SCHEDULE_SUMMARY.md`를 최우선으로 참조합니다.
 9. 정교한 기하학적 표현이나 겹침 등 시각적 설명이 필요한 경우 별도 `.svg` 파일로 저장하고 Markdown 이미지 태그로 삽입합니다. GitHub 호환성을 위해 표준 SVG 네임스페이스를 포함하고, 다크/라이트 테마 모두에서 보이는 중간 톤 이상의 고대비 색상을 사용합니다.
 
 ## 주요 참조 파일
@@ -38,11 +38,11 @@
 - `Documents/HISTORY.md`: 전체 교육과정 개발 및 업데이트 이력.
 - `Documents/LEARNING_DOCUMENT_GUIDE.md`: 과정별 학습 문서 작성 규칙.
 - `Documents/QUIZ_ANSWERS_*.md`: 각 일자별 퀴즈 정답 및 해설.
-- `Documents/COURSE_SCHEDULE_SUMMARY_*.md`: 전공 교과목별 상세 교육 일정 및 소요 일수 요약본.
+- `Documents/COURSE_SCHEDULE_SUMMARY.md`: 전공 교과목별 상세 교육 일정 및 소요 일수 요약본.
 - `26국기_교수계획서.pdf`: 공식 강의 계획 및 일정표.
 
 ## Codex 작업 메모
 
-- 기존 Gemini CLI 설정은 `GEMINI.md`, `.gemini/settings.json`, `.geminiignore`에 남아 있습니다.
+- 기존 Gemini CLI 설정은 `.gemini/settings.json`, `.geminiignore`에 남아 있습니다.
 - Codex는 이 `AGENTS.md`를 우선 프로젝트 지침으로 사용합니다.
 - Gemini 전용 개인 설정(`.gemini/settings.json`의 OAuth, 모델명, MCP 서버 등)은 Codex 설정으로 자동 변환하지 않습니다. 필요한 MCP나 도구 설정은 현재 Codex 환경에서 별도로 활성화합니다.
