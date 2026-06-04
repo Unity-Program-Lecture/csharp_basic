@@ -252,6 +252,9 @@ public class AStarGizmoVisualizer : MonoBehaviour
     private int GetManhattanDistance(Vector2Int a, Vector2Int b)
     {
         // 두 칸 사이를 가로/세로 이동만으로 간다고 생각했을 때 필요한 최소 칸 수입니다.
+        // 예를 들어 (0, 0)에서 (3, 2)로 가려면 오른쪽으로 3칸, 위로 2칸 이동해야 합니다.
+        // 그래서 거리는 3 + 2 = 5칸이 됩니다.
+        // Mathf.Abs는 b가 왼쪽이나 아래쪽에 있어도 차이를 양수로 계산하기 위해 사용합니다.
         return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
     }
 
