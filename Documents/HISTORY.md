@@ -1,5 +1,22 @@
 # 📜 프로젝트 교육과정 개발 히스토리
 
+## 2026-06-15
+
+1. **게임엔진 10일차 외부 에셋 관리 기준 정정**
+   - `DAY10_EXTERNAL_LIBRARY.md`에서 Asset Store 에셋을 무조건 `ThirdParty`로 옮기도록 보일 수 있는 설명을 수정함.
+   - 외부 에셋 원본은 제작자 기본 경로를 유지하고, 직접 만든 씬/스크립트/Prefab Variant는 `_Project`에 분리하는 방식으로 안내를 정리함.
+   - `.meta` 파일과 업데이트 시 중복 폴더, 참조 꼬임 위험을 초보자 눈높이로 보강함.
+2. **게임엔진 11일차 UGUI 기초 설명 보강**
+   - `DAY11_UIUX_ENGINE.md`에 Canvas Render Mode, RectTransform의 Anchor/Pivot/Pos 관계, Canvas Scaler, EventSystem과 Raycast Target 설명을 추가함.
+   - 점수 버튼 실습 절차에 Canvas Scaler 설정과 Anchor/Pivot 배치 확인 과정을 보강함.
+3. **게임엔진 12일차 사운드/VFX 기초 설명 보강**
+   - `DAY12_AUDIO_VFX.md`에 Audio Listener의 역할, 중복 Listener 주의사항, AudioSource 주요 설정을 추가함.
+   - ParticleSystem의 Main, Emission, Shape, Color over Lifetime, Size over Lifetime, Renderer 핵심 모듈 설명을 보강함.
+   - 실습 절차에 Audio Listener 확인, Spatial Blend, ParticleSystem Looping/Duration/Emission 조정 단계를 추가함.
+4. **게임엔진 13~14일차 VR 패키지 준비 절차 보강**
+   - `DAY13_VR_FUNDAMENTALS.md`에 Package Manager로 설치할 XR 필수 패키지 목록과 OpenXR 활성화, XR Interaction Toolkit 샘플 Import 안내를 추가함.
+   - `DAY14_VR_INTERACTION.md`에 VR 그랩 실습 전 XR Interaction Toolkit, Input System, OpenXR Plugin, Starter Assets 확인 절차를 추가함.
+
 ## 2026-06-01
 
 1. **알고리즘 11~14일차 학습 흐름 재정렬 및 규격화**
