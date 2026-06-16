@@ -1,4 +1,4 @@
-# DAY 06: Unity 스크립팅 생명주기와 Input System 이동
+# DAY 07: Unity 스크립팅 생명주기와 Input System 이동
 
 오늘의 목표는 Unity 스크립트를 "**정해진 시간표대로 움직이는 수업 도우미**"처럼 이해하고, `Update`, `FixedUpdate`, Input System 이벤트를 나누어 사용하는 기본 이동 코드를 작성하는 것입니다.
 

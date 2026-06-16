@@ -1,4 +1,4 @@
-# DAY 05: 조명과 머티리얼 기초
+# DAY 06: 조명과 머티리얼 기초
 
 오늘의 목표는 조명과 머티리얼을 "**무대 조명과 물체 표면의 옷감**"처럼 이해하고, URP 기본 머티리얼에서 색, 금속성, 거칠기, 표면 요철, 발광을 조절해 보는 것입니다.
 
@@ -101,3 +101,228 @@ Emission을 켠 머티리얼은 표면 자체가 밝아 보입니다. 다만 Emi
 - 초급 단계에서는 `Base Color`, `Metallic`, `Smoothness`만 비교해도 플라스틱, 돌, 금속의 차이를 설명할 수 있습니다.
 - `Normal Map`은 실제 모델을 복잡하게 만들지 않고 표면의 작은 요철을 보여 주는 데 사용합니다.
 - `Emission`은 물체가 스스로 빛나는 느낌을 주지만, 실제 조명 역할과는 구분해야 합니다.
+
+## 별첨: 기본 Unity 쉐이더 문법
+
+Unity에서 직접 작성하는 쉐이더 파일은 보통 `.shader` 확장자를 사용합니다. 초급 단계에서는 모든 문법을 외우기보다, 쉐이더가 어떤 순서로 구성되는지 읽을 수 있으면 충분합니다.
+
+Unity 6의 URP 프로젝트에서는 ShaderLab이라는 Unity용 포장 문법 안에 HLSL 코드를 작성합니다.
+
+```text
+Shader
+└─ Properties
+   └─ Material Inspector에 노출할 값
+└─ SubShader
+   └─ 실제 렌더링 조건과 Pass 묶음
+      └─ Pass
+         └─ HLSLPROGRAM
+            ├─ vertex 함수
+            └─ fragment 함수
+```
+
+### 기본 구조
+
+```ShaderLab
+Shader "폴더이름/쉐이더이름"
+{
+    Properties
+    {
+        // 머티리얼 Inspector에 보일 값
+    }
+
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"
+        }
+
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            // HLSL 코드 작성 위치
+
+            ENDHLSL
+        }
+    }
+}
+```
+
+각 부분의 역할은 다음과 같습니다.
+
+| 문법 | 역할 |
+| :--- | :--- |
+| `Shader "이름"` | Unity의 Shader 선택 메뉴에 표시될 이름 |
+| `Properties` | 머티리얼 Inspector에 노출할 색, 숫자, 텍스처 값 |
+| `SubShader` | 특정 렌더링 환경에서 사용할 실제 쉐이더 묶음 |
+| `Tags` | URP용 쉐이더인지, 불투명 물체인지 같은 렌더링 조건 |
+| `Pass` | 물체를 한 번 그리는 렌더링 단계 |
+| `HLSLPROGRAM` | 실제 GPU에서 실행될 HLSL 코드 시작 |
+| `#pragma vertex` | 어떤 함수를 정점 처리에 사용할지 지정 |
+| `#pragma fragment` | 어떤 함수를 픽셀 색상 처리에 사용할지 지정 |
+| `ENDHLSL` | HLSL 코드 종료 |
+
+## 별첨 예제 1: 색상만 출력하는 URP Unlit 쉐이더
+
+이 예제는 조명 계산을 하지 않고, 머티리얼에서 지정한 색을 그대로 출력합니다. 빛의 영향을 받지 않으므로 표식, 디버그 오브젝트, 단순 색상 확인에 적합합니다.
+
+1. Project 창에서 `Create > Shader > Blank Shader` 또는 텍스트 파일을 만들어 `.shader` 확장자로 저장합니다.
+2. 파일 이름을 `URP_Unlit_Color.shader`로 정합니다.
+3. 아래 코드를 붙여 넣습니다.
+4. 새 머티리얼을 만들고 Shader를 `SBS/URP Unlit Color`로 선택합니다.
+
+```ShaderLab
+Shader "SBS/URP Unlit Color"
+{
+    Properties
+    {
+        [MainColor] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
+    }
+
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"
+        }
+
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+            };
+
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+            };
+
+            CBUFFER_START(UnityPerMaterial)
+                half4 _BaseColor;
+            CBUFFER_END
+
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                return OUT;
+            }
+
+            half4 frag(Varyings IN) : SV_Target
+            {
+                return _BaseColor;
+            }
+            ENDHLSL
+        }
+    }
+}
+```
+
+### 코드 읽기
+
+- `Properties`의 `_BaseColor`는 머티리얼 Inspector에서 바꿀 수 있는 색입니다.
+- `Attributes`는 모델에서 들어오는 정점 정보를 받습니다.
+- `Varyings`는 정점 함수에서 픽셀 함수로 넘길 값을 담습니다.
+- `vert` 함수는 오브젝트 공간 좌표를 화면에 그릴 수 있는 좌표로 바꿉니다.
+- `frag` 함수는 최종 픽셀 색을 반환합니다.
+- `TransformObjectToHClip`은 URP에서 오브젝트 좌표를 화면용 좌표로 변환할 때 사용하는 함수입니다.
+
+## 별첨 예제 2: 위쪽으로 갈수록 밝아지는 색상 쉐이더
+
+이 예제는 모델의 로컬 Y 좌표를 이용해 아래쪽은 어둡게, 위쪽은 밝게 보이도록 만듭니다. 조명을 계산하지 않아도 간단한 색상 변화 원리를 확인할 수 있습니다.
+
+```ShaderLab
+Shader "SBS/URP Height Color"
+{
+    Properties
+    {
+        _BottomColor("Bottom Color", Color) = (0.1, 0.1, 0.1, 1)
+        _TopColor("Top Color", Color) = (0.2, 0.8, 1, 1)
+        _Height("Height Range", Float) = 2
+    }
+
+    SubShader
+    {
+        Tags
+        {
+            "RenderType" = "Opaque"
+            "RenderPipeline" = "UniversalPipeline"
+        }
+
+        Pass
+        {
+            HLSLPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+            struct Attributes
+            {
+                float4 positionOS : POSITION;
+            };
+
+            struct Varyings
+            {
+                float4 positionHCS : SV_POSITION;
+                float height01 : TEXCOORD0;
+            };
+
+            CBUFFER_START(UnityPerMaterial)
+                half4 _BottomColor;
+                half4 _TopColor;
+                float _Height;
+            CBUFFER_END
+
+            Varyings vert(Attributes IN)
+            {
+                Varyings OUT;
+                OUT.positionHCS = TransformObjectToHClip(IN.positionOS.xyz);
+                OUT.height01 = saturate((IN.positionOS.y / _Height) + 0.5);
+                return OUT;
+            }
+
+            half4 frag(Varyings IN) : SV_Target
+            {
+                return lerp(_BottomColor, _TopColor, IN.height01);
+            }
+            ENDHLSL
+        }
+    }
+}
+```
+
+### 코드 읽기
+
+- `_BottomColor`는 아래쪽 색입니다.
+- `_TopColor`는 위쪽 색입니다.
+- `_Height`는 색이 바뀌는 높이 범위를 조절합니다.
+- `saturate`는 값을 `0`에서 `1` 사이로 제한합니다.
+- `lerp(a, b, t)`는 `t` 값에 따라 `a`와 `b` 사이의 색을 섞습니다.
+
+## 별첨 실습: 직접 확인하기
+
+1. 큐브 또는 캡슐 오브젝트를 하나 만듭니다.
+2. `SBS/URP Unlit Color` 쉐이더를 사용하는 머티리얼을 적용합니다.
+3. 머티리얼의 `Base Color`를 바꾸고 Game View에서 확인합니다.
+4. 같은 오브젝트에 `SBS/URP Height Color` 쉐이더를 사용하는 머티리얼을 적용합니다.
+5. `Bottom Color`, `Top Color`, `Height Range` 값을 바꾸며 색 변화가 어떻게 달라지는지 확인합니다.
+
+### 주의할 점
+
+- 이 별첨 예제는 빛을 계산하지 않는 Unlit 계열입니다.
+- `Directional Light`를 돌려도 색이 크게 바뀌지 않는 것이 정상입니다.
+- 조명 영향을 받는 표면을 만들려면 URP Lit 구조와 조명 계산을 추가로 다루어야 합니다.
+- 포트폴리오에서는 직접 쉐이더를 많이 만드는 것보다, 쉐이더와 머티리얼의 역할 차이를 설명할 수 있는 것이 우선입니다.

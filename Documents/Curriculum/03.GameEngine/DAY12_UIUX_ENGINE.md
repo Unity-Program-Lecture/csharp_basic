@@ -1,4 +1,4 @@
-# DAY 11: UGUI UI/UX 기초
+# DAY 12: UGUI UI/UX 기초
 
 오늘의 목표는 Unity UI를 "**화면 위에 붙이는 투명한 안내판**"처럼 이해하고, Canvas, RectTransform, Button 이벤트로 간단한 HUD를 만드는 것입니다.
 

@@ -1,4 +1,4 @@
-# DAY 09: Package Manager와 플러그인 확장
+# DAY 10: Package Manager와 플러그인 확장
 
 오늘의 목표는 Unity 패키지를 "**필요할 때 가져오는 공구 세트**"로 이해하고, Package Manager를 통해 기능을 추가하는 흐름을 익히는 것입니다.
 

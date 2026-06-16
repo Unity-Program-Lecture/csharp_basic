@@ -1,4 +1,4 @@
-# DAY 12: 사운드와 파티클 효과
+# DAY 13: 사운드와 파티클 효과
 
 오늘의 목표는 사운드와 VFX를 "**게임의 손맛을 알려 주는 반응**"으로 이해하고, AudioSource, Audio Listener, ParticleSystem을 함께 사용하는 방법을 익히는 것입니다.
 
