@@ -43,16 +43,17 @@ Rigidbody는 힘, 중력, 충돌 반응을 물리 엔진에 맡기는 방식입�
 
 ## 실습 예제: CharacterController로 기본 이동 만들기
 
-**미션:** 입력 값을 임시로 코드에 넣어 `CharacterController.Move`로 캐릭터를 이동시킵니다.
+**미션:** Input System으로 받은 이동 입력을 `CharacterController.Move`에 연결해 캐릭터를 이동시킵니다.
 
 1. 캡슐 오브젝트를 하나 만들고 이름을 `Player_CC`로 정합니다.
 2. `CharacterController` 컴포넌트를 추가합니다.
 3. Inspector에서 `Height`, `Radius`, `Center`가 캡슐 모델과 맞는지 확인합니다.
 4. 아래 스크립트를 `SimpleCharacterControllerMover.cs`로 만들고 `Player_CC`에 붙입니다.
-5. Play 버튼을 누르고 방향키 또는 WASD로 이동을 확인합니다.
+5. Play 버튼을 누르고 WASD 또는 방향키로 이동을 확인합니다.
 
 ```csharp
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 public class SimpleCharacterControllerMover : MonoBehaviour
@@ -61,19 +62,41 @@ public class SimpleCharacterControllerMover : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
 
     private CharacterController controller;
+    private InputAction moveAction;
     private float verticalVelocity;
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+
+        moveAction = new InputAction("Move", InputActionType.Value);
+        moveAction.AddCompositeBinding("2DVector")
+            .With("Up", "<Keyboard>/w")
+            .With("Down", "<Keyboard>/s")
+            .With("Left", "<Keyboard>/a")
+            .With("Right", "<Keyboard>/d");
+
+        moveAction.AddCompositeBinding("2DVector")
+            .With("Up", "<Keyboard>/upArrow")
+            .With("Down", "<Keyboard>/downArrow")
+            .With("Left", "<Keyboard>/leftArrow")
+            .With("Right", "<Keyboard>/rightArrow");
+    }
+
+    private void OnEnable()
+    {
+        moveAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveAction.Disable();
     }
 
     private void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-
-        Vector3 move = new Vector3(horizontal, 0f, vertical).normalized;
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        Vector3 move = new Vector3(moveInput.x, 0f, moveInput.y).normalized;
         move *= moveSpeed;
 
         if (controller.isGrounded && verticalVelocity < 0f)
@@ -89,7 +112,7 @@ public class SimpleCharacterControllerMover : MonoBehaviour
 }
 ```
 
-이 예제는 `Input System`이 아니라 기존 축 입력을 사용해 이동 구조만 먼저 확인합니다. `Input System`을 사용한 실제 플레이어 조작 구조는 클라이언트 과정에서 다시 정리합니다.
+이 예제는 별도의 Input Actions 에셋이나 `Player Input` 컴포넌트를 만들지 않고, 스크립트 안에서 `InputAction`을 직접 생성합니다. 따라서 CharacterController의 이동 원리를 확인하기 위한 간단한 입력 예제로 사용할 수 있습니다.
 
 ### 실행해보면
 

@@ -105,10 +105,56 @@ Agent가 NavMesh 위에서 목표 지점까지 이동합니다. 목표까지 직
 2. Agent의 `Radius`가 너무 크면 좁은 문을 지나갈 수 있을까요?
 3. Navigation은 AI 자체일까요, 아니면 이동 가능한 길을 계산하는 시스템일까요?
 
+## 별첨: NavMeshModifier와 NavMeshModifierVolume
+
+`NavMeshSurface`는 전체 NavMesh를 Bake하는 기준을 정합니다. 하지만 실제 레벨에서는 특정 오브젝트만 Bake에서 제외하거나, 특정 구역만 다른 이동 비용을 주고 싶을 때가 있습니다. 이때 사용하는 보조 컴포넌트가 `NavMeshModifier`와 `NavMeshModifierVolume`입니다.
+
+## 별첨 1. NavMeshModifier
+
+`NavMeshModifier`는 특정 GameObject가 NavMesh Bake에 어떻게 반영될지 바꾸는 컴포넌트입니다. 오브젝트 하나 또는 그 자식 오브젝트 묶음에 적용하는 설정이라고 보면 됩니다.
+
+| 프로퍼티 | 의미 | 사용 예 |
+| :--- | :--- | :--- |
+| `Override Area` | 이 오브젝트의 Area 타입을 직접 지정할지 정함 | 바닥 일부를 `Not Walkable`로 바꾸기 |
+| `Area Type` | 적용할 Area 종류 | `Walkable`, `Not Walkable`, `Jump` 등 |
+| `Ignore From Build` | 이 오브젝트를 NavMesh Bake 계산에서 제외할지 정함 | 장식용 풀, 작은 돌, 시각 효과 오브젝트 제외 |
+| `Apply To Children` | 자식 오브젝트에도 Modifier를 적용할지 정함 | 복잡한 장식물 묶음을 한 번에 제외 |
+| `Affected Agents` | 어떤 Agent Type에 적용할지 정함 | 사람은 못 지나가지만 작은 몬스터는 지나가게 구분 |
+
+예를 들어 바닥 위에 장식용 카펫이 있고, 카펫의 Mesh 때문에 NavMesh가 이상하게 갈라진다면 카펫 오브젝트에 `NavMeshModifier`를 붙이고 `Ignore From Build`를 켤 수 있습니다. 그러면 카펫은 화면에는 보이지만 NavMesh Bake 계산에는 들어가지 않습니다.
+
+반대로 특정 다리나 위험 지역을 `Not Walkable`로 만들고 싶다면 `Override Area`를 켜고 `Area Type`을 `Not Walkable`로 지정합니다.
+
+## 별첨 2. NavMeshModifierVolume
+
+`NavMeshModifierVolume`은 오브젝트의 Mesh 모양이 아니라, 지정한 박스 형태의 공간에 Area 타입을 덮어씌우는 컴포넌트입니다. 특정 구역 전체를 느린 땅, 위험 지역, 이동 금지 영역처럼 처리할 때 사용합니다.
+
+| 프로퍼티 | 의미 | 사용 예 |
+| :--- | :--- | :--- |
+| `Size` | Volume의 박스 크기 | 늪지대나 위험 구역 범위 지정 |
+| `Center` | Volume 중심 위치 | 실제 구역과 박스 위치 맞추기 |
+| `Area Type` | Volume 안에 적용할 Area 종류 | `Not Walkable` 또는 별도 Area |
+| `Affected Agents` | 어떤 Agent Type에 적용할지 정함 | 큰 몬스터만 못 지나가는 영역 만들기 |
+
+`NavMeshModifierVolume`은 보이지 않는 박스를 씬에 놓고, 그 안쪽 NavMesh Area를 바꾸는 방식입니다. 모델의 모양과 상관없이 사각형 구역 단위로 이동 규칙을 바꾸고 싶을 때 적합합니다.
+
+## 별첨 3. 언제 무엇을 쓰나요?
+
+| 상황 | 사용할 컴포넌트 |
+| :--- | :--- |
+| 특정 오브젝트를 Bake에서 제외하고 싶음 | `NavMeshModifier` |
+| 특정 오브젝트와 자식 전체에 같은 Area를 주고 싶음 | `NavMeshModifier` + `Apply To Children` |
+| 보이지 않는 박스 구역 전체를 이동 금지로 만들고 싶음 | `NavMeshModifierVolume` |
+| 움직이는 장애물이 Agent를 막거나 피하게 만들고 싶음 | `NavMeshObstacle` |
+| NavMesh를 생성하고 Bake하고 싶음 | `NavMeshSurface` |
+
+정리하면 `NavMeshSurface`는 전체 지도를 굽는 오븐이고, `NavMeshModifier`는 특정 재료를 빼거나 다른 재료로 표시하는 태그입니다. `NavMeshModifierVolume`은 지도 위에 투명한 박스를 올려 특정 구역의 이동 규칙을 바꾸는 도구입니다.
+
 ## 오늘의 정리
 
 - NavMesh는 이동 가능한 영역을 미리 계산해 둔 길 지도입니다.
 - `NavMeshSurface`는 NavMesh를 만들 범위와 기준을 정합니다.
 - `NavMeshAgent`는 NavMesh 위에서 목적지를 향해 이동합니다.
 - `NavMeshObstacle`은 Agent가 피해야 할 장애물이나 길을 막는 대상을 표현합니다.
+- `NavMeshModifier`와 `NavMeshModifierVolume`은 Bake 대상과 Area 타입을 세부적으로 조절할 때 사용합니다.
 - 엔진 과정에서는 Navigation 시스템의 구조를 이해하고, 클라이언트나 AI 과정에서 추적, 순찰, 상호작용 이동으로 확장합니다.
