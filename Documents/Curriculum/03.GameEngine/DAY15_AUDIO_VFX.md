@@ -1,4 +1,4 @@
-# DAY 13: 사운드와 파티클 효과
+# DAY 15: 사운드와 파티클 효과
 
 오늘의 목표는 사운드와 VFX를 "**게임의 손맛을 알려 주는 반응**"으로 이해하고, AudioSource, Audio Listener, ParticleSystem을 함께 사용하는 방법을 익히는 것입니다.
 
@@ -56,6 +56,19 @@ ParticleSystem은 작은 입자를 많이 뿌려서 불꽃, 연기, 먼지, 마�
 | `Color over Lifetime` | 시간이 지나며 색이 어떻게 바뀔지 | 처음엔 노랑, 끝에는 투명한 주황 |
 | `Size over Lifetime` | 시간이 지나며 크기가 어떻게 바뀔지 | 점점 커지는 연기, 점점 작아지는 불꽃 |
 | `Renderer` | 어떤 재질과 방식으로 보일지 | 파티클 Material, 정렬 방식 |
+
+ParticleSystem에서 먼저 확인할 Inspector 항목은 다음과 같습니다.
+
+| 모듈 | 프로퍼티 | 의미 |
+| :--- | :--- | :--- |
+| `Main` | `Duration` | 파티클 효과가 한 번 재생되는 기본 시간입니다. |
+| `Main` | `Looping` | 효과를 반복할지 정합니다. |
+| `Main` | `Start Lifetime` | 입자 하나가 살아 있는 시간입니다. |
+| `Main` | `Start Speed` | 입자가 처음 튀어나가는 속도입니다. |
+| `Main` | `Start Size` | 입자의 초기 크기입니다. |
+| `Emission` | `Rate over Time` | 시간당 생성되는 입자 수입니다. |
+| `Shape` | `Shape` | 입자가 생성되는 영역의 형태입니다. |
+| `Renderer` | `Material` | 파티클이 화면에 그려질 때 사용할 머티리얼입니다. |
 
 `Main`은 파티클의 기본 성격을 정합니다. `Duration`은 효과가 몇 초 동안 재생되는지, `Looping`은 반복할지, `Start Lifetime`은 입자 하나가 얼마나 오래 살아남는지, `Start Speed`는 입자가 얼마나 빠르게 움직이는지를 뜻합니다.
 

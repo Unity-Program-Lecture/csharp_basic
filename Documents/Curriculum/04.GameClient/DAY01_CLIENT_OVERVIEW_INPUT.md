@@ -16,6 +16,18 @@
 - **State**: 캐릭터가 현재 어떤 상태인지 나타내는 값입니다. 예: 대기, 이동, 공격 준비.
 - **Feedback**: 입력 결과를 화면, 소리, UI 등으로 플레이어에게 알려 주는 반응입니다.
 
+## 2. Player Input Inspector 주요 프로퍼티
+
+| 프로퍼티 | 의미 | 수업에서 확인할 것 |
+| :--- | :--- | :--- |
+| `Actions` | 사용할 Input Actions 에셋 | `Move`, `Jump`, `Interact` 같은 액션이 들어 있는지 확인 |
+| `Default Map` | 처음 활성화할 Action Map | 보통 `Player` 또는 `Gameplay` 맵으로 시작 |
+| `Behavior` | 입력 이벤트를 스크립트에 전달하는 방식 | 초급 실습에서는 `Send Messages` 또는 `Invoke Unity Events` 중 하나로 통일 |
+| `Default Control Scheme` | 기본 입력 장치 묶음 | 키보드/마우스, 게임패드 구분 |
+| `Camera` | UI 입력이나 화면 좌표 입력에 사용할 카메라 | 화면 클릭이나 UI 입력을 다룰 때 확인 |
+
+`Behavior`가 스크립트 함수 이름과 맞지 않으면 입력을 눌러도 함수가 호출되지 않습니다. 예를 들어 `Send Messages` 방식에서 `Move` 액션을 사용하면 스크립트에 `OnMove` 함수가 있어야 합니다.
+
 ## 실습 예제: 입력 값을 플레이어 상태로 바꾸기
 
 **미션:** Input System으로 이동 입력을 받고, 현재 입력 상태를 화면 디버그 메시지로 확인합니다.

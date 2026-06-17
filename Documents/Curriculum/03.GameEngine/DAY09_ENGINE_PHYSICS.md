@@ -14,6 +14,20 @@
 - **Collision**: 서로 막고 튕기는 충돌입니다.
 - **Trigger**: 통과는 가능하지만 들어옴과 나감을 감지하는 충돌입니다.
 
+## 2. Rigidbody와 Collider Inspector 주요 프로퍼티
+
+| 컴포넌트 | 프로퍼티 | 의미 |
+| :--- | :--- | :--- |
+| `Rigidbody` | `Mass` | 물체의 질량입니다. 충돌과 힘 반응에 영향을 줍니다. |
+| `Rigidbody` | `Drag` | 이동 속도가 줄어드는 공기 저항입니다. |
+| `Rigidbody` | `Angular Drag` | 회전 속도가 줄어드는 저항입니다. |
+| `Rigidbody` | `Use Gravity` | 중력을 받을지 정합니다. |
+| `Rigidbody` | `Is Kinematic` | 물리 힘 대신 스크립트나 애니메이션으로 움직일지 정합니다. |
+| `Rigidbody` | `Interpolate` | 화면에 보이는 움직임을 부드럽게 보정합니다. |
+| `Collider` | `Is Trigger` | 물리적으로 막지 않고 겹침 이벤트만 받을지 정합니다. |
+| `Collider` | `Material` | 마찰과 튕김 정도를 정하는 Physics Material입니다. |
+| `Collider` | `Center` / `Size` | 충돌 범위의 위치와 크기입니다. |
+
 ## 실습 예제: Trigger로 문 열기
 
 **미션:** 플레이어가 특정 구역에 들어오면 문 오브젝트가 위로 올라가도록 만듭니다.

@@ -43,6 +43,18 @@ Unity의 `Main Camera`도 특별한 물건이 아니라 `Camera` Component가 �
 | 쿼터뷰 | 대각선 위에서 장면을 봄 | 탐험, RPG, 퍼즐 공간 |
 | 1인칭 시점 | 카메라가 플레이어 눈 위치에 있음 | 시야 체험, VR 준비 |
 
+## 4. Camera Inspector 주요 프로퍼티
+
+| 프로퍼티 | 의미 | 수업에서 확인할 것 |
+| :--- | :--- | :--- |
+| `Projection` | 원근 또는 직교 투영 방식 | 3D 공간감은 `Perspective`, 일정한 크기 표현은 `Orthographic` |
+| `Field of View` | Perspective 카메라의 시야각 | 값이 크면 넓게 보이고, 작으면 좁게 확대되어 보임 |
+| `Size` | Orthographic 카메라의 화면 크기 | 값이 크면 더 넓은 영역이 보임 |
+| `Clipping Planes Near` | 카메라가 그리기 시작하는 가장 가까운 거리 | 너무 크면 가까운 오브젝트가 잘림 |
+| `Clipping Planes Far` | 카메라가 그릴 수 있는 가장 먼 거리 | 너무 작으면 멀리 있는 오브젝트가 사라짐 |
+| `Culling Mask` | 카메라가 렌더링할 Layer | 특정 Layer가 빠져 있으면 Game View에 보이지 않음 |
+| `Clear Flags` | 배경을 어떻게 지울지 정하는 값 | 하늘, 단색 배경, 이전 화면 유지 여부 확인 |
+
 ## 실습 예제: 오브젝트가 잘 보이는 고정 카메라 만들기
 
 **미션:** 큐브와 목표 오브젝트가 Game View에 잘 보이도록 카메라를 배치합니다.

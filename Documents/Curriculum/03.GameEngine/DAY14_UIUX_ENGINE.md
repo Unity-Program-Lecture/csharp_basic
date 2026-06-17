@@ -1,4 +1,4 @@
-# DAY 12: UGUI UI/UX 기초
+# DAY 14: UGUI UI/UX 기초
 
 오늘의 목표는 Unity UI를 "**화면 위에 붙이는 투명한 안내판**"처럼 이해하고, Canvas, RectTransform, Button 이벤트로 간단한 HUD를 만드는 것입니다.
 
@@ -60,6 +60,21 @@ Button이 눌리려면 세 가지가 맞아야 합니다.
 3. 클릭할 UI의 `Raycast Target`이 켜져 있어야 합니다.
 
 버튼 위에 투명한 Image가 덮여 있고 그 Image의 `Raycast Target`이 켜져 있으면, 클릭이 버튼까지 도착하지 않을 수 있습니다. UI가 눌리지 않을 때는 "버튼 코드가 틀렸다"라고 바로 판단하지 말고, 클릭을 가로막는 UI가 있는지도 확인해야 합니다.
+
+## 5. UGUI Inspector 주요 프로퍼티
+
+| 컴포넌트 | 프로퍼티 | 의미 |
+| :--- | :--- | :--- |
+| `Canvas` | `Render Mode` | UI를 화면 위, 카메라 앞, 월드 공간 중 어디에 그릴지 정합니다. |
+| `Canvas` | `Pixel Perfect` | UI를 픽셀 단위로 또렷하게 맞출지 정합니다. |
+| `Canvas Scaler` | `UI Scale Mode` | 해상도 변화에 따라 UI 크기를 어떻게 조정할지 정합니다. |
+| `Canvas Scaler` | `Reference Resolution` | 기준 해상도입니다. 수업에서는 보통 `1920 x 1080`으로 시작합니다. |
+| `RectTransform` | `Anchor` | 부모 영역의 어느 지점을 기준으로 위치를 잡을지 정합니다. |
+| `RectTransform` | `Pivot` | UI 자기 자신의 기준점입니다. |
+| `RectTransform` | `Pos X/Y` | Anchor 기준 위치입니다. |
+| `Button` | `Interactable` | 버튼을 누를 수 있는 상태인지 정합니다. |
+| `Button` | `Transition` | 버튼 상태에 따라 색, 이미지, 애니메이션을 바꾸는 방식입니다. |
+| `Button` | `On Click` | 버튼을 눌렀을 때 호출할 함수를 연결하는 이벤트 목록입니다. |
 
 ## 실습 예제: 점수 버튼 만들기
 

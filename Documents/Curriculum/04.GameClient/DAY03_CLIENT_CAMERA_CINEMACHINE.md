@@ -40,6 +40,19 @@ Cinemachine을 사용할 때 실제 화면을 렌더링하는 것은 여전히 `
 4. Virtual Camera의 `Look At`에 플레이어 Transform 또는 시선 기준 오브젝트를 연결합니다.
 5. Body와 Aim 설정으로 따라가는 거리, 높이, 부드러움을 조정합니다.
 
+## 4. Cinemachine Inspector 주요 프로퍼티
+
+| 컴포넌트 | 프로퍼티 | 의미 |
+| :--- | :--- | :--- |
+| `Cinemachine Brain` | `Default Blend` | Virtual Camera가 바뀔 때 전환되는 기본 시간과 방식입니다. |
+| `Cinemachine Brain` | `Update Method` | 카메라 갱신 시점을 정합니다. 움직임 떨림이 있으면 확인합니다. |
+| `CinemachineCamera` | `Follow` | 카메라가 따라갈 Transform입니다. |
+| `CinemachineCamera` | `Look At` | 카메라가 바라볼 Transform입니다. |
+| `CinemachineCamera` | `Priority` | 여러 Virtual Camera 중 우선 사용할 카메라를 정합니다. |
+| `CinemachineCamera` | `Lens Field of View` | 카메라 시야각입니다. 값이 크면 넓고 작으면 확대되어 보입니다. |
+| `Body` | `Tracked Object Offset` | 따라갈 대상 기준으로 카메라가 바라볼 높이와 위치를 보정합니다. |
+| `Body` | `Damping` | 대상 이동을 얼마나 부드럽게 따라갈지 정합니다. |
+
 ## 실습 예제: 플레이어를 따라가는 Cinemachine 카메라 만들기
 
 **미션:** `DAY02`에서 만든 플레이어 이동 오브젝트를 Cinemachine 카메라가 따라가도록 구성합니다.
@@ -68,7 +81,7 @@ Camera 위치 감각: 플레이어보다 위와 뒤
 
 프로젝트의 Cinemachine 버전에 따라 설정 이름이 다를 수 있습니다. 중요한 것은 Virtual Camera가 플레이어를 따라가고, `Main Camera`가 Cinemachine Brain을 통해 그 결과를 받아 화면에 보여 준다는 구조입니다.
 
-## 4. 시점 전환의 기본 원리
+## 5. 시점 전환의 기본 원리
 
 여러 Virtual Camera를 만들면 상황에 따라 카메라를 바꿀 수 있습니다. 예를 들어 기본 추적 카메라, 목표 지점 카메라, 클로즈업 카메라를 따로 만들 수 있습니다.
 

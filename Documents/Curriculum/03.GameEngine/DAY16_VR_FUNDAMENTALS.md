@@ -1,4 +1,4 @@
-# DAY 14: VR 기초와 XR Origin
+# DAY 16: VR 기초와 XR Origin
 
 오늘의 목표는 VR 환경을 "**플레이어의 머리와 손을 게임 세상에 연결하는 장치**"로 이해하고, OpenXR과 XR Origin의 기본 구조를 익히는 것입니다.
 
