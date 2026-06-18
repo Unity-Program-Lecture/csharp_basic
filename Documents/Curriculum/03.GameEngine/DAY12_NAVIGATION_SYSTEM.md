@@ -1,4 +1,4 @@
-# DAY 11: Navigation 시스템과 NavMesh 기초
+# DAY 12: Navigation 시스템과 NavMesh 기초
 
 오늘의 목표는 Unity Navigation을 "**캐릭터가 걸어갈 수 있는 길 지도**"로 이해하고, `NavMeshSurface`와 `NavMeshAgent`를 사용해 오브젝트가 목표 지점까지 이동하는 흐름을 구성하는 것입니다.
 

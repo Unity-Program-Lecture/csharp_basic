@@ -1,5 +1,16 @@
 # 📜 프로젝트 교육과정 개발 히스토리
 
+## 2026-06-18
+
+1. **게임엔진 과정에 Animation과 Animator 기초 차시 추가**
+   - `DAY11_ANIMATION_ANIMATOR.md`를 추가하여 Animation Clip, Animator Controller, State, Transition, Parameter, Root Motion의 기초를 정리함.
+   - CharacterController의 실제 이동 속도를 `Animator.SetFloat`로 전달하여 Idle과 Walk를 전환하는 실습을 추가함.
+   - Animator Inspector 주요 프로퍼티와 Animation/Animator 창의 차이, 반복 Clip 설정, 자주 발생하는 연결 오류를 초보자 눈높이로 설명함.
+2. **게임엔진 11~13일차 학습 흐름 재정렬**
+   - 기존 Navigation 수업을 `DAY12_NAVIGATION_SYSTEM.md`로 이동하고 문서 제목의 일차를 갱신함.
+   - Package Manager와 외부 라이브러리 수업을 `DAY13_PACKAGE_EXTERNAL_ASSET.md`에 통합하여 전체 18일 구성을 유지함.
+   - 게임엔진 포트폴리오 과제, 통합 포트폴리오 가이드, 최종 점검표에 Animation과 Animator 활용 항목을 반영함.
+
 ## 2026-06-15
 
 1. **게임엔진 10일차 외부 에셋 관리 기준 정정**
