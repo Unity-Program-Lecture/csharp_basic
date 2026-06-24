@@ -2,6 +2,12 @@
 
 ## 2026-06-24
 
+4. **게임 그래픽 프로그래밍 과정 학습 문서 14일 구성 추가**
+   - `Documents/Curriculum/08.GameGraphics/` 폴더를 추가하고 게임 그래픽 프로그래밍 과정의 개요, DAY 01~14 학습 문서, 포트폴리오 과제를 작성함.
+   - NCS `게임 그래픽 프로그래밍` 모듈의 셰이더 프로그래밍하기, 이펙트 프로그래밍하기 흐름을 Unity 6 URP, Shader Graph, Particle System, Visual Effect Graph 실습으로 재구성함.
+   - 실제 Unity 에디터 스크린샷을 추가할 수 있도록 각 문서에 스크린샷 체크포인트와 권장 이미지 파일명을 포함함.
+   - Shader Graph와 Visual Effect Graph의 창 구조, 프로퍼티 노출, 노드/블록 연결, 머티리얼/컴포넌트 적용, 디버깅 절차 설명을 보강함.
+
 3. **게임 UI/UX 프로그래밍 과정 학습 문서 6일 구성 추가**
    - `Documents/Curriculum/07.GameUIUX/` 폴더를 추가하고 게임 UI/UX 프로그래밍 과정의 DAY 01~06 학습 문서를 작성함.
    - NCS `게임 UIUX 프로그래밍` 모듈의 UI/UX 설계, 요소 프로그래밍, 응용 프로그래밍 흐름을 Unity 6 UGUI, TextMeshPro, Input System, UI Prefab, UI Manager 실습으로 재구성함.
