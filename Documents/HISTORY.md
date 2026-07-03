@@ -3,11 +3,11 @@
 ## 2026-07-03
 
 1. **게임엔진 과정 ScriptableObject 보충 학습 문서 추가**
-   - `Documents/Curriculum/03.GameEngine/SCRIPTABLE_OBJECT_GUIDE.md`를 추가하여 ScriptableObject의 기본 개념, Prefab과의 차이, 주요 사용처를 정리함.
+   - `Documents/Curriculum/03.GameEngine/Supplement/SCRIPTABLE_OBJECT_GUIDE.md`를 추가하여 ScriptableObject의 기본 개념, Prefab과의 차이, 주요 사용처를 정리함.
    - 아이템 데이터 예제를 통해 `CreateAssetMenu`, 데이터 에셋 생성, Inspector 참조 연결, 실행 시 `null` 검사 흐름을 설명함.
    - 런타임 상태를 원본 ScriptableObject에 직접 저장하지 않는 기준, 저장 데이터와 템플릿 데이터 구분, 폴더/이름 규칙 등 실무 주의사항을 보강함.
 2. **게임엔진 과정 에셋 임포트 보충 학습 문서 추가**
-   - `ASSET_IMPORT_IMAGE_GUIDE.md`, `ASSET_IMPORT_AUDIO_GUIDE.md`, `ASSET_IMPORT_MODEL_GUIDE.md`를 추가하여 이미지, 사운드, 모델링 에셋의 파일 포맷 차이와 Unity Import Settings 확인 흐름을 정리함.
+   - `Supplement/ASSET_IMPORT_IMAGE_GUIDE.md`, `Supplement/ASSET_IMPORT_AUDIO_GUIDE.md`, `Supplement/ASSET_IMPORT_MODEL_GUIDE.md`를 추가하여 이미지, 사운드, 모델링 에셋의 파일 포맷 차이와 Unity Import Settings 확인 흐름을 정리함.
    - 이미지 문서에는 PNG/JPG/PSD/TGA, Texture Type, Max Size, Compression, Mipmap, Filter/Wrap Mode와 UI/2D/3D 텍스처별 설정 기준을 포함함.
    - 사운드 문서에는 WAV/MP3/OGG, Load Type, Preload Audio Data, Compression Format, Force To Mono와 효과음/BGM/환경음별 설정 기준을 포함함.
    - 모델링 문서에는 FBX/OBJ/Blend, Model/Rig/Animation/Materials 탭, Scale Factor, Avatar, Loop, Material 추출, Prefab 분리 등 실무 주의사항을 포함함.
