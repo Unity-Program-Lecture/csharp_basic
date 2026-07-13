@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="790" viewBox="0 0 1200 790" role="img" aria-labelledby="title desc">
+  <title id="title">Unity 코루틴 재개 타이밍</title>
+  <desc id="desc">고정 시간 단계와 프레임 단계에서 FixedUpdate, Update, 일반 코루틴, LateUpdate, 렌더링, WaitForEndOfFrame이 실행되는 관계를 보여 주는 그림입니다.</desc>
+  <style>
+    .bg { fill: #171b24; }
+    .title { fill: #ffffff; font: 700 30px 'Segoe UI', sans-serif; }
+    .subtitle { fill: #d8e1f0; font: 18px 'Segoe UI', sans-serif; }
+    .phase { fill: #d8e1f0; font: 700 19px 'Segoe UI', sans-serif; }
+    .step { fill: #ffffff; font: 700 19px 'Segoe UI', sans-serif; }
+    .detail { fill: #eef3fb; font: 16px 'Segoe UI', sans-serif; }
+    .note { fill: #d8e1f0; font: 16px 'Segoe UI', sans-serif; }
+    .arrow { stroke: #d8e1f0; stroke-width: 3; fill: none; marker-end: url(#arrow); }
+    .line { stroke: #61708a; stroke-width: 2; stroke-dasharray: 8 7; }
+  </style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d8e1f0"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="790" rx="20"/>
+  <text class="title" x="60" y="62">Unity 코루틴은 언제 다시 실행될까?</text>
+  <text class="subtitle" x="60" y="95">StartCoroutine은 첫 yield 전까지 바로 실행하고, yield 종류가 다음 재개 위치를 정합니다.</text>
+
+  <rect x="60" y="135" width="1080" height="170" rx="16" fill="#253044" stroke="#6e86a9" stroke-width="2"/>
+  <text class="phase" x="90" y="170">고정 시간 단계 (필요한 프레임에 0회 이상 반복)</text>
+  <rect x="90" y="195" width="270" height="75" rx="12" fill="#325273"/>
+  <text class="step" x="225" y="226" text-anchor="middle">FixedUpdate</text>
+  <text class="detail" x="225" y="251" text-anchor="middle">모든 스크립트</text>
+  <path class="arrow" d="M 370 232 L 445 232"/>
+  <rect x="455" y="195" width="270" height="75" rx="12" fill="#325273"/>
+  <text class="step" x="590" y="226" text-anchor="middle">물리 처리</text>
+  <text class="detail" x="590" y="251" text-anchor="middle">Physics 단계</text>
+  <path class="arrow" d="M 735 232 L 810 232"/>
+  <rect x="820" y="195" width="280" height="75" rx="12" fill="#9b5b20"/>
+  <text class="step" x="960" y="226" text-anchor="middle">WaitForFixedUpdate</text>
+  <text class="detail" x="960" y="251" text-anchor="middle">재개</text>
+
+  <path class="arrow" d="M 600 315 L 600 362"/>
+
+  <rect x="60" y="380" width="1080" height="305" rx="16" fill="#253044" stroke="#6e86a9" stroke-width="2"/>
+  <text class="phase" x="90" y="415">프레임 단계</text>
+  <rect x="90" y="445" width="180" height="105" rx="12" fill="#315d52"/>
+  <text class="step" x="180" y="482" text-anchor="middle">Update</text>
+  <text class="detail" x="180" y="510" text-anchor="middle">입력·일반 게임</text>
+  <text class="detail" x="180" y="532" text-anchor="middle">로직 갱신</text>
+  <path class="arrow" d="M 280 498 L 340 498"/>
+  <rect x="350" y="435" width="330" height="125" rx="12" fill="#9b5b20"/>
+  <text class="step" x="515" y="470" text-anchor="middle">일반 코루틴 확인·재개</text>
+  <text class="detail" x="515" y="498" text-anchor="middle">yield return null</text>
+  <text class="detail" x="515" y="522" text-anchor="middle">WaitForSeconds / WaitUntil</text>
+  <text class="detail" x="515" y="546" text-anchor="middle">조건 충족 시 다음 코드 실행</text>
+  <path class="arrow" d="M 690 498 L 750 498"/>
+  <rect x="760" y="445" width="180" height="105" rx="12" fill="#5b467b"/>
+  <text class="step" x="850" y="482" text-anchor="middle">LateUpdate</text>
+  <text class="detail" x="850" y="510" text-anchor="middle">카메라 등</text>
+  <text class="detail" x="850" y="532" text-anchor="middle">마무리 갱신</text>
+  <path class="arrow" d="M 950 498 L 1010 498"/>
+  <rect x="1020" y="445" width="90" height="105" rx="12" fill="#4d6383"/>
+  <text class="step" x="1065" y="482" text-anchor="middle">렌더링</text>
+  <text class="detail" x="1065" y="510" text-anchor="middle">화면</text>
+  <text class="detail" x="1065" y="532" text-anchor="middle">그리기</text>
+
+  <path class="arrow" d="M 1065 560 L 1065 605"/>
+  <rect x="755" y="615" width="355" height="48" rx="12" fill="#9b5b20"/>
+  <text class="step" x="932" y="646" text-anchor="middle">WaitForEndOfFrame 재개</text>
+
+  <line class="line" x1="60" y1="715" x2="1140" y2="715"/>
+  <text class="note" x="60" y="752">주의: 같은 종류의 콜백이라도 서로 다른 GameObject 사이의 세부 호출 순서는 보장되지 않습니다.</text>
+</svg>
