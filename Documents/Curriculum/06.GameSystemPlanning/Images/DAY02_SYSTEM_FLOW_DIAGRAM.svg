@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1770" viewBox="0 0 1200 1770" role="img" aria-labelledby="title desc">
+  <title id="title">아이템 추천 판매 시스템 순서도</title>
+  <desc id="desc">손님 방문부터 아이템 선택, 속성 비교, 예외 처리, 판매 결과 표시와 종료까지의 흐름을 나타낸 순서도</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155" />
+    </marker>
+    <style>
+      .title { font: 700 30px sans-serif; fill: #0f172a; }
+      .label { font: 700 22px sans-serif; fill: #0f172a; text-anchor: middle; }
+      .small { font: 600 18px sans-serif; fill: #0f172a; text-anchor: middle; }
+      .branch { font: 700 19px sans-serif; fill: #0f172a; }
+      .flow { fill: none; stroke: #334155; stroke-width: 4; marker-end: url(#arrow); }
+      .start-end { fill: #dbeafe; stroke: #1d4ed8; stroke-width: 4; }
+      .input-output { fill: #dcfce7; stroke: #15803d; stroke-width: 4; }
+      .process { fill: #fef3c7; stroke: #b45309; stroke-width: 4; }
+      .decision { fill: #fce7f3; stroke: #be185d; stroke-width: 4; }
+      .exception { fill: #fee2e2; stroke: #b91c1c; stroke-width: 4; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="1770" fill="#ffffff" />
+  <text x="600" y="55" class="title">아이템 추천 판매 시스템</text>
+
+  <ellipse cx="600" cy="125" rx="170" ry="48" class="start-end" />
+  <text x="600" y="133" class="label">시작: 손님이 상점에 방문</text>
+
+  <path d="M 600 173 L 600 235" class="flow" />
+  <polygon points="410,235 790,235 730,325 350,325" class="input-output" />
+  <text x="570" y="275" class="label">입력: 손님 정보와 플레이어 선택</text>
+  <text x="570" y="302" class="small">직업 · 목표 던전 · 위험 요소 · 선택 아이템</text>
+
+  <path d="M 600 325 L 600 390" class="flow" />
+  <rect x="390" y="390" width="420" height="100" rx="12" class="process" />
+  <text x="600" y="430" class="label">처리 1: 손님 정보 표시</text>
+  <text x="600" y="460" class="small">직업과 던전 위험 요소를 보여준다</text>
+
+  <path d="M 600 490 L 600 555" class="flow" />
+  <rect x="390" y="555" width="420" height="100" rx="12" class="process" />
+  <text x="600" y="595" class="label">처리 2: 판매할 아이템 선택</text>
+  <text x="600" y="625" class="small">플레이어가 아이템을 고른다</text>
+
+  <path d="M 600 655 L 600 725" class="flow" />
+  <polygon points="600,725 790,825 600,925 410,825" class="decision" />
+  <text x="600" y="817" class="label">아이템 속성이</text>
+  <text x="600" y="847" class="label">위험 요소와 맞는가?</text>
+
+  <path d="M 410 825 L 180 825 L 180 950" class="flow" />
+  <text x="275" y="805" class="branch">아니오</text>
+  <rect x="40" y="950" width="280" height="110" rx="12" class="process" />
+  <text x="180" y="994" class="label">실패 결과 처리</text>
+  <text x="180" y="1024" class="small">만족도 감소</text>
+  <text x="180" y="1048" class="small">공략 성공 확률 감소</text>
+
+  <path d="M 790 825 L 1020 825 L 1020 950" class="flow" />
+  <text x="870" y="805" class="branch">예</text>
+  <rect x="880" y="950" width="280" height="110" rx="12" class="process" />
+  <text x="1020" y="994" class="label">성공 결과 처리</text>
+  <text x="1020" y="1024" class="small">만족도 증가</text>
+  <text x="1020" y="1048" class="small">공략 성공 확률 증가</text>
+
+  <path d="M 180 1060 L 180 1120 L 600 1120" class="flow" />
+  <path d="M 1020 1060 L 1020 1120 L 600 1120" class="flow" />
+  <rect x="390" y="1120" width="420" height="100" rx="12" class="process" />
+  <text x="600" y="1160" class="label">판매 결과 계산</text>
+  <text x="600" y="1190" class="small">획득 골드와 만족도 변화를 반영한다</text>
+
+  <path d="M 600 1220 L 600 1290" class="flow" />
+  <polygon points="600,1290 790,1390 600,1490 410,1390" class="decision" />
+  <text x="600" y="1382" class="label">예외 상황인가?</text>
+  <text x="600" y="1412" class="small">미보유 또는 중복 구매</text>
+
+  <path d="M 410 1390 L 180 1390 L 180 1515" class="flow" />
+  <text x="270" y="1370" class="branch">예</text>
+  <rect x="40" y="1515" width="280" height="110" rx="12" class="exception" />
+  <text x="180" y="1558" class="label">예외 처리</text>
+  <text x="180" y="1588" class="small">버튼 비활성화 또는</text>
+  <text x="180" y="1612" class="small">중복 구매 경고 표시</text>
+
+  <path d="M 790 1390 L 1020 1390 L 1020 1515" class="flow" />
+  <text x="875" y="1370" class="branch">아니오</text>
+  <polygon points="890,1515 1150,1515 1110,1625 850,1625" class="input-output" />
+  <text x="1020" y="1560" class="label">출력: 판매 결과 표시</text>
+  <text x="1020" y="1590" class="small">골드 · 만족도 · 반응 문장</text>
+
+  <path d="M 180 1625 L 180 1680 L 600 1680" class="flow" />
+  <path d="M 1020 1625 L 1020 1680 L 600 1680" class="flow" />
+  <ellipse cx="600" cy="1720" rx="170" ry="38" class="start-end" />
+  <text x="600" y="1728" class="label">종료: 판매 완료 또는 손님 퇴장</text>
+</svg>
