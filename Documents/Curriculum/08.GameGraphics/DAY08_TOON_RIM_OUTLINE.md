@@ -33,9 +33,12 @@
 - `Images/day08_rim_light_graph.png`: Rim Light Shader Graph
 - `Images/day08_toon_result.png`: 적용 전/후 비교 화면
 
+![Rim Light 그래프](Images/day08_rim_light_graph.png)
+
+![Toon 표현 결과](Images/day08_toon_result.png)
+
 ## 오늘의 정리
 
 - 셰이더는 게임의 화풍을 만드는 도구입니다.
 - Rim Light와 Outline은 캐릭터 가독성을 높이는 데 유용합니다.
 - 다음 시간부터는 이펙트 프로그래밍으로 넘어가 Particle System을 다룹니다.
-

@@ -43,6 +43,10 @@ Unity 화면은 카메라가 보는 오브젝트를 모아 GPU가 처리한 결�
 - `Images/day01_urp_project_settings.png`: Project Settings의 Graphics 또는 Quality 설정 화면
 - `Images/day01_graphics_lab_scene.png`: Plane, Sphere, Cube, Light가 배치된 씬 화면
 
+![URP Graphics 설정](Images/day01_urp_project_settings.png)
+
+![GraphicsLab 씬](Images/day01_graphics_lab_scene.png)
+
 ## 실습 미션
 
 `GraphicsLab` 씬에서 같은 Sphere 3개를 만들고, 라이트 강도와 머티리얼 색을 바꾸어 화면 인상이 어떻게 달라지는지 캡처합니다.
@@ -52,4 +56,3 @@ Unity 화면은 카메라가 보는 오브젝트를 모아 GPU가 처리한 결�
 - 게임 그래픽은 오브젝트만으로 만들어지지 않고 카메라, 라이트, 머티리얼, 렌더 파이프라인이 함께 만든 결과입니다.
 - URP 설정은 수업 전체의 기본 그래픽 규칙입니다.
 - 다음 시간에는 머티리얼과 텍스처를 이용해 표면의 느낌을 바꿉니다.
-

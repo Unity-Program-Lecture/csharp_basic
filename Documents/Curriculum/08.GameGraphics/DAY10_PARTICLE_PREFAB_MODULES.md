@@ -33,9 +33,12 @@
 - `Images/day10_effect_prefabs.png`: Project 창의 이펙트 프리팹 3종
 - `Images/day10_effect_prefab_inspector.png`: Prefab Inspector와 Particle System 설정
 
+![이펙트 Prefab 목록](Images/day10_effect_prefabs.png)
+
+![이펙트 Prefab Inspector](Images/day10_effect_prefab_inspector.png)
+
 ## 오늘의 정리
 
 - 이펙트는 Prefab으로 정리해야 반복 사용과 수정이 쉽습니다.
 - 이펙트의 시작, 지속, 종료 시점을 명확히 정해야 합니다.
 - 다음 시간에는 C# 코드로 이펙트를 재생합니다.
-

@@ -52,9 +52,10 @@ Shader Graph로 만든 그래프와 셰이더 코드 예시를 비교하며 다�
 
 - `Images/day07_shader_code_compare.png`: Shader Graph와 코드 구조를 나란히 정리한 화면
 
+![Shader Graph와 코드 구조 비교](Images/day07_shader_code_compare.png)
+
 ## 오늘의 정리
 
 - 정점 단계는 위치, 픽셀 단계는 색을 주로 다룹니다.
 - Shader Graph를 쓰더라도 셰이더의 기본 흐름을 알면 오류를 이해하기 쉽습니다.
 - 다음 시간에는 Toon, Rim Light, Outline 같은 비실사 표현을 다룹니다.
-

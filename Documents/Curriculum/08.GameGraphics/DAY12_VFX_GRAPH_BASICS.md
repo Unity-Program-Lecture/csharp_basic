@@ -128,6 +128,14 @@ Output Particle Context에서 다음을 확인합니다.
 - `Images/day12_vfx_initialize_blocks.png`: Lifetime, Position, Velocity, Size Block이 보이는 Initialize Context
 - `Images/day12_vfx_output_particle.png`: Output Particle 설정 화면
 
+![VFX Graph 기본 흐름](Images/day12_vfx_graph_basic.png)
+
+![Visual Effect 컴포넌트](Images/day12_vfx_component.png)
+
+![VFX Initialize Blocks](Images/day12_vfx_initialize_blocks.png)
+
+![VFX Output Particle](Images/day12_vfx_output_particle.png)
+
 ## 오늘의 정리
 
 - Visual Effect Graph는 대량 파티클과 복잡한 이펙트에 적합합니다.

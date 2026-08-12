@@ -113,6 +113,14 @@ Shader Graph도 코드처럼 `위->아래`, `오->왼`, `안->밖`으로 읽을 
 - `Images/day04_shader_graph_blackboard.png`: Blackboard에 `BaseColor`, `PulseSpeed`가 추가된 화면
 - `Images/day04_shader_graph_inspector.png`: Graph Inspector에서 Surface 설정을 확인하는 화면
 
+![Shader Graph 기본 구조](Images/day04_shader_graph_basic.png)
+
+![Shader Graph 머티리얼 결과](Images/day04_shader_graph_material.png)
+
+![Shader Graph Blackboard](Images/day04_shader_graph_blackboard.png)
+
+![Shader Graph Inspector](Images/day04_shader_graph_inspector.png)
+
 ## 오늘의 정리
 
 - Shader Graph는 셰이더 알고리즘을 노드로 조립하는 도구입니다.

@@ -138,6 +138,14 @@ VFX Graph는 GPU에서 많은 입자를 처리할 수 있지만, 무제한으로
 - `Images/day13_vfx_quality_compare.png`: 낮은 강도와 높은 강도 비교 화면
 - `Images/day13_vfx_component_exposed_values.png`: Visual Effect 컴포넌트에서 노출 프로퍼티가 보이는 화면
 
+![VFX Exposed Property](Images/day13_vfx_exposed_property.png)
+
+![Input Actions 설정](Images/day13_player_input_actions.png)
+
+![VFX 품질 비교](Images/day13_vfx_quality_compare.png)
+
+![Visual Effect 노출 값](Images/day13_vfx_component_exposed_values.png)
+
 ## 오늘의 정리
 
 - VFX Graph는 노출 프로퍼티를 통해 코드와 연결할 수 있습니다.

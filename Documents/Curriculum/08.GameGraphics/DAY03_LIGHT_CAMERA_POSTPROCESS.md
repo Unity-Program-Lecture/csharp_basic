@@ -42,9 +42,12 @@
 - `Images/day03_lighting_variants.png`: 같은 씬을 낮/저녁/던전 조명으로 비교한 화면
 - `Images/day03_volume_profile.png`: Volume Profile에 Bloom과 Color Adjustments가 추가된 화면
 
+![조명과 색감 예제 장면](Images/day03_lighting_variants.png)
+
+![Volume Profile Inspector](Images/day03_volume_profile.png)
+
 ## 오늘의 정리
 
 - 조명은 오브젝트의 입체감과 분위기를 만듭니다.
 - 그림자와 후처리는 화면의 완성도를 높이지만 성능 비용도 있습니다.
 - 다음 시간부터 Shader Graph로 직접 표면 계산을 만들어 봅니다.
-

@@ -39,7 +39,11 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 ## 스크린샷 체크포인트
 
 - `Images/day02_pbr_material_compare.png`: 같은 Sphere에 다른 머티리얼을 적용한 비교 화면
+![PBR 머티리얼 비교 예제](Images/day02_pbr_material_compare.png)
+
 - `Images/day02_material_inspector.png`: Metallic, Smoothness, Emission 값이 보이는 Inspector
+
+![URP Lit 머티리얼 Inspector](Images/day02_material_inspector.png)
 
 ## 생각해보기
 
@@ -51,4 +55,3 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 - 머티리얼은 색뿐 아니라 빛 반사 규칙을 함께 담습니다.
 - PBR 값은 게임의 사실감과 스타일을 결정합니다.
 - 다음 시간에는 라이트, 그림자, 카메라 후처리로 장면 분위기를 만듭니다.
-

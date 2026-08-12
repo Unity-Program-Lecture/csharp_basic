@@ -125,6 +125,14 @@ Shader Graph는 중간 값을 눈으로 확인해야 빨리 고칠 수 있습니
 - `Images/day05_shield_properties.png`: 보호막 그래프의 Blackboard 프로퍼티
 - `Images/day05_lava_noise_preview.png`: 용암 Noise 중간값 Preview
 
+![표면 효과 그래프](Images/day05_surface_graph.png)
+
+![표면 효과 결과](Images/day05_surface_result.png)
+
+![보호막 Blackboard 프로퍼티](Images/day05_shield_properties.png)
+
+![용암 Noise Preview](Images/day05_lava_noise_preview.png)
+
 ## 오늘의 정리
 
 - Shader Graph 표면 효과는 UV, Noise, 시간, 색, 투명도 조합으로 시작할 수 있습니다.

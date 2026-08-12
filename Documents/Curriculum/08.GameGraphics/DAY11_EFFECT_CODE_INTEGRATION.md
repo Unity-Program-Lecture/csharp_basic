@@ -86,6 +86,10 @@ public class ClickEffectSpawner : MonoBehaviour
 - `Images/day11_effect_code_inspector.png`: `ClickEffectSpawner`에 Camera, Prefab, LayerMask가 연결된 Inspector
 - `Images/day11_effect_spawn_result.png`: 클릭 위치에 이펙트가 재생된 화면
 
+![ClickEffectSpawner Inspector](Images/day11_effect_code_inspector.png)
+
+![클릭 위치 이펙트 재생](Images/day11_effect_spawn_result.png)
+
 ## 오늘의 정리
 
 - 이펙트는 게임 사건과 연결될 때 의미가 생깁니다.

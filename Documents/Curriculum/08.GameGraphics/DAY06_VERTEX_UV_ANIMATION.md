@@ -37,9 +37,12 @@
 - `Images/day06_vertex_animation_graph.png`: Vertex Position에 Offset을 연결한 그래프
 - `Images/day06_vertex_animation_scene.png`: 흔들림이 적용된 표면 화면
 
+![Vertex Position Offset 그래프](Images/day06_vertex_animation_graph.png)
+
+![정점 애니메이션 결과](Images/day06_vertex_animation_scene.png)
+
 ## 오늘의 정리
 
 - 정점 변형은 보이는 모델의 위치를 셰이더 단계에서 바꿉니다.
 - UV 애니메이션은 텍스처 무늬를 움직입니다.
 - 다음 시간에는 셰이더 코드를 짧게 읽어 Shader Graph 뒤에서 어떤 일이 일어나는지 감각을 잡습니다.
-
