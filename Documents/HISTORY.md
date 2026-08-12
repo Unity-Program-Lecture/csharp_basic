@@ -2,6 +2,14 @@
 
 ## 2026-07-03
 
+## 2026-08-11
+
+- `07.GameUIUX` 과정을 `26국기_교수계획서.pdf`의 게임 UI/UX 프로그래밍 주요 학습내용과 다시 대조했습니다.
+- DAY 01에 UI 리소스 설계와 UX 콘셉트 산출물을, DAY 02에 GUI 디자인 가이드·구현 가능성 검토·요소별 단위 테스트 기록을, DAY 06과 포트폴리오 과제에 설계 변경·다시 확인한 기록을 보강했습니다.
+- `COURSE_OPERATION_PLAN.md`에 하루 6시간·최대 4교시 기준의 6일 운영표와 주요 학습내용 반영표를 추가했습니다.
+- `08.GameGraphics` 과정을 교수계획서의 셰이더·이펙트 주요 학습내용과 대조하고, 이펙트의 3D 공간 배치 분석과 플레이 규칙 통합·중복 재생 검증을 DAY 09·DAY 14·포트폴리오에 보강했습니다.
+- `08.GameGraphics/COURSE_OPERATION_PLAN.md`에 14일·하루 6시간·최대 4교시 운영표와 주요 학습내용 반영표를 추가했습니다.
+
 1. **게임엔진 과정 ScriptableObject 보충 학습 문서 추가**
    - `Documents/Curriculum/03.GameEngine/Supplement/SCRIPTABLE_OBJECT_GUIDE.md`를 추가하여 ScriptableObject의 기본 개념, Prefab과의 차이, 주요 사용처를 정리함.
    - 아이템 데이터 예제를 통해 `CreateAssetMenu`, 데이터 에셋 생성, Inspector 참조 연결, 실행 시 `null` 검사 흐름을 설명함.
