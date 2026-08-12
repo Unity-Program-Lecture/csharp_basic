@@ -74,6 +74,14 @@ Player 오브젝트 또는 빈 GameObject에 `PlayerInput` 컴포넌트를 추�
 
 `PlayerInput`의 Behavior는 `Send Messages`로 설정합니다. 그러면 Action 이름에 맞춰 `OnLowIntensity`, `OnHighIntensity` 메서드가 호출됩니다.
 
+### Controller 컴포넌트 연결과 품질값 확인
+
+1. DAY 11의 `GraphicsInputActions` Asset을 열고 `Gameplay` Action Map에 `LowIntensity`, `HighIntensity` Action을 추가합니다. 두 Action 모두 Type을 `Button`으로 두고 각각 `<Keyboard>/1`, `<Keyboard>/2` Binding을 추가합니다.
+2. DAY 11의 `EffectInput` 또는 새 `VfxController` GameObject에 `VfxIntensityController`를 붙입니다. 같은 오브젝트에 PlayerInput이 없다면 PlayerInput을 추가하고 Actions·Default Map·Behavior를 DAY 11과 같은 값으로 맞춥니다.
+3. `VfxIntensityController` Inspector의 Visual Effect 필드에 `VFX_GpuSpark_Player`의 Visual Effect 컴포넌트를 끌어 놓습니다. `Spawn Rate Name`은 Graph Blackboard의 Reference와 같은 `SpawnRate`인지 확인합니다.
+4. Low Rate와 High Rate를 예를 들어 `20`, `200`으로 입력하고 Play Mode에서 `1`, `2`를 한 번씩 누릅니다. 값이 바뀌는지 Visual Effect Inspector와 Game View를 함께 확인합니다.
+5. Quality 비교가 끝나면 낮은 값, 높은 값, Bounds, Lifetime, Game View 관찰 결과를 표로 기록합니다. 입자 수만 많고 화면 차이가 없다면 먼저 Spawn Rate가 실제 Spawn Context에 연결됐는지 확인합니다.
+
 <details>
 <summary>코드 보기</summary>
 
@@ -131,20 +139,13 @@ VFX Graph는 GPU에서 많은 입자를 처리할 수 있지만, 무제한으로
 | 입력이 동작하지 않음 | `PlayerInput` Behavior가 `Send Messages`인지, Action 이름과 메서드 이름이 맞는지 확인 |
 | 이펙트가 갑자기 잘림 | Bounds 크기가 이펙트 움직임보다 작은지 확인 |
 
-## 스크린샷 체크포인트
+## Exposed Property·Input Actions Inspector 점검
 
-- `Images/day13_vfx_exposed_property.png`: `SpawnRate`가 Exposed Property로 보이는 VFX Graph
-- `Images/day13_player_input_actions.png`: `LowIntensity`, `HighIntensity` Action이 설정된 Input Actions 화면
-- `Images/day13_vfx_quality_compare.png`: 낮은 강도와 높은 강도 비교 화면
-- `Images/day13_vfx_component_exposed_values.png`: Visual Effect 컴포넌트에서 노출 프로퍼티가 보이는 화면
+VFX Graph Blackboard에서 Float `SpawnRate`를 만든 뒤 Exposed를 켭니다. 이름은 C#의 `SetFloat("SpawnRate", value)`와 대소문자까지 같아야 하며, Graph Area에 놓은 SpawnRate Property를 `Constant Spawn Rate` 입력에 실제로 연결해야 합니다. Blackboard에 값만 만들고 Spawn Context에 연결하지 않으면 Inspector 값이 바뀌어도 입자 수는 바뀌지 않습니다.
 
-![VFX Exposed Property](Images/day13_vfx_exposed_property.png)
+씬의 Visual Effect 컴포넌트 Inspector에서 `SpawnRate`가 노출된 필드로 보이는지 확인합니다. 이 값은 기본값 확인용이며, Play Mode에서 스크립트가 매번 바꾸면 코드 값이 우선합니다. 낮은 강도와 높은 강도 값을 바꿀 때는 Spawn Rate뿐 아니라 Lifetime, Size, Output의 투명도와 Bounds도 함께 기록해 어떤 값이 화면 밀도와 성능에 영향을 주는지 구분합니다.
 
-![Input Actions 설정](Images/day13_player_input_actions.png)
-
-![VFX 품질 비교](Images/day13_vfx_quality_compare.png)
-
-![Visual Effect 노출 값](Images/day13_vfx_component_exposed_values.png)
+Input Actions Asset에서는 `LowIntensity`, `HighIntensity`가 같은 Action Map 안에 있고 Type이 Button인지, 각각 `<Keyboard>/1`, `<Keyboard>/2` 또는 동등한 바인딩이 있는지 확인합니다. PlayerInput의 Behavior가 `Send Messages`이면 메서드는 `OnLowIntensity`, `OnHighIntensity`여야 합니다. 키를 눌러도 변화가 없으면 Action Map 활성화, PlayerInput의 Actions Asset, 메서드 이름, SpawnRate Reference 이름을 이 순서로 확인합니다.
 
 ## 오늘의 정리
 

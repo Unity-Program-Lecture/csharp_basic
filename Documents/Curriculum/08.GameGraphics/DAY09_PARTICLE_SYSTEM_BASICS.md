@@ -28,6 +28,14 @@
 4. Color over Lifetime으로 처음은 밝고 끝은 투명하게 만듭니다.
 5. Shape를 Sphere 또는 Cone으로 바꿔 퍼지는 방향을 조절합니다.
 
+### Particle System을 만들고 모듈을 여는 순서
+
+1. Hierarchy의 빈 곳에서 `GameObject > Effects > Particle System`을 선택하고 이름을 `FX_HitSpark_Test`로 바꿉니다.
+2. 새 오브젝트를 선택한 Inspector의 Particle System 컴포넌트에서 Main 모듈을 펼칩니다. Duration, Looping, Start Lifetime, Start Speed, Start Size를 먼저 설정합니다.
+3. 왼쪽 체크 상자를 켜서 Emission, Shape, Color over Lifetime, Size over Lifetime, Renderer 모듈을 필요한 만큼 활성화합니다. 체크 상자가 꺼진 모듈은 값이 보여도 실행에 적용되지 않습니다.
+4. Emission의 `+` 버튼으로 Burst를 하나 추가하고, Rate over Time을 `0`으로 둡니다. Scene View의 Particle Effect 패널 재생 버튼과 Play Mode 결과를 모두 확인합니다.
+5. 이펙트 위치는 대상 Mesh의 중심 또는 충돌 지점에 두고, Transform Scale이 아니라 Start Size로 먼저 크기를 맞춥니다.
+
 ## 3. 이펙트를 놓을 3D 공간 분석하기
 
 이펙트는 혼자 예쁘게 보이면 끝이 아닙니다. 같은 폭발도 캐릭터 발밑, 무기 끝, 벽 표면, 아주 먼 배경에 놓일 때 필요한 크기와 방향이 다릅니다. 만들기 전에 "어디에서, 누구에게, 언제 보여 줄 것인가"를 정합니다.
@@ -54,14 +62,13 @@
 | Size over Lifetime | 시간에 따른 크기 변화 |
 | Renderer | 표시 방식과 머티리얼 |
 
-## 스크린샷 체크포인트
+## Particle System Inspector 읽는 순서
 
-- `Images/day09_particle_system_modules.png`: Particle System 모듈이 펼쳐진 Inspector
-- `Images/day09_hit_effect_scene.png`: 히트 이펙트가 재생되는 Scene 또는 Game 화면
+Particle System 오브젝트를 선택한 뒤 Inspector의 모듈을 위에서 아래로 읽습니다. Main 모듈에서는 Duration, Looping, Start Lifetime, Start Speed, Start Size, Start Color, Simulation Space를 먼저 정합니다. 한 번 터지는 히트 이펙트는 Looping을 끄고, Simulation Space는 이펙트가 발생한 자리에 남아야 하면 World, 이동하는 무기에 붙어야 하면 Local을 선택합니다.
 
-![Particle System 모듈 Inspector](Images/day09_particle_system_modules.png)
+Emission 모듈은 `Rate over Time`으로 계속 나오는 입자 수를, `Bursts`로 한 번에 나오는 입자 수를 정합니다. 히트 이펙트는 보통 Rate over Time을 `0`으로 두고 Bursts를 하나 넣어 의도하지 않은 계속 재생을 막습니다. Shape에서는 Cone·Sphere·Box 중 발생 형태를 정하고, Velocity over Lifetime과 Size over Lifetime은 입자가 태어난 뒤의 이동과 크기 변화를 담당합니다.
 
-![Particle System 히트 이펙트 예제](Images/day09_hit_effect_scene.png)
+Color over Lifetime은 시작·중간·끝의 색과 Alpha를 정합니다. 끝 Alpha를 `0`으로 내려야 입자가 갑자기 사라지는 느낌을 줄일 수 있습니다. Renderer 모듈에서는 Render Mode, Material, Sorting Fudge를 확인합니다. Material이 없거나 URP와 맞지 않으면 분홍색·검은 사각형이 보일 수 있으며, 연출이 재생되지 않으면 GameObject 활성 상태와 Main 모듈의 Play On Awake도 함께 확인합니다.
 
 ## 오늘의 정리
 

@@ -31,6 +31,15 @@ Player 오브젝트 또는 빈 GameObject에 `PlayerInput` 컴포넌트를 추�
 
 `PlayerInput`의 Behavior는 `Send Messages`로 설정합니다. 그러면 Action 이름에 맞춰 `OnPoint`, `OnClick` 메서드가 호출됩니다.
 
+### Input Actions Asset과 PlayerInput 연결 순서
+
+1. Project 창의 `GameGraphics/Input` 폴더에서 `Create > Input Actions`를 선택하고 `GraphicsInputActions`로 이름을 바꿉니다.
+2. Asset을 더블 클릭해 Input Actions 편집기를 열고 `Gameplay` Action Map을 만듭니다.
+3. `+`로 `Point` Action을 추가하고 Action Type을 `Value`, Control Type을 `Vector2`로 설정한 뒤 Binding에 `<Pointer>/position`을 추가합니다.
+4. `Click` Action은 Type을 `Button`으로 두고 Binding에 `<Mouse>/leftButton`을 추가합니다. 저장 버튼을 누르거나 창을 닫기 전에 변경 사항이 저장됐는지 확인합니다.
+5. Hierarchy에서 `EffectInput` 빈 GameObject를 만들고 `PlayerInput`과 `ClickEffectSpawner`를 함께 추가합니다. PlayerInput의 Actions에 `GraphicsInputActions`, Default Map에 `Gameplay`, Behavior에 `Send Messages`를 지정합니다.
+6. `ClickEffectSpawner`의 Target Camera, Effect Prefab, Ground Mask를 연결한 뒤 Play Mode에서 Console Error 없이 `OnPoint`, `OnClick`이 호출되는지 확인합니다.
+
 <details>
 <summary>코드 보기</summary>
 
@@ -81,14 +90,13 @@ public class ClickEffectSpawner : MonoBehaviour
 - `Instantiate`는 이펙트 프리팹을 클릭 위치에 만듭니다.
 - `Destroy`는 이펙트가 끝난 뒤 오브젝트를 정리합니다.
 
-## 스크린샷 체크포인트
+## ClickEffectSpawner Inspector 연결 절차
 
-- `Images/day11_effect_code_inspector.png`: `ClickEffectSpawner`에 Camera, Prefab, LayerMask가 연결된 Inspector
-- `Images/day11_effect_spawn_result.png`: 클릭 위치에 이펙트가 재생된 화면
+`ClickEffectSpawner`를 빈 GameObject에 붙인 뒤 Inspector의 `Target Camera`에는 Main Camera를, `Effect Prefab`에는 DAY 10에서 만든 Particle System Prefab을 끌어 놓습니다. `Ground Mask`에는 클릭을 받을 Plane의 Layer만 선택합니다. LayerMask가 `Nothing`이면 Raycast가 항상 실패하고, `Everything`이면 캐릭터나 장식 오브젝트를 바닥으로 잘못 인식할 수 있습니다.
 
-![ClickEffectSpawner Inspector](Images/day11_effect_code_inspector.png)
+Plane에는 Collider가 있어야 합니다. Plane을 선택해 Inspector 상단 Layer를 `Ground`로 바꾸고 Collider가 활성화돼 있는지 확인합니다. PlayerInput을 같은 오브젝트 또는 입력을 전달받는 오브젝트에 붙이고 Actions Asset, Default Action Map, Behavior `Send Messages`를 지정합니다. Action 이름 `Point`, `Click`은 각각 `OnPoint`, `OnClick` 메서드 이름과 정확히 대응합니다.
 
-![클릭 위치 이펙트 재생](Images/day11_effect_spawn_result.png)
+Play Mode에서 먼저 마우스를 움직여 Point 입력이 들어오는지, 다음으로 Plane을 클릭했을 때만 이펙트가 한 번 생성되는지 확인합니다. 이펙트가 여러 번 생성되면 Click Action Binding, `value.isPressed` 검사, PlayerInput 중복 여부를 확인합니다. 생성은 되지만 바로 사라지면 Prefab의 Duration·Start Lifetime과 `Destroy` 시간을 확인합니다.
 
 ## 오늘의 정리
 

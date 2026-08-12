@@ -4,6 +4,21 @@
 
 ## 2026-08-11
 
+- `07.GameUIUX/ENVIRONMENT_SETUP_GUIDE.md`를 추가하여 Unity 6 UGUI·TextMeshPro·Input System의 최소 환경, 패키지 설치와 버전 기준, Active Input Handling, EventSystem, UI Action Map, Canvas 설정, 공통 씬 구조, 사전 점검표를 정리했습니다.
+- 같은 안내서에 Canvas·UIRoot의 Scale `(1, 1, 1)` 원칙과 RectTransform·Anchor·Canvas Scaler·Layout Group으로 UI 크기를 다루는 기준, 버튼 시각 효과의 예외를 추가했습니다.
+- DAY 06에 UGUI 최적화 점검을 추가하여 변경 주기별 Canvas 분리, 불필요한 UI 갱신·Raycast 방지, 목록 재사용, Atlas·마스크·오버드로우 주의와 Profiler·Frame Debugger 비교 실습을 정리했습니다.
+- DAY 06의 Canvas 분리 규칙에 Sorting Layer·Order in Layer·Override Sorting, Modal 입력 차단, Canvas Scaler 통일, 별도 Canvas의 Graphic Raycaster 확인을 보강했습니다.
+- DAY 06에 같은 Canvas 내부의 Hierarchy 그리기 순서와 Raycast Target의 역할을 구분하고, 표시 순서와 입력 우선순위가 어긋나는 조건을 추가했습니다.
+- `08.GameGraphics/ENVIRONMENT_SETUP_GUIDE.md`를 추가하여 Unity 6 URP 프로젝트, 그래픽 패키지 버전 규칙, VFX Graph GPU 조건, Input System, URP·색 공간 설정, 최소 공통 씬, DAY별 사전 점검표를 정리했습니다.
+- `08.GameGraphics`의 DAY 01~14, 과정 개요, 포트폴리오 과제에서 스크린샷 의존을 제거하고 URP·Material·Volume·Shader Graph·Particle System·VFX Graph·Input System의 Inspector와 설정을 텍스트 기반 확인 절차로 보강했습니다.
+- `08.GameGraphics` DAY 01에 SRP와 URP의 관계, URP Asset·Universal Renderer Data·Renderer Feature·Camera·Material의 연결 구조, SRP Render Loop와 Vertex·Fragment 셰이더 단계의 역할 구분, Inspector 추적 절차를 추가했습니다.
+- `08.GameGraphics` DAY 02~14를 점검해 Material·Light·Volume·Shader Graph·Particle System·Prefab·Input Actions·PlayerInput·VFX Graph·최종 씬의 생성 경로, Inspector 연결, Play Mode 확인 절차가 부족한 부분을 보강했습니다.
+- `08.GameGraphics` DAY 03에 Lighting 창의 씬 단위 적용 범위, 공유 가능한 Lighting Settings Asset과 씬별 Lighting Data의 차이, URP·Quality 같은 프로젝트 설정과의 경계를 추가했습니다.
+- DAY 03에 Unity 6 URP Lighting 창의 Scene·Environment·Adaptive Probe Volumes·Realtime/Baked Lightmaps·Control 영역별 역할과, Environment·베이크 항목의 수업용 설정 기준을 추가했습니다.
+- `08.GameGraphics` DAY 04를 셰이더 실행 구조 선행 방식으로 재구성해 SRP/URP의 Render Loop, Vertex·Rasterization·Fragment 단계, Material Property와 Shader Graph의 Vertex·Fragment 블록 대응을 먼저 다루고, DAY 07은 이를 HLSL 코드로 확인하도록 연결했습니다.
+- DAY 04·06에 Renderer Culling과 Backface Culling의 위치, Fragment에서 픽셀값이 확정되는 과정, Shader Graph Position 노드의 좌표 공간, World Space 변형값을 Object Space로 변환해 Vertex Position에 연결하는 규칙을 추가했습니다.
+- `08.GameGraphics` 학습 문서의 "학생" 표현을 수행 절차·산출물 중심 문장으로 정리했습니다.
+- UI/UX 과정 샘플 코드를 Unity 6 Canvas용 `TextMeshProUGUI` 타입으로 명확히 하고, Input System UI Input Module 확인과 InputAction 정리, Pause 중 Toast 시간 동작 주석을 보강했습니다.
 - `07.GameUIUX` 과정을 `26국기_교수계획서.pdf`의 게임 UI/UX 프로그래밍 주요 학습내용과 다시 대조했습니다.
 - DAY 01에 UI 리소스 설계와 UX 콘셉트 산출물을, DAY 02에 GUI 디자인 가이드·구현 가능성 검토·요소별 단위 테스트 기록을, DAY 06과 포트폴리오 과제에 설계 변경·다시 확인한 기록을 보강했습니다.
 - `COURSE_OPERATION_PLAN.md`에 하루 6시간·최대 4교시 기준의 6일 운영표와 주요 학습내용 반영표를 추가했습니다.

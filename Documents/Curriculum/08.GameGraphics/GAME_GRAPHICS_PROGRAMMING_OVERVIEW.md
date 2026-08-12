@@ -26,7 +26,7 @@
 | DAY 01 | Unity 6 렌더링 파이프라인과 URP 기초 | 그래픽 실험용 씬 |
 | DAY 02 | 머티리얼, 텍스처, PBR 기초 | 금속/거칠기 비교 머티리얼 |
 | DAY 03 | 조명, 그림자, 카메라와 색 보정 | 조명 비교 씬 |
-| DAY 04 | Shader Graph 입문 | 색 변화 Shader Graph |
+| DAY 04 | 셰이더 실행 구조와 Shader Graph 기초 | Vertex·Fragment 구분과 색 변화 Shader Graph |
 | DAY 05 | Shader Graph로 표면 표현 만들기 | 용암/물/보호막 중 1개 |
 | DAY 06 | 정점 변형과 UV 애니메이션 | 흔들리는 풀 또는 흐르는 표면 |
 | DAY 07 | 간단한 셰이더 코드와 렌더링 사고 | Unlit 또는 Toon 셰이더 |
@@ -38,23 +38,18 @@
 | DAY 13 | VFX Graph 고급 제어와 성능 | 노출 프로퍼티와 품질 옵션 |
 | DAY 14 | 그래픽 포트폴리오 통합 | 셰이더 + 이펙트 통합 씬 |
 
-## 스크린샷 포함 기준
+## 수업 설정 확인 기준
 
-수업 문서에는 실제 Unity 에디터 화면을 넣을 수 있으면 가장 좋습니다. 캡처 파일은 다음 규칙으로 보관합니다.
+이 과정의 학습 문서는 화면 이미지 대신 Inspector와 설정 창을 직접 읽도록 작성합니다. 각 DAY는 다음 네 가지를 기록하거나 설명할 수 있어야 합니다.
 
-```text
-Documents/Curriculum/08.GameGraphics/Images/
-  day01_urp_project_settings.png
-  day04_shader_graph_basic.png
-  day09_particle_system_modules.png
-  day12_vfx_graph_basic.png
-  portfolio_final_scene.png
-```
+1. **대상**: 어떤 GameObject, Asset, Graph, Project Settings를 선택하는가?
+2. **경로**: Inspector 또는 메뉴에서 어떤 항목을 여는가?
+3. **값과 연결**: 어떤 프로퍼티·노드·참조를 바꾸고 어디에 연결하는가?
+4. **확인 결과**: Play Mode 또는 Preview에서 무엇이 달라져야 하는가? 다르면 어떤 순서로 점검하는가?
 
-각 DAY 문서에는 "스크린샷 체크포인트"를 넣었습니다. 강사는 수업 준비 중 같은 이름으로 캡처 이미지를 저장한 뒤 Markdown 이미지 태그를 추가하면 됩니다.
+따라서 제출과 수업 준비에는 이미지 파일이 아니라 Inspector 값표, Graph 연결 설명, Play Mode 확인 기록을 사용합니다.
 
 ## 공식 문서 참고
 
 - Unity Manual: [Creating shaders with Shader Graph](https://docs.unity3d.com/6000.0/Documentation/Manual/shader-graph.html)
 - Unity Manual: [Visual Effect Graph](https://docs.unity3d.com/6000.0/Documentation/Manual/VFXGraph.html)
-

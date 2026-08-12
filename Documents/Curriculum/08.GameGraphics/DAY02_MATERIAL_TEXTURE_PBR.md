@@ -27,6 +27,14 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 3. Metallic과 Smoothness 값을 바꾸며 빛 반사를 관찰합니다.
 4. Emission을 켠 머티리얼은 어두운 배경에서 확인합니다.
 
+### Material 만들기와 적용 순서
+
+1. Project 창의 `GameGraphics/Materials` 폴더를 열고 빈 곳에서 우클릭한 뒤 `Create > Material`을 선택합니다.
+2. 이름을 `Mat_Stone`, `Mat_Metal`, `Mat_Plastic`, `Mat_Glow`로 바꿉니다. Material을 복제할 때는 이름과 값이 함께 복사되므로, 네 개를 먼저 만든 뒤 각각 Inspector 값을 바꾸는 편이 안전합니다.
+3. Material을 선택해 Inspector 맨 위 `Shader`가 `Universal Render Pipeline/Lit`인지 확인합니다. 다른 Shader라면 Shader 드롭다운에서 같은 항목을 선택합니다.
+4. Hierarchy에서 Sphere를 선택하고 `Mesh Renderer > Materials`를 펼칩니다. `Element 0` 슬롯에 Material을 Project 창에서 끌어 놓습니다.
+5. 네 Sphere를 모두 배치한 뒤에는 Camera·Directional Light를 고정합니다. 같은 조명 조건에서 한 Material의 한 값만 바꾸어야 표면 차이를 비교할 수 있습니다.
+
 ## Inspector 핵심 값
 
 | 속성 | 낮을 때 | 높을 때 |
@@ -36,14 +44,17 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 | Normal Strength | 평평해 보임 | 표면 굴곡이 강함 |
 | Emission | 스스로 빛나지 않음 | 발광체처럼 보임 |
 
-## 스크린샷 체크포인트
+## URP Lit 머티리얼 Inspector 읽는 순서
 
-- `Images/day02_pbr_material_compare.png`: 같은 Sphere에 다른 머티리얼을 적용한 비교 화면
-![PBR 머티리얼 비교 예제](Images/day02_pbr_material_compare.png)
+Project 창에서 만든 Material을 선택한 뒤 Inspector를 위에서 아래로 읽습니다. `Shader`가 `Universal Render Pipeline/Lit`인지 먼저 확인하고, 다음으로 `Surface Inputs`의 Base Map 색·텍스처, Metallic Map, Smoothness, Normal Map, Emission을 봅니다. Material 값을 바꿨는데 Sphere가 달라지지 않으면 Sphere의 `Mesh Renderer > Materials > Element 0`에 이 Material이 실제로 연결됐는지 확인합니다.
 
-- `Images/day02_material_inspector.png`: Metallic, Smoothness, Emission 값이 보이는 Inspector
+| 비교 대상 | Inspector에서 바꿀 값 | 관찰할 결과 |
+| :--- | :--- | :--- |
+| 고무 공 | Metallic `0` 부근, Smoothness 낮음 | 넓고 흐린 반사, 거친 표면 |
+| 금속 공 | Metallic `1` 부근, Smoothness 높음 | 주변 빛과 색을 강하게 반사 |
+| 발광 표지 | Emission 체크, HDR Color와 강도 | 조명이 약해도 자체 발광 색이 남음 |
 
-![URP Lit 머티리얼 Inspector](Images/day02_material_inspector.png)
+Normal Map을 쓸 때는 텍스처 Inspector의 Texture Type을 `Normal map`으로 바꾼 뒤 `Fix Now` 또는 Apply를 누릅니다. Normal Map 슬롯에 텍스처를 넣었는데 효과가 지나치게 약하거나 반대로 보이면 Texture Type과 Normal Map 강도를 먼저 확인합니다. Metallic·AO처럼 색이 아닌 수치 정보를 담은 맵은 Import Settings의 sRGB 설정도 프로젝트 규칙과 맞는지 확인합니다.
 
 ## 생각해보기
 

@@ -37,8 +37,8 @@ Unity 6 프로젝트에서 작은 그래픽 쇼케이스 씬을 제작합니다.
    - 입력, 충돌, 체력 변화, 공격 판정 중 1개 이상의 게임 사건에 이펙트를 연결합니다.
    - 한 번의 게임 사건에 이펙트가 불필요하게 중복 생성되지 않도록 합니다.
 
-8. 스크린샷
-   - 최종 씬, Shader Graph, Particle System Inspector, VFX Graph 화면을 각각 1장 이상 캡처합니다.
+8. 구현 설정 기록
+   - 최종 씬의 URP·Quality 설정, Shader Graph 핵심 연결, Particle System 모듈 값, VFX Graph 흐름과 Exposed Property를 텍스트와 표로 기록합니다.
 
 ## 제출 산출물
 
@@ -49,7 +49,7 @@ Unity 6 프로젝트에서 작은 그래픽 쇼케이스 씬을 제작합니다.
 - Visual Effect Graph 에셋 1개 이상
 - 이펙트 연동 C# 스크립트
 - 구현 설명서
-- 실행 화면 캡처 4장 이상
+- Inspector·Graph·실행 검증 기록표
 
 ## 제출 전 확인
 
@@ -64,7 +64,7 @@ Unity 6 프로젝트에서 작은 그래픽 쇼케이스 씬을 제작합니다.
 | 이펙트 Prefab이 코드에서 재생된다. |  |
 | Visual Effect Graph 이펙트가 씬에서 재생된다. |  |
 | VFX Graph의 주요 프로퍼티를 조절할 수 있다. |  |
-| 스크린샷 4장 이상을 포함했다. |  |
+| URP·Material·Particle System·VFX Graph의 핵심 설정과 실행 결과를 텍스트로 기록했다. |  |
 | 성능을 위해 조절 가능한 값이 정리되어 있다. |  |
 | 같은 사건에서 이펙트가 중복 재생되지 않는지 확인했다. |  |
 

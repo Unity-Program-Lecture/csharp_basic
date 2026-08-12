@@ -60,6 +60,14 @@ Time           -> Sine -> Alpha 보정
 | `AlphaStrength` | Float | 0.45 | 투명도 |
 | `PulseSpeed` | Float | 2 | 깜박임 속도 |
 
+### Material과 대상 오브젝트 준비
+
+1. Project 창의 `GameGraphics/Shaders` 폴더에 `SG_Shield`를 저장하고, `GameGraphics/Materials`에서 `Create > Material`로 `Mat_Shield`를 만듭니다.
+2. `Mat_Shield`의 Inspector `Shader` 드롭다운에서 `Shader Graphs > SG_Shield`를 선택합니다. 생성한 Graph를 Material 슬롯에 직접 끌어 놓아도 됩니다.
+3. Hierarchy에서 Sphere 또는 Capsule을 선택하고 `Mesh Renderer > Materials > Element 0`에 `Mat_Shield`를 연결합니다.
+4. Material Inspector의 `ShieldColor`, `RimPower`, `EmissionStrength`, `AlphaStrength`, `PulseSpeed`가 보이는지 확인합니다. 보이지 않으면 Graph Blackboard의 Exposed와 저장 상태를 확인합니다.
+5. 투명 Material은 Scene View보다 Game View에서 Camera·배경과 함께 확인합니다. 비교할 때는 Camera와 Light를 고정합니다.
+
 ### 노드 연결 순서
 
 | 단계 | 연결 |
@@ -118,20 +126,13 @@ Shader Graph는 중간 값을 눈으로 확인해야 빨리 고칠 수 있습니
 | 프로퍼티 이름 정리 | `Float1` 같은 이름을 그대로 두지 않고 의미 있는 이름으로 바꿉니다. |
 | 한 번에 하나씩 추가 | Noise, Fresnel, Emission을 한 번에 만들지 말고 단계별로 확인합니다. |
 
-## 스크린샷 체크포인트
+## 표면 효과를 단계별로 검사하기
 
-- `Images/day05_surface_graph.png`: 선택한 표면 효과 Shader Graph
-- `Images/day05_surface_result.png`: 씬에서 적용된 결과 화면
-- `Images/day05_shield_properties.png`: 보호막 그래프의 Blackboard 프로퍼티
-- `Images/day05_lava_noise_preview.png`: 용암 Noise 중간값 Preview
+보호막 그래프는 Graph Inspector에서 `Surface Type = Transparent`, 필요하면 `Blend Mode = Alpha`를 먼저 설정합니다. Blackboard의 색·강도·속도·투명도 프로퍼티는 Exposed 상태인지 확인하고, Fresnel 결과는 가장자리만 밝아지는지 Main Preview에서 먼저 봅니다. Fresnel, Emission, Alpha를 모두 한 번에 연결하지 말고 하나씩 연결해 어느 선이 결과를 바꾸는지 확인합니다.
 
-![표면 효과 그래프](Images/day05_surface_graph.png)
+용암 그래프는 `UV`에 Time 기반 Offset을 더한 뒤 Noise에 연결합니다. Noise 출력은 먼저 Base Color에 연결해 움직이는 무늬만 확인하고, 그 다음 Color Ramp 또는 Multiply를 거쳐 Emission으로 보냅니다. Noise 값이 너무 대비가 약하면 Remap 또는 Power로 범위를 조절하고, 지나치게 밝으면 Emission 강도와 Bloom을 동시에 올리지 말고 하나씩 낮춥니다.
 
-![표면 효과 결과](Images/day05_surface_result.png)
-
-![보호막 Blackboard 프로퍼티](Images/day05_shield_properties.png)
-
-![용암 Noise Preview](Images/day05_lava_noise_preview.png)
+Material Inspector에서는 같은 Shader Graph를 쓰는 Material마다 색·속도·Emission 강도가 독립적으로 바뀌는지 확인합니다. 투명 보호막이 뒤의 물체를 이상하게 가리면 Surface Type, Alpha 입력, Blend Mode, Render Face 순서로 확인합니다.
 
 ## 오늘의 정리
 

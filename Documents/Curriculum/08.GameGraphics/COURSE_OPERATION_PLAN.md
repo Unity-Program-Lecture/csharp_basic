@@ -4,7 +4,7 @@
 
 ## 교수계획서 반영표
 
-| 교수계획서 주요 학습내용 | 반영 문서 | 학생 산출물 또는 확인 방법 |
+| 교수계획서 주요 학습내용 | 반영 문서 | 수행 산출물 또는 확인 방법 |
 | :--- | :--- | :--- |
 | 정점 셰이더로 변환 처리 | DAY 06, DAY 07 | Vertex Position 변형 또는 정점 단계 코드 설명 |
 | 픽셀 셰이더로 렌더링 처리 | DAY 04, DAY 07 | Shader Graph 표면 출력 또는 Fragment/Pixel 단계 설명 |
@@ -21,7 +21,7 @@
 | DAY 01 | 렌더링 흐름 | URP와 Camera | Light·Mesh Renderer | 그래픽 실험 씬 |
 | DAY 02 | 텍스처·머티리얼 | Metallic·Smoothness | Normal·Emission | PBR 비교 실습 |
 | DAY 03 | 빛과 그림자 | 카메라 | Volume·색 보정 | 조명 비교 씬 |
-| DAY 04 | Shader Graph 역할 | Property와 Node | 색 출력 연결 | 머티리얼 적용 |
+| DAY 04 | 셰이더 실행 구조와 Shader Graph | Vertex·Fragment 구분 | Property·Node와 Fragment 색 출력 연결 | 머티리얼 적용 |
 | DAY 05 | 표면 표현 분석 | 보호막 또는 용암 | Noise·Fresnel | 그래프 디버깅 |
 | DAY 06 | 정점과 UV | Vertex Position | UV Animation | 변형 테스트 |
 | DAY 07 | Shader Graph와 코드 | Vertex 단계 | Fragment/Pixel 단계 | 코드 읽기·테스트 |

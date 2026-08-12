@@ -28,11 +28,19 @@ Unity 6 공식 문서에 따르면 Visual Effect Graph는 대규모 비주얼 �
 4. 씬에 Visual Effect 오브젝트를 추가하고 에셋을 연결합니다.
 5. Spawn Rate, Velocity, Color, Lifetime을 조절합니다.
 
+### 패키지와 Graph 편집기 준비
+
+1. `Window > Package Manager`를 열고 Packages 목록을 `Unity Registry` 또는 `All`로 바꿉니다.
+2. `Visual Effect Graph`를 선택하고 Install을 누릅니다. 설치가 끝난 뒤 Console Error가 없는지 확인하고, Unity가 재시작을 요청하면 재시작합니다.
+3. Project 창의 `GameGraphics/VFX` 폴더에서 `Create > Visual Effects > Visual Effect Graph`를 선택해 `VFX_GpuSpark`를 만듭니다.
+4. Graph를 더블 클릭해 VFX Graph 창을 열고, 비어 있는 Context 또는 Context의 빈 영역을 우클릭해 필요한 Block을 검색·추가합니다. Block은 반드시 알맞은 Context 안에 넣습니다.
+5. Graph를 저장한 뒤 Asset을 Hierarchy로 끌어 놓습니다. 그러면 Visual Effect 컴포넌트와 Asset 연결을 가진 GameObject가 만들어집니다. 별도로 빈 GameObject를 만들었다면 `Add Component > Visual Effect` 후 Asset을 연결합니다.
+
 ## 3. Visual Effect Graph 창 사용법
 
 VFX Graph는 Shader Graph와 비슷하게 노드를 연결하지만, 더 큰 단위인 Context 흐름을 먼저 읽어야 합니다.
 
-| 영역 | 하는 일 | 학생이 자주 하는 작업 |
+| 영역 | 하는 일 | 주로 하는 작업 |
 | :--- | :--- | :--- |
 | Blackboard | 외부에서 조절할 프로퍼티를 만듭니다. | Spawn Rate, Color, Size 노출 |
 | Graph Area | Context와 Operator를 배치합니다. | 블록 추가, 값 연결 |
@@ -121,20 +129,13 @@ Output Particle Context에서 다음을 확인합니다.
 | 입자가 한 점에만 뭉침 | Position Shape 또는 Velocity 설정 확인 |
 | 편집 중 결과가 이상함 | 그래프 저장 후 Visual Effect 컴포넌트가 최신 에셋을 쓰는지 확인 |
 
-## 스크린샷 체크포인트
+## VFX Graph와 Visual Effect Inspector 확인 절차
 
-- `Images/day12_vfx_graph_basic.png`: Spawn, Initialize, Update, Output이 보이는 VFX Graph
-- `Images/day12_vfx_component.png`: Visual Effect 컴포넌트에 에셋이 연결된 Inspector
-- `Images/day12_vfx_initialize_blocks.png`: Lifetime, Position, Velocity, Size Block이 보이는 Initialize Context
-- `Images/day12_vfx_output_particle.png`: Output Particle 설정 화면
+Graph Area는 왼쪽에서 오른쪽으로 `Spawn > Initialize Particle > Update Particle > Output Particle Quad` 순서가 이어져야 합니다. Spawn에는 Constant Spawn Rate 또는 Burst를 두고, Initialize에는 Set Lifetime, Set Position, Set Velocity, Set Size를 넣습니다. Update에는 입자가 살아 있는 동안 적용할 힘·색·회전 변화를 넣고, Output에는 Quad·Blend Mode·색·텍스처 출력을 둡니다. Context 사이 연결이 끊기면 해당 단계의 입자가 만들어지거나 보이지 않습니다.
 
-![VFX Graph 기본 흐름](Images/day12_vfx_graph_basic.png)
+VFX Graph Asset을 씬으로 끌어 놓아 만든 GameObject를 선택하면 `Visual Effect` 컴포넌트가 보입니다. Inspector의 Visual Effect Asset 필드에 만든 Graph가 연결돼 있는지, Pause·Play 상태가 의도한지, 노출한 프로퍼티가 있다면 값이 표시되는지 확인합니다. 에셋을 바꾼 뒤 결과가 갱신되지 않으면 Graph 저장, Asset 필드, Console Error 순서로 확인합니다.
 
-![Visual Effect 컴포넌트](Images/day12_vfx_component.png)
-
-![VFX Initialize Blocks](Images/day12_vfx_initialize_blocks.png)
-
-![VFX Output Particle](Images/day12_vfx_output_particle.png)
+VFX가 보이지 않으면 Spawn Rate가 `0`이 아닌지, Initialize Lifetime과 Size가 `0`이 아닌지, Output Particle의 색 Alpha가 `0`이 아닌지부터 확인합니다. 그 다음 Camera가 이펙트 위치를 보는지, Visual Effect의 Bounds가 이동 범위를 포함하는지, GPU Compute Shader를 지원하는 환경인지 확인합니다.
 
 ## 오늘의 정리
 
