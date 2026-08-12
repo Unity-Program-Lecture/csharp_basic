@@ -26,13 +26,14 @@ Prefab은 조립식 부품입니다. 한 번 잘 만들어 두면 여러 화면�
 ## 2. 작은 UI 프레임워크 구조
 
 ```text
-UIRoot
-├── HudView
-├── MenuView
-├── PopupRoot
-│   └── ConfirmPopup
-└── ToastRoot
-    └── ToastMessage
+Canvas
+└── UIRoot
+    ├── HudView
+    ├── MenuView
+    ├── PopupRoot
+    │   └── ConfirmPopup
+    └── ToastRoot
+        └── ToastMessage
 
 Scripts
 ├── UIManager
@@ -82,7 +83,7 @@ using UnityEngine;
 
 public class ToastMessage : MonoBehaviour
 {
-    [SerializeField] private TMP_Text messageText;
+    [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private float lifeTime = 2f;
 
     public void Show(string message)
@@ -93,6 +94,8 @@ public class ToastMessage : MonoBehaviour
 
     private IEnumerator HideAfterDelay()
     {
+        // WaitForSeconds는 Time.timeScale의 영향을 받습니다.
+        // Pause 중에도 Toast가 사라져야 할 때만 WaitForSecondsRealtime으로 바꿉니다.
         yield return new WaitForSeconds(lifeTime);
         Destroy(gameObject);
     }
@@ -131,7 +134,7 @@ public class UIManager : MonoBehaviour
 
 ### Unity 연결
 
-1. Canvas 아래에 `ToastRoot`를 만들고 Anchor를 오른쪽 위로 설정합니다.
+1. Canvas 아래의 `UIRoot`에 `ToastRoot`를 만들고 Anchor를 오른쪽 위로 설정합니다.
 2. `ToastMessage` UI를 만든 뒤 Prefab으로 저장합니다.
 3. 씬의 `UIManager`에 `toastRoot`와 `toastPrefab`을 연결합니다.
 4. 테스트 Button의 `On Click`에 `UIManager.ShowItemToast`를 연결합니다.

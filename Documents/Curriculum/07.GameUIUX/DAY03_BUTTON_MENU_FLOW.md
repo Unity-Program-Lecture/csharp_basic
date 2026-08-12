@@ -49,10 +49,11 @@ Result
 Button이 눌리지 않을 때는 먼저 다음을 확인합니다.
 
 1. 씬에 `EventSystem`이 있는가?
-2. Canvas에 `Graphic Raycaster`가 있는가?
-3. 버튼을 덮고 있는 Image의 `Raycast Target`이 클릭을 가로막고 있지 않은가?
-4. Button의 `Interactable`이 켜져 있는가?
-5. Button의 `On Click`에 올바른 오브젝트와 함수가 연결되어 있는가?
+2. EventSystem의 입력 모듈이 `Input System UI Input Module`인가? Unity 6에서 Input System으로 UGUI를 조작할 때 필요합니다.
+3. Canvas에 `Graphic Raycaster`가 있는가?
+4. 버튼을 덮고 있는 Image의 `Raycast Target`이 클릭을 가로막고 있지 않은가?
+5. Button의 `Interactable`이 켜져 있는가?
+6. Button의 `On Click`에 올바른 오브젝트와 함수가 연결되어 있는가?
 
 ## 실습 예제: UI 화면 전환 컨트롤러
 
@@ -62,20 +63,19 @@ Button이 눌리지 않을 때는 먼저 다음을 확인합니다.
 
 ```text
 Canvas
-├── Screen_Title
-│   ├── StartButton
-│   └── QuitButton
-├── Screen_PlayHud
-│   └── PauseButton
-├── Screen_Pause
-│   ├── ResumeButton
-│   └── TitleButton
-└── Screen_Result
-    ├── RetryButton
-    └── TitleButton
-
-UIRoot
-└── UIScreenFlowController
+└── UIRoot
+    ├── Screen_Title
+    │   ├── StartButton
+    │   └── QuitButton
+    ├── Screen_PlayHud
+    │   └── PauseButton
+    ├── Screen_Pause
+    │   ├── ResumeButton
+    │   └── TitleButton
+    ├── Screen_Result
+    │   ├── RetryButton
+    │   └── TitleButton
+    └── UIScreenFlowController
 ```
 
 ### 스크립트 작성

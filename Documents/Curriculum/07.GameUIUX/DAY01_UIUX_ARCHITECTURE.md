@@ -148,18 +148,18 @@ ToastMessage
 
 ```text
 Canvas
-├── Screen_Title
-├── Screen_PlayHud
-│   ├── HealthBar
-│   ├── ScoreText
-│   ├── TimeText
-│   └── ObjectiveText
-├── Screen_Pause
-└── Screen_Result
+└── UIRoot
+    ├── Screen_Title
+    ├── Screen_PlayHud
+    │   ├── HealthBar
+    │   ├── ScoreText
+    │   ├── TimeText
+    │   └── ObjectiveText
+    ├── Screen_Pause
+    ├── Screen_Result
+    └── UIFlowController
 
 EventSystem
-UIRoot
-└── UIFlowController
 ```
 
 ### 5단계: 리소스와 콘셉트 결정

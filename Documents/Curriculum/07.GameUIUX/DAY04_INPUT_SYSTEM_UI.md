@@ -85,6 +85,11 @@ public class PauseInputController : MonoBehaviour
         pauseAction.Disable();
     }
 
+    void OnDestroy()
+    {
+        pauseAction.Dispose();
+    }
+
     private void OnPausePerformed(InputAction.CallbackContext context)
     {
         isPaused = !isPaused;
@@ -108,6 +113,7 @@ public class PauseInputController : MonoBehaviour
 - `Awake`에서는 입력 규칙을 만듭니다.
 - `OnEnable`에서는 입력을 켜고 이벤트를 구독합니다.
 - `OnDisable`에서는 구독을 해제하고 입력을 끕니다.
+- `OnDestroy`에서는 직접 만든 Input Action을 정리합니다.
 - `performed += OnPausePerformed`는 Pause 입력이 발생했을 때 실행할 함수를 등록한다는 뜻입니다.
 
 ## 4. UI Navigation 확인하기

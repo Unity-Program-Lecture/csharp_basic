@@ -66,11 +66,11 @@ UI는 예쁘게 보이는 것도 중요하지만, 플레이 중 시선을 빼앗
 
 ### Unity 오브젝트 만들기
 
-1. `GameObject > UI > Canvas`를 만듭니다.
+1. 환경 설정 안내서에서 만든 Canvas를 사용합니다. 아직 없다면 `GameObject > UI > Canvas`를 만듭니다.
 2. Canvas의 `Render Mode`를 `Screen Space - Overlay`로 둡니다.
 3. Canvas Scaler의 `UI Scale Mode`를 `Scale With Screen Size`로 바꿉니다.
 4. `Reference Resolution`을 `1920 x 1080`으로 설정합니다.
-5. Canvas 아래에 `TextMeshPro - Text`, `Slider`, `Image`를 배치합니다.
+5. Canvas 아래의 `UIRoot`를 만들고, 그 아래에 `TextMeshPro - Text`, `Slider`, `Image`를 배치합니다.
 6. 왼쪽 위에는 점수 Text, 왼쪽 아래에는 체력 Slider, 위쪽 가운데에는 시간 Text를 둡니다.
 7. 테스트용 Button을 하나 만들고 `AddScoreAndDamage` 함수에 연결합니다.
 
@@ -86,8 +86,8 @@ using UnityEngine.UI;
 
 public class BasicHudView : MonoBehaviour
 {
-    [SerializeField] private TMP_Text scoreText;
-    [SerializeField] private TMP_Text timeText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private Slider healthSlider;
 
     private int score;
