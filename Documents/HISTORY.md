@@ -25,6 +25,10 @@
 - `08.GameGraphics` 과정을 교수계획서의 셰이더·이펙트 주요 학습내용과 대조하고, 이펙트의 3D 공간 배치 분석과 플레이 규칙 통합·중복 재생 검증을 DAY 09·DAY 14·포트폴리오에 보강했습니다.
 - `08.GameGraphics/COURSE_OPERATION_PLAN.md`에 14일·하루 6시간·최대 4교시 운영표와 주요 학습내용 반영표를 추가했습니다.
 
+## 2026-08-13
+
+- `07.GameUIUX/SUPPLEMENT_TEXTMESHPRO_SETUP_GUIDE.md`를 추가하여 TMP Importer의 Essentials 선택, 예제 리소스 선택 기준, 한글 Font Asset 생성·연결, Fallback Font Asset, Dynamic·Static Atlas 확인 절차를 정리했습니다. Pretendard·Noto Sans KR·IBM Plex Sans KR의 한글 지원과 OFL, 정적 `.ttf`·`.otf` 원본 선택 기준, 원본 Font Inspector의 `Include Font Data`와 생성 Font Asset의 Character Table 확인 기준도 추가했습니다. Unity 6 Font Asset Creator의 실제 `Create > TextMeshPro > Font Asset > SDF` 경로와 `Character Set`·Atlas 설정, 생성 뒤 Dynamic Font Asset Inspector 설정을 구분했습니다.
+
 1. **게임엔진 과정 ScriptableObject 보충 학습 문서 추가**
    - `Documents/Curriculum/03.GameEngine/Supplement/SCRIPTABLE_OBJECT_GUIDE.md`를 추가하여 ScriptableObject의 기본 개념, Prefab과의 차이, 주요 사용처를 정리함.
    - 아이템 데이터 예제를 통해 `CreateAssetMenu`, 데이터 에셋 생성, Inspector 참조 연결, 실행 시 `null` 검사 흐름을 설명함.

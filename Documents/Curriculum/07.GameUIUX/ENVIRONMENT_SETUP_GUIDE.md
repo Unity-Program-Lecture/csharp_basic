@@ -60,7 +60,7 @@ Visual Studio, VS Code, Rider 중 하나를 사용합니다. VS Code를 사용�
 | TMP | `TextMeshPro` | Installed 상태, `3.2.0` 이상 | `TextMeshProUGUI`, Font Asset, 텍스트 표시 |
 | Input System | `Input System` | Installed 상태, `1.17.0` 이상 | Input Action, UI Navigate, Submit, Cancel |
 
-`Unity UI` 또는 `TextMeshPro`가 보이지 않으면 Package Manager 검색창에서 패키지 이름을 검색해 설치합니다. TMP를 처음 사용할 때 **TMP Essential Resources를 가져오겠냐는 창**이 나오면 가져옵니다. 이 리소스에는 기본 Font Asset과 UI용 머티리얼이 포함됩니다.
+`Unity UI` 또는 `TextMeshPro`가 보이지 않으면 Package Manager 검색창에서 패키지 이름을 검색해 설치합니다. TMP를 처음 사용할 때 **TMP Essential Resources를 가져오겠냐는 창**이 나오면 가져옵니다. 이 리소스에는 기본 Font Asset과 UI용 머티리얼이 포함됩니다. TMP Importer의 두 선택지와 한글 Font Asset·Fallback 설정은 [TextMeshPro 초기 설정과 한글 폰트 가이드](SUPPLEMENT_TEXTMESHPRO_SETUP_GUIDE.md)를 따릅니다.
 
 ### Input System 활성화
 
@@ -155,6 +155,8 @@ UI의 기본 크기를 `Transform Scale`로 맞추지 않습니다. `Canvas`, `U
 시작 전에는 `Canvas`와 `UIRoot`의 Scale이 `(1, 1, 1)`인지, UI를 담는 상위 Panel에도 의도하지 않은 Scale이 없는지 확인합니다.
 
 ## 7. TMP와 UGUI 오브젝트 연결 규칙
+
+한글을 표시하는 Text에는 한글 Glyph를 포함한 Font Asset을 지정합니다. 기본 Font Asset에 한글 Glyph가 없으면 네모로 보일 수 있으므로, Font Asset 생성과 Fallback 연결은 [별첨 가이드](SUPPLEMENT_TEXTMESHPRO_SETUP_GUIDE.md)의 절차를 사용합니다.
 
 | 용도 | Hierarchy에서 만들 메뉴 | Inspector에 연결할 타입 | 주의점 |
 | :--- | :--- | :--- | :--- |
