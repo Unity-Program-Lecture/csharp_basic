@@ -18,7 +18,7 @@
 ## 2. 프로젝트 만들기
 
 1. Unity Hub에서 **New project**를 선택합니다.
-2. Editor Version이 Unity 6 `6000.0` 이상인지 확인합니다.
+2. Editor Version이 Unity 6 `6000.5.8f1` 인지 확인합니다.
 3. 템플릿으로 `3D Core`를 선택합니다.
 4. 프로젝트 이름을 `GameUIUXLab`으로 입력합니다.
 5. 생성 위치는 영문 경로를 권장합니다. 예: `D:\UnityProjects\GameUIUXLab`
