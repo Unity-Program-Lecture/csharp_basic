@@ -20,7 +20,36 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 - **Normal Map**: 실제 모델을 울퉁불퉁하게 만들지 않고 표면의 굴곡처럼 보이게 하는 텍스처입니다.
 - **Emission**: 오브젝트 자체가 빛나는 것처럼 보이게 하는 색입니다.
 
-## 2. 실습: 같은 모델, 다른 재질
+## 2. 실습용 PBR 텍스처 다운로드
+
+아래 파일은 이 문서의 실습을 위해 만든 1024×1024 PNG 텍스처입니다. 같은 이름으로 시작하는 파일끼리 하나의 재질 세트입니다. 링크를 클릭해 파일을 열고 저장하거나, 압축 파일을 한 번에 내려받습니다.
+
+- [전체 PBR 텍스처 세트 다운로드 (ZIP)](Assets/DAY02_PBR_Textures/DAY02_PBR_Texture_Set.zip)
+
+| 재질 | Base Map | Normal Map | Metallic·Smoothness Map | Occlusion Map |
+| :--- | :--- | :--- | :--- | :--- |
+| 돌 | [Stone_BaseMap.png](Assets/DAY02_PBR_Textures/Stone_BaseMap.png) | [Stone_NormalMap.png](Assets/DAY02_PBR_Textures/Stone_NormalMap.png) | [Stone_MetallicSmoothness.png](Assets/DAY02_PBR_Textures/Stone_MetallicSmoothness.png) | [Stone_Occlusion.png](Assets/DAY02_PBR_Textures/Stone_Occlusion.png) |
+| 금속 | [Metal_BaseMap.png](Assets/DAY02_PBR_Textures/Metal_BaseMap.png) | [Metal_NormalMap.png](Assets/DAY02_PBR_Textures/Metal_NormalMap.png) | [Metal_MetallicSmoothness.png](Assets/DAY02_PBR_Textures/Metal_MetallicSmoothness.png) | [Metal_Occlusion.png](Assets/DAY02_PBR_Textures/Metal_Occlusion.png) |
+
+### 파일 이름으로 역할 구분하기
+
+- `BaseMap`: 눈에 보이는 기본 색입니다. 색 정보이므로 `sRGB (Color Texture)`를 켭니다.
+- `NormalMap`: 표면의 방향 정보를 담은 파란색 계열 이미지입니다. `Texture Type`을 `Normal map`으로 바꿉니다.
+- `MetallicSmoothness`: RGB에는 금속성, Alpha에는 매끄러움이 들어 있습니다. 색이 아닌 수치 정보이므로 sRGB를 끕니다.
+- `Occlusion`: 틈과 홈을 어둡게 만들어 입체감을 보강합니다. 색이 아닌 수치 정보이므로 sRGB를 끕니다.
+
+### Unity 프로젝트로 임포트하기
+
+1. ZIP 파일의 압축을 풀거나 필요한 PNG 파일을 저장합니다.
+2. Unity Project 창에서 `Assets/GameGraphics/Textures/DAY02` 폴더를 만듭니다.
+3. 내려받은 PNG 파일을 Project 창의 `DAY02` 폴더로 끌어 놓습니다.
+4. `Stone_BaseMap`과 `Metal_BaseMap`을 함께 선택합니다. Inspector에서 `Texture Type`은 `Default`, `sRGB (Color Texture)`는 체크, `Wrap Mode`는 `Repeat`로 설정한 뒤 `Apply`를 누릅니다.
+5. 이름이 `NormalMap`으로 끝나는 두 파일을 함께 선택합니다. `Texture Type`을 `Normal map`으로 바꾸고 `Fix Now`가 표시되면 누른 뒤 `Apply`를 누릅니다.
+6. 이름이 `MetallicSmoothness` 또는 `Occlusion`으로 끝나는 파일은 `Texture Type`을 `Default`, `sRGB (Color Texture)`는 체크 해제로 설정합니다. `MetallicSmoothness` 파일은 `Alpha Source`가 `Input Texture Alpha`인지도 확인한 뒤 `Apply`를 누릅니다.
+
+> Base Map은 "**색 사진**", 나머지 맵은 "**숫자가 적힌 설계도**"라고 생각하면 쉽습니다. 설계도에 sRGB 색 보정을 적용하면 원래 수치가 달라질 수 있습니다.
+
+## 3. 실습: 같은 모델, 다른 재질
 
 1. Sphere 4개를 나란히 배치합니다.
 2. `Mat_Stone`, `Mat_Metal`, `Mat_Plastic`, `Mat_Glow` 머티리얼을 만듭니다.
@@ -34,6 +63,23 @@ PBR은 Physically Based Rendering의 줄임말입니다. 빛이 표면에 닿을
 3. Material을 선택해 Inspector 맨 위 `Shader`가 `Universal Render Pipeline/Lit`인지 확인합니다. 다른 Shader라면 Shader 드롭다운에서 같은 항목을 선택합니다.
 4. Hierarchy에서 Sphere를 선택하고 `Mesh Renderer > Materials`를 펼칩니다. `Element 0` 슬롯에 Material을 Project 창에서 끌어 놓습니다.
 5. 네 Sphere를 모두 배치한 뒤에는 Camera·Directional Light를 고정합니다. 같은 조명 조건에서 한 Material의 한 값만 바꾸어야 표면 차이를 비교할 수 있습니다.
+
+### 내려받은 텍스처를 Material에 연결하기
+
+`Mat_Stone`과 `Mat_Metal`의 Shader를 `Universal Render Pipeline/Lit`으로 맞춘 뒤, 같은 접두사의 파일을 다음 슬롯에 끌어 놓습니다.
+
+| 텍스처 이름 끝부분 | URP Lit 슬롯 | 먼저 관찰할 내용 |
+| :--- | :--- | :--- |
+| `_BaseMap` | `Base Map` | 돌의 색과 금속 패널의 색 |
+| `_MetallicSmoothness` | `Metallic Map` | 돌은 금속성이 낮고, 금속은 금속성이 높다는 차이 |
+| `_NormalMap` | `Normal Map` | 돌 틈, 패널 경계와 리벳의 굴곡 |
+| `_Occlusion` | `Occlusion Map` | 돌 틈과 패널 경계가 더 분명해지는 변화 |
+
+1. 먼저 Base Map만 연결한 상태를 확인합니다.
+2. Metallic Map, Normal Map, Occlusion Map을 하나씩 추가합니다. 한 번에 모두 연결하면 어떤 맵이 어떤 변화를 만들었는지 구분하기 어렵습니다.
+3. Material Inspector의 `Tiling`을 `X 2`, `Y 2`로 바꾸어 텍스처가 반복되는 모습도 확인합니다.
+4. Metallic Map을 연결한 뒤 Smoothness는 먼저 `1`로 두어 파일 Alpha의 결과를 보고, 이후 값을 낮추며 반사의 선명도가 어떻게 달라지는지 비교합니다.
+5. Normal Map 효과가 너무 강하면 슬롯 오른쪽의 강도를 낮추고, 너무 약하면 높입니다. 모델의 꼭짓점 수는 그대로라는 점도 함께 확인합니다.
 
 ## Inspector 핵심 값
 
