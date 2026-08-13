@@ -6,7 +6,7 @@
 
 | 항목 | 최소 기준 | 권장 기준 | 이유 |
 | :--- | :--- | :--- | :--- |
-| Unity Editor | Unity 6 `6000.0` 이상 | Unity 6 LTS의 최신 패치 버전 | Unity 6의 Project-wide Input Actions와 현재 UGUI 워크플로를 기준으로 합니다. |
+| Unity Editor | Unity 6 `6000.5.8f1` | Unity 6 LTS의 최신 패치 버전 | Unity 6의 Project-wide Input Actions와 현재 UGUI 워크플로를 기준으로 합니다. |
 | 프로젝트 템플릿 | 3D Core | 3D Core | HUD·메뉴·입력 실습에 충분하며, 렌더 파이프라인 선택이 UI 실습을 막지 않습니다. |
 | Unity UI (UGUI) | `com.unity.ugui` `2.0.0` 이상 | Editor에 맞는 최신 검증 버전 | Canvas, Button, Image, Slider, EventSystem을 사용합니다. |
 | TextMeshPro | `com.unity.textmeshpro` `3.2.0` 이상 | Editor에 포함된 최신 검증 버전 | Canvas용 텍스트는 `TextMeshProUGUI`로 만듭니다. |
