@@ -61,7 +61,7 @@ URP Shader 실행
 Camera의 최종 화면 출력
 ```
 
-따라서 `URP Asset`과 `Universal Renderer Data`는 1~3단계의 규칙과 패스를 정하고, Material의 URP Shader 또는 Shader Graph는 4~5단계의 계산 규칙을 정합니다. DAY 04 이후 Shader Graph를 배울 때도 "SRP/URP가 그릴 순서를 정하고, Graph가 그 순서 안에서 표면 값을 계산한다"고 연결해서 이해합니다.
+따라서 `URP Asset`과 `Universal Renderer Data`는 1\~3단계의 규칙과 패스를 정하고, Material의 URP Shader 또는 Shader Graph는 4\~5단계의 계산 규칙을 정합니다. DAY 04 이후 Shader Graph를 배울 때도 "SRP/URP가 그릴 순서를 정하고, Graph가 그 순서 안에서 표면 값을 계산한다"고 연결해서 이해합니다.
 
 각 항목의 역할은 다음과 같습니다.
 
