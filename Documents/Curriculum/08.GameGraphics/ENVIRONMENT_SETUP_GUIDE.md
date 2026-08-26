@@ -154,7 +154,7 @@ DAY 11에는 `PlayerInput`과 `ClickEffectSpawner`를 붙일 빈 오브젝트를
 
 | 확인 항목 | 완료 |
 | :--- | :--- |
-| Unity Editor가 Unity 6 `6000.0` 이상이다. |  |
+| Unity Editor가 Unity 6 `6000.5.9f1` 이상이다. |  |
 | 새 프로젝트가 `Universal 3D` 템플릿으로 생성됐다. |  |
 | Graphics와 Quality에 URP Asset이 연결돼 있다. |  |
 | URP·Shader Graph·VFX Graph가 같은 `17.0.x` 계열이다. |  |
