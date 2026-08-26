@@ -8,7 +8,7 @@
 
 | 항목 | 최소 기준 | 수업 권장 기준 | 이유 |
 | :--- | :--- | :--- | :--- |
-| Unity Editor | Unity 6 `6000.5.9f1` 이상 | Unity Hub에서 설치한 Unity 6 `6000.0` 최신 패치 | URP 17 계열과 Shader Graph·VFX Graph 실습 기준입니다. |
+| Unity Editor | Unity 6 `6000.5.9f1` 이상 | Unity Hub에서 설치한 Unity 6 `6000.5.9f1` 최신 패치 | URP 17 계열과 Shader Graph·VFX Graph 실습 기준입니다. |
 | 프로젝트 템플릿 | `Universal 3D` | 새 프로젝트 `GameGraphicsLab` | URP Asset과 기본 렌더링 구성이 함께 생성됩니다. |
 | 운영체제 | Windows 10/11 64-bit | Windows 11 64-bit | 수업의 PC Play Mode와 Standalone 확인 기준입니다. |
 | 그래픽 하드웨어 | DirectX 11 이상을 지원하는 GPU | Compute Shader를 지원하는 외장 또는 내장 GPU | DAY 12~13의 VFX Graph는 GPU Compute Shader를 사용합니다. |
