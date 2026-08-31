@@ -1,0 +1,89 @@
+/* =========================================
+   VS Code Markdown Preview - Lecture Style
+   ========================================= */
+
+/* 전체 화면 폭 활용 */
+body {
+    max-width: none !important;
+    width: auto !important;
+
+    margin: 0 !important;
+    padding: 32px 64px !important;
+
+    font-size: 22px;
+    line-height: 1.65;
+}
+
+/* 제목 */
+h1 {
+    font-size: 2.2em;
+    margin-top: 0.8em;
+    margin-bottom: 0.6em;
+}
+
+h2 {
+    font-size: 1.7em;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h3 {
+    font-size: 1.35em;
+    margin-top: 1.3em;
+}
+
+/* 문단 */
+p {
+    margin-top: 0.7em;
+    margin-bottom: 0.7em;
+}
+
+/* 목록 */
+ul,
+ol {
+    padding-left: 1.8em;
+}
+
+li {
+    margin: 0.3em 0;
+}
+
+/* 코드 블록 */
+pre {
+    font-size: 0.9em;
+    line-height: 1.5;
+
+    padding: 20px 24px !important;
+    margin: 1em 0;
+
+    overflow-x: auto;
+}
+
+/* 인라인 코드 */
+code {
+    font-size: 0.9em;
+}
+
+/* 표 */
+table {
+    width: 100%;
+    font-size: 0.95em;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 10px 16px !important;
+}
+
+/* 인용문 */
+blockquote {
+    margin: 1em 0;
+    padding: 0.2em 1em;
+}
+
+/* 이미지가 화면 밖으로 나가지 않도록 */
+img {
+    max-width: 100%;
+    height: auto;
+}

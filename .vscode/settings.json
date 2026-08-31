@@ -1,0 +1,10 @@
+{
+    "markdown.styles": [
+        "markdown-preview.css"
+    ],
+
+    "zenMode.fullScreen": true,
+    "zenMode.hideStatusBar": true,
+    "zenMode.hideActivityBar": true,
+    "zenMode.centerLayout": false
+}
