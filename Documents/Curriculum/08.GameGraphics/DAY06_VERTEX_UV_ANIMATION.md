@@ -34,6 +34,23 @@
 4. UV 흐름에 텍스처를 쓸 때는 텍스처 Asset을 선택해 Inspector의 Wrap Mode를 `Repeat`로 바꾸고 Apply를 누릅니다. 그 뒤 Sample Texture 2D의 Texture 입력과 UV 입력을 각각 연결합니다.
 5. Material Inspector에 `Amplitude`, `Speed`, `Tiling`, `UvSpeed`처럼 조절할 값을 Exposed로 만들고, 처음에는 Amplitude를 작은 값으로 둡니다.
 
+### 단계별 테스트 리소스
+
+아래 두 리소스는 한 번에 완성된 물결만 확인하지 않고, 어떤 연결이 결과를 바꿨는지 순서대로 확인하기 위한 자료입니다.
+
+| 리소스 | 용도 | Unity Import 설정 |
+| :--- | :--- | :--- |
+| [WaterSurface_Albedo.png](Assets/DAY05_FlowingWater/WaterSurface_Albedo.png) | DAY05에서 만든 UV 흐름을 재사용해 최종 물결을 확인하는 기본 물 표면 텍스처 | `Wrap Mode = Repeat`, `Filter Mode = Bilinear` |
+| [VertexWave_TestGrid.svg](Assets/DAY06_WaterWave/VertexWave_TestGrid.svg) | 정점이 위아래로 움직일 때 격자선과 흰 점이 굽는지 확인하는 대비용 텍스처 | `Wrap Mode = Repeat`, `Filter Mode = Point` 또는 `Bilinear` |
+
+기본 물 텍스처만으로도 최종 결과를 만드는 데는 충분합니다. 하지만 물 무늬도 움직이고 정점도 동시에 움직이면, 무엇이 성공했고 무엇이 실패했는지 구분하기 어렵습니다. 따라서 아래 순서로 테스트합니다.
+
+1. `VertexWave_TestGrid.svg`를 Sample Texture 2D에 연결하고, `Vertex Position`에는 아직 선을 연결하지 않습니다. `UV` Offset만 연결해 격자 무늬가 가로 또는 세로로 움직이는지 확인합니다.
+2. UV Offset을 `0`으로 되돌린 뒤, `Time`과 `Sine`으로 만든 작은 Offset만 `Vertex Position`에 연결합니다. 카메라를 낮은 각도로 두고 Plane의 정점·격자선이 출렁이는지 확인합니다.
+3. 격자 텍스처를 `WaterSurface_Albedo.png`로 바꿉니다. UV 흐름과 정점 변형을 함께 연결해 최종 물결을 확인합니다.
+
+> Plane 기본 메시처럼 정점 수가 적으면 격자선이 거의 굽지 않고 큰 조각 단위로 움직입니다. 이 경우 텍스처 문제가 아니라 메시 밀도 문제이므로, 정점이 더 촘촘한 Plane을 사용해 다시 확인합니다.
+
 ## 주의할 점
 
 - 정점 수가 너무 적으면 부드럽게 변형되지 않습니다.
