@@ -87,6 +87,45 @@ Position (Object) ────────────────────�
 
 `Vertex Position`은 **Object Space 최종 위치**를 받습니다. 그래서 원래 `Position (Object)`에 Object Space Y Offset을 더합니다. World Space Position을 그대로 더하면 좌표 기준이 달라, 오브젝트를 옮기거나 회전할 때 예상과 다르게 보일 수 있습니다.
 
+### 선택 심화: 두 방향 잔물결 추가하기
+
+앞의 기본 그래프는 X축 하나만 사용하므로, 한 방향으로만 파도가 진행합니다. 여기서는 Split의 `B` (Z) 출력으로 두 번째 파도를 만들고 기존 파도와 더합니다. 두 방향의 파도가 만나는 지점에서는 높이가 합쳐져, 물 표면이 더 자연스럽게 흔들립니다.
+
+1. Blackboard에 아래 Property를 새로 만들고 `Exposed`를 켭니다.
+
+| 이름 | 타입 | 기본값 예시 | 역할 |
+| :--- | :--- | :--- | :--- |
+| `CrossWaveFrequency` | Float | `1.6` | Z축 방향 보조 파도의 촘촘함입니다. |
+| `CrossWaveSpeed` | Float | `1.1` | Z축 방향 보조 파도의 진행 속도입니다. |
+| `CrossWaveStrength` | Float | `0.5` | 보조 파도가 기본 파도에 섞이는 비율입니다. |
+
+2. 기존 X축 파도 그래프는 그대로 둡니다. `Sine × Amplitude`의 결과를 `waveX`라고 생각합니다.
+3. 같은 `Position (Object)`의 `Split` 노드에서 `B` (Z)를 새 `Multiply`에 연결하고, `CrossWaveFrequency`를 다른 입력에 연결합니다.
+4. `Time`의 `Time` 출력을 새 `Multiply`에 연결하고, `CrossWaveSpeed`를 다른 입력에 연결합니다.
+5. 두 Multiply 결과를 새 `Add`로 합친 뒤 `Sine`에 연결합니다.
+6. 이 `Sine` 출력 × `Amplitude` × `CrossWaveStrength`의 결과를 만듭니다. 이것이 `waveZ`입니다.
+7. `waveX`와 `waveZ`를 `Add`로 더합니다. 두 값이 같은 순간에 최대가 되어 물결이 너무 높아지지 않도록 결과에 `0.5`를 곱합니다.
+8. 기존 Combine 노드의 `G` 입력을 `waveX` 대신 이 최종 결과로 바꿉니다. `R = 0`, `B = 0`은 그대로 둡니다.
+
+```text
+X branch: Split.R × WaveFrequency + Time × WaveSpeed
+          └──────────────────────────────────────────> Sine × Amplitude ── waveX
+
+Z branch: Split.B × CrossWaveFrequency + Time × CrossWaveSpeed
+          └──────────────────────────────────────────> Sine × Amplitude × CrossWaveStrength ── waveZ
+
+waveX + waveZ ── × 0.5 ──> Combine(0, Y, 0) ──> Vertex Position
+```
+
+| Inspector 값 | 처음 시험할 값 | 관찰할 결과 |
+| :--- | :--- | :--- |
+| `CrossWaveStrength` | `0` | 기존과 같은 한 방향 진행파입니다. |
+| `CrossWaveStrength` | `0.5` | X축과 Z축 파도가 교차하는 잔물결입니다. |
+| `CrossWaveFrequency` | `1.6` → `3` | 값이 클수록 보조 파도 간격이 짧아집니다. |
+| `CrossWaveSpeed` | `1.1` → `2` | 값이 클수록 보조 파도가 빨라집니다. |
+
+> 두 방향을 모두 `WaveFrequency = 2`, `WaveSpeed = 1.5`로 두면 규칙적인 격자 물결처럼 보일 수 있습니다. 보조 파도에는 기본 파도와 조금 다른 값 (`1.6`, `1.1`)을 주면 더 자연스럽게 보입니다.
+
 ### 단계별 테스트 리소스
 
 아래 두 리소스는 한 번에 완성된 물결만 확인하지 않고, 어떤 연결이 결과를 바꿨는지 순서대로 확인하기 위한 자료입니다.
