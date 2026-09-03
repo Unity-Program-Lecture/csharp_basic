@@ -159,7 +159,7 @@ using (SqliteTransaction transaction = connection.BeginTransaction())
 | :--- | :--- |
 | `no such table` | 표를 만드는 SQL을 실행했는지, 올바른 DB 파일을 열었는지 |
 | `no such column` | SQL 열 이름과 스키마 열 이름이 같은지 |
-| `database is locked` | DB Browser 또는 다른 프로그램이 파일을 수정 중인지 |
+| `database is locked` | DB Browser 또는 다른 프로그램이 파일 입출력 (I/O, Input/Output) 작업을 수행 중인지 |
 | `ExecuteReader`에서 값 변환 오류 | SELECT 열 순서와 `GetString`/`GetInt32` 자료형이 맞는지 |
 | 외래 키 규칙이 동작하지 않음 | 연결을 연 뒤 `PRAGMA foreign_keys = ON;`을 실행했는지 |
 

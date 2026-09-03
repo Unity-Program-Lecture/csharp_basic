@@ -1,6 +1,6 @@
 # DAY 11: Unity 6와 게임 데이터 연결하기 (4교시)
 
-오늘은 Unity의 기획 데이터, 플레이 데이터, DB의 책임을 구분하고, 앞에서 만든 SQLite `GameShop.db`를 Unity에서 실제로 읽어 상점 결과를 UI로 보여 줍니다.
+오늘은 Unity의 기획 데이터, 플레이 데이터, DB의 책임을 구분하고, 앞에서 만든 SQLite `GameShop.db`를 Unity에서 실제로 읽어 상점 결과를 UI (User Interface, 사용자 인터페이스)로 보여 줍니다.
 
 ## NCS 연결
 
@@ -14,16 +14,16 @@
 Unity 상점 UI -> C# 데이터 관리 코드 -> SQLite 또는 LiteDB 파일
 
 온라인 게임의 기본 구조
-Unity 클라이언트 -> 게임 서버/API -> 서버형 데이터베이스
+Unity 클라이언트 -> 게임 서버/API (Application Programming Interface, 응용 프로그래밍 인터페이스) -> 서버형 데이터베이스
 ```
 
 Unity는 화면과 입력을 담당하고, DB는 데이터를 보관합니다. 온라인 게임에서 클라이언트가 DB 비밀번호를 갖고 직접 골드를 바꾸면 조작과 보안 문제가 생길 수 있으므로 서버가 규칙을 확인해야 합니다.
 
-## 2. UPM으로 SQLite 연결하기
+## 2. UPM (Unity Package Manager)으로 SQLite 연결하기
 
-DAY11의 기본 실제 연동은 NuGet이 아니라 Unity Package Manager (UPM)로 설치하는 `com.gilzoide.sqlite-net`입니다. 이 패키지는 Windows, macOS, Linux, Android, iOS, WebGL을 지원한다고 안내하며, WebGL에서는 IndexedDB를 사용해 SQLite 데이터를 보관합니다.
+DAY11의 기본 실제 연동은 NuGet이 아니라 Unity Package Manager (UPM)로 설치하는 `com.gilzoide.sqlite-net`입니다. 이 패키지는 Windows, macOS, Linux, Android, iOS, WebGL (Web Graphics Library)을 지원한다고 안내하며, WebGL에서는 IndexedDB를 사용해 SQLite 데이터를 보관합니다.
 
-1. [Unity용 SQLite-net 사용 가이드](Supplement/UNITY_SQLITE_NET_GUIDE.md)를 따라 UPM Git URL로 패키지를 설치합니다.
+1. [Unity용 SQLite-net 사용 가이드](Supplement/UNITY_SQLITE_NET_GUIDE.md)를 따라 UPM Git URL (Uniform Resource Locator, 웹 주소)로 패키지를 설치합니다.
 2. DAY06~07에서 만든 `GameShop.db`의 복사본을 Unity 프로젝트에 준비합니다.
 3. `Item` 표를 `SELECT`하여 Unity Console에 출력합니다.
 4. 조회 결과를 `ShopView`에 전달해 UI에 표시합니다.

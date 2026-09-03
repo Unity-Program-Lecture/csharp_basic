@@ -114,4 +114,4 @@ CREATE TABLE IF NOT EXISTS Inventory (
 ## 오늘의 정리
 
 - NuGet 패키지는 C# 프로젝트에 필요한 라이브러리를 내려받아 연결합니다.
-- 다음 시간에는 매개 변수와 CRUD로 안전하게 데이터를 관리합니다.
+- 다음 시간에는 CRUD (Create, Read, Update, Delete)와 매개 변수로 안전하게 데이터를 관리합니다.

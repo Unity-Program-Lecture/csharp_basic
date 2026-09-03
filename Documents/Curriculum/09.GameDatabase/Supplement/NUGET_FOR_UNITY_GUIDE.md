@@ -53,7 +53,7 @@ NuGetForUnity는 기본적으로 프로젝트 안에 NuGet 패키지 정보를 �
 
 ## 5. DAY11에서 이 도구를 기본 경로로 쓰지 않는 이유
 
-`Microsoft.Data.Sqlite`는 기본적으로 SQLitePCLRaw와 네이티브 SQLite 번들을 함께 사용합니다. .NET 콘솔 프로젝트에서는 편리하지만, Unity에서는 Editor·Windows 빌드·Android·iOS·IL2CPP마다 네이티브 라이브러리와 플랫폼 설정을 별도로 검증해야 할 수 있습니다.
+`Microsoft.Data.Sqlite`는 기본적으로 SQLitePCLRaw와 네이티브 SQLite 번들을 함께 사용합니다. .NET 콘솔 프로젝트에서는 편리하지만, Unity에서는 Editor·Windows 빌드·Android·iOS·IL2CPP (Intermediate Language To C++, 중간 언어를 C++로 변환하는 Unity 스크립팅 백엔드)마다 네이티브 라이브러리와 플랫폼 설정을 별도로 검증해야 할 수 있습니다.
 
 따라서 DAY11의 기본 실습은 **UPM용 `com.gilzoide.sqlite-net`**으로 합니다. 해당 패키지는 Unity 플랫폼용 네이티브 라이브러리와 WebGL용 저장 처리를 포함합니다. LiteDB는 이 문서에서 다루는 NuGet 연습 및 문서형 DB 확장 실습으로 유지합니다.
 

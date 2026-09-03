@@ -82,7 +82,7 @@ internal class Program
 
 ### 이 단어는 무슨 뜻인가요?
 
-- **POCO 클래스**: DB 전용 부모 클래스 없이 작성하는 일반 C# 클래스입니다.
+- **POCO 클래스** (Plain Old CLR Object, CLR은 Common Language Runtime): DB 전용 부모 클래스 없이 작성하는 일반 C# 클래스입니다.
 - **컬렉션**: 같은 성격의 문서 모음입니다. 여기서는 `logs`입니다.
 - **문서 ID (`_id`)**: 한 컬렉션 안에서 문서 한 건을 고유하게 구분하는 값입니다. 관계형 DB의 기본 키와 비슷한 역할을 합니다.
 - **문서 CRUD**: `Insert`, `Find`, `Update`, `Delete`로 문서를 다룹니다.

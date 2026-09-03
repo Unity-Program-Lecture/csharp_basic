@@ -9,13 +9,13 @@
 
 ## 1. SQLite는 무엇인가요?
 
-SQLite는 별도 서버 없이 `.db` 파일 하나에 SQL 관계형 DB를 저장하는 도구입니다. 오늘은 GUI 도구로 파일을 보고, 다음 시간에는 C# 코드로 같은 일을 합니다.
+SQLite는 별도 서버 없이 `.db` 파일 하나에 SQL 관계형 DB를 저장하는 도구입니다. 오늘은 **GUI** (Graphical User Interface, 그래픽 사용자 인터페이스) 도구로 파일을 보고, 다음 시간에는 C# 코드로 같은 일을 합니다.
 
 ### SQL은 무엇인가요?
 
 **SQL** (Structured Query Language)은 데이터베이스에 "표를 만들어 주세요", "이 데이터를 넣어 주세요", "조건에 맞는 데이터를 보여 주세요"라고 요청하는 언어입니다. C#처럼 게임 전체의 동작을 만드는 범용 프로그래밍 언어라기보다, **데이터를 만들고·찾고·바꾸고·지우는 데 특화된 언어**라고 이해하면 됩니다.
 
-SQL은 SQLite, MySQL, PostgreSQL, SQL Server 같은 **관계형 DBMS의 공통 기반 언어**입니다. 하지만 모든 DB가 SQL을 주된 방식으로 쓰는 것은 아닙니다. LiteDB나 MongoDB 같은 문서형 DB는 보통 C# API 또는 제품별 문서 질의 방식을 사용합니다. 또 관계형 DB끼리도 `SELECT`, `INSERT`, `UPDATE`, `DELETE` 같은 기본 문법은 비슷하지만, 자료형·날짜 함수·자동 번호·고급 기능에는 제품별 차이(방언)가 있습니다.
+SQL은 SQLite, MySQL, PostgreSQL, SQL Server 같은 **관계형 DBMS의 공통 기반 언어**입니다. 하지만 모든 DB가 SQL을 주된 방식으로 쓰는 것은 아닙니다. LiteDB나 MongoDB 같은 문서형 DB는 보통 C# **API** (Application Programming Interface, 응용 프로그래밍 인터페이스) 또는 제품별 문서 질의 방식을 사용합니다. 또 관계형 DB끼리도 `SELECT`, `INSERT`, `UPDATE`, `DELETE` 같은 기본 문법은 비슷하지만, 자료형·날짜 함수·자동 번호·고급 기능에는 제품별 차이(방언)가 있습니다.
 
 ```text
 학생이 SQL 문장을 작성
@@ -55,7 +55,7 @@ SQL이 실행된다고 해서 C# 코드가 없어지는 것은 아닙니다. C#�
 ## 2. DB Browser for SQLite 다운로드와 설치 (Windows)
 
 1. 브라우저에서 [DB Browser for SQLite 공식 다운로드](https://sqlitebrowser.org/dl/) 페이지를 엽니다.
-2. Windows 항목에서 자신의 PC에 맞는 `Standard installer`를 고릅니다. 대부분의 PC는 `win64`입니다. ARM PC는 ARM64 설치 파일을 고릅니다.
+2. Windows 항목에서 자신의 PC에 맞는 `Standard installer`를 고릅니다. 대부분의 PC는 `win64`입니다. ARM (Advanced RISC Machine, RISC는 Reduced Instruction Set Computer의 약자) 기반 PC는 ARM64 설치 파일을 고릅니다.
 3. 내려받은 `.msi` 파일을 두 번 클릭합니다.
 4. 설치 화면에서 기본 설치 위치를 유지하고 `Install`을 누릅니다.
 5. 설치가 끝나면 시작 메뉴에서 `DB Browser for SQLite`를 실행합니다.

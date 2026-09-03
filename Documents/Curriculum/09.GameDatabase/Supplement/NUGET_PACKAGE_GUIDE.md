@@ -119,7 +119,7 @@ dotnet restore
 4. `찾아보기(Browse)` 탭을 엽니다.
 5. 검색창에 `Microsoft.Data.Sqlite` 또는 `LiteDB`를 입력합니다.
 6. 패키지 이름, 설명, 소유자 정보를 확인합니다.
-   - `Microsoft.Data.Sqlite`: Microsoft가 제공하는 SQLite용 ADO.NET 라이브러리
+   - `Microsoft.Data.Sqlite`: Microsoft가 제공하는 SQLite용 ADO.NET (ActiveX Data Objects .NET, .NET 데이터 접근 기술) 라이브러리
    - `LiteDB`: .NET용 임베디드 문서 데이터베이스 라이브러리
 7. `버전(Version)`에서 수업에 지정된 안정 버전을 고릅니다. 별도 지시가 없으면 시험판(Prerelease)은 선택하지 않습니다.
 8. `설치(Install)`를 누르고, 라이선스 확인 창이 나오면 내용을 읽고 승인합니다.
@@ -176,7 +176,7 @@ using LiteDB;
 
 | 증상 | 먼저 확인할 것 | 해결 방향 |
 | :--- | :--- | :--- |
-| `dotnet`을 찾을 수 없음 | .NET SDK 설치 여부 | Visual Studio Installer 또는 .NET SDK 설치 상태를 강사와 확인 |
+| `dotnet`을 찾을 수 없음 | .NET SDK (Software Development Kit, 소프트웨어 개발 도구 모음) 설치 여부 | Visual Studio Installer 또는 .NET SDK 설치 상태를 강사와 확인 |
 | `프로젝트를 찾을 수 없음` | 현재 폴더와 `.csproj` 파일 | `cd`로 프로젝트 폴더 이동 후 다시 실행 |
 | 패키지 다운로드 실패 | 인터넷, 학교 방화벽, NuGet 접근 | 오류 메시지를 캡처해 강사에게 알림 |
 | `using LiteDB`에 빨간 줄 | 패키지 설치 대상 프로젝트 | 현재 프로젝트의 Dependencies와 빌드 결과 확인 |

@@ -55,7 +55,7 @@ DO UPDATE SET Quantity = Quantity + 1;
 | `DO UPDATE` | 중복 오류를 내는 대신 기존 행을 수정합니다. |
 | `SET Quantity = Quantity + 1` | 기존 수량에 1을 더합니다. |
 
-이 동작을 **UPSERT**라고도 부릅니다. `UPDATE`와 `INSERT`를 상황에 맞춰 한 번에 처리한다는 뜻입니다. 다만 `ON CONFLICT`의 세부 문법은 DBMS마다 다를 수 있으므로, 여기서는 SQLite 문법으로 학습합니다.
+이 동작을 **UPSERT** (Update + Insert)라고도 부릅니다. `UPDATE`와 `INSERT`를 상황에 맞춰 한 번에 처리한다는 뜻입니다. 다만 `ON CONFLICT`의 세부 문법은 DBMS마다 다를 수 있으므로, 여기서는 SQLite 문법으로 학습합니다.
 
 ## 3. 실습 예제: 포션 구매
 
