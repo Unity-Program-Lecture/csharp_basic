@@ -38,7 +38,50 @@
 5. `EffectInput`에는 DAY 11·13의 PlayerInput과 Controller를 두고, Camera·Effect Prefab·Visual Effect 참조와 Action Map을 각각 연결합니다.
 6. Play Mode에서 Shader 표현, Particle System, VFX Graph, 입력 사건을 하나씩 확인한 뒤 마지막에 함께 실행합니다. 문제가 나면 모든 값을 동시에 바꾸지 말고 해당 영역의 Inspector 연결부터 다시 확인합니다.
 
-## 4. 발표 구성
+## 4. Shader Graph 포트폴리오 표현 완성하기
+
+DAY 14에서는 새 Graph를 무작정 많이 만들지 않습니다. DAY 05의 표면 표현, DAY 06의 정점·UV 애니메이션, DAY 08의 비실사 표현 중 하나를 골라 장면의 역할에 맞게 완성합니다. 원본 Graph는 보존하고, 포트폴리오용 복제본에서만 값을 바꿉니다.
+
+| 장면 주제 | 시작 Graph 예시 | 포트폴리오에서 보강할 연결 | 전달할 게임 상태 |
+| :--- | :--- | :--- | :--- |
+| 마법 훈련장 | `SG_Shield` 또는 `SG_ToonRim` | Fresnel × 색 × Emission | 보호·선택·피격 대상을 눈에 띄게 합니다. |
+| 용암 던전 | `SG_Lava` | Noise·Time·Lerp·Emission | 위험 지역의 열기와 흐름을 보여 줍니다. |
+| SF 실험실 | `SG_ToonBand` 또는 `SG_OutlineShell` | Dot Product·Step 또는 Vertex Position Offset | 중요한 장치·캐릭터의 실루엣을 강조합니다. |
+
+### Material과 Graph를 안전하게 분리하기
+
+1. 사용할 Graph Asset을 복제해 `SG_Portfolio_주제`처럼 이름을 바꿉니다. DAY 05~08의 원본은 비교 자료로 남깁니다.
+2. 복제 Graph를 열고 Blackboard에서 포트폴리오용 Property를 확인합니다. Color, Float, Texture2D 중 현재 장면에서 실제로 조절할 값만 `Exposed`로 둡니다.
+3. 저장 후 `Mat_Portfolio_주제` Material을 새로 만듭니다. 기존 Day Material을 직접 바꾸면 이전 실습 장면까지 함께 달라질 수 있습니다.
+4. Material의 Shader가 복제한 Graph인지 확인한 뒤, 대상 Mesh Renderer의 정확한 Material 슬롯에 연결합니다.
+5. Inspector에서 Property를 하나씩 바꾸고, Graph의 어느 연결이 그 값을 받는지 역방향으로 따라갑니다.
+
+### Graph를 읽고 하나씩 완성하기
+
+Graph는 Master Stack의 최종 출력에서 시작해 거꾸로 읽습니다. 아래 세 가지 중 장면에 필요한 한 가지 이상을 완성합니다.
+
+| 최종 출력 | 연결 예시 | 확인할 결과 |
+| :--- | :--- | :--- |
+| Fragment `Base Color` | `Lerp(어두운 색, 밝은 색, Step 또는 Noise)` | 표면 색 구역 또는 무늬가 바뀝니다. |
+| Fragment `Emission` | `Fresnel 또는 Noise × Color × Intensity` | 빛나는 가장자리·균열·에너지 부분이 보입니다. |
+| Vertex `Position` | `Position (Object) + Normal (Object) × Offset` | Mesh 실루엣 또는 Outline Shell 위치가 바뀝니다. |
+
+1. `Base Color` 또는 `Emission`을 쓸 때는 먼저 원본 색 하나만 연결해 Material·Mesh Renderer 연결이 맞는지 확인합니다.
+2. 다음으로 Time, Noise, Fresnel, Step 중 필요한 계산 노드를 하나만 추가하고 Preview와 Game View의 변화를 확인합니다.
+3. 마지막에 Blackboard Property를 연결해 Material Inspector에서 속도·세기·색을 조절합니다.
+4. Vertex Position을 쓸 때는 `Position`과 Offset의 Space가 모두 Object인지 확인합니다. World Space Offset을 그대로 더지 않습니다.
+
+### 포트폴리오 Shader Graph 확인표
+
+| 확인 항목 | 기록할 내용 | 기대 결과 |
+| :--- | :--- | :--- |
+| 대상 | Graph Asset, Material, 적용한 GameObject | 어느 오브젝트에 어떤 Graph가 쓰였는지 재현할 수 있습니다. |
+| 입력 | Exposed Property 이름·시작값 | Material Inspector에서 같은 값을 찾을 수 있습니다. |
+| 연결 | 최종 출력까지의 핵심 노드 3개 이상 | 값이 어떤 순서로 바뀌는지 설명할 수 있습니다. |
+| 결과 | Base Color, Emission, Vertex Position 중 사용한 출력 | 색·빛·실루엣 중 무엇이 달라지는지 분명합니다. |
+| Play Mode | Camera 거리에서의 관찰 결과 | 게임 중에도 대상과 효과가 구분됩니다. |
+
+## 5. 발표 구성
 
 1. 어떤 화면 스타일을 목표로 했는지 설명합니다.
 2. Shader Graph에서 사용한 주요 노드를 설명합니다.
@@ -47,7 +90,7 @@
 5. 성능을 위해 어떤 값을 조절할 수 있는지 설명합니다.
 6. 이펙트의 위치, 방향, 크기, 지속 시간이 게임 공간과 플레이 규칙에 맞는 이유를 설명합니다.
 
-## 5. 최종 통합 테스트
+## 6. 최종 통합 테스트
 
 최종 씬에서는 이펙트가 "보인다"만 확인하지 말고, 게임 규칙과 함께 확인합니다.
 
