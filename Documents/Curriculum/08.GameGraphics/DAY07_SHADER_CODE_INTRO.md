@@ -156,6 +156,32 @@ Shader "GameGraphics/Day07 Unlit Color"
 }
 ```
 
+### 여러 `Pass`가 있으면 무엇이 실행되나요?
+
+하나의 Shader에는 `Pass`를 여러 개 작성할 수 있습니다. 하지만 위에서 아래로 모든 Pass가 자동 실행되지는 않습니다. Unity가 현재 렌더 파이프라인과 호환되는 `SubShader`를 고른 뒤, **URP가 현재 렌더링 목적에 필요한 `LightMode` 태그의 Pass를 찾아 호출**합니다.
+
+```hlsl
+Pass
+{
+    Name "ForwardUnlit"
+    Tags { "LightMode" = "UniversalForward" }
+}
+```
+
+이 예제의 `UniversalForward` Pass는 URP가 Camera에 오브젝트 표면을 일반적으로 그리는 포워드 렌더링 단계에서 호출합니다. `Name`은 사람이 식별하거나 코드에서 Pass를 찾을 때 쓰는 이름이고, 일반적인 URP Pass 선택의 핵심은 `LightMode`입니다.
+
+| `LightMode` | URP가 이 Pass를 호출하는 대표 상황 |
+| :--- | :--- |
+| `UniversalForward` | Camera에 일반 표면을 그릴 때 |
+| `ShadowCaster` | Light의 그림자맵을 만들 때 |
+| `DepthOnly` | Camera 기준 깊이 정보만 필요할 때 |
+| `DepthNormals` | 깊이와 법선 정보가 필요할 때 |
+| `UniversalGBuffer` | 디퍼드 렌더링에서 GBuffer를 채울 때 |
+| `Meta` | Editor에서 라이트맵을 베이크할 때 |
+| `SRPDefaultUnlit` | 윤곽선처럼 추가로 한 번 더 그릴 때 |
+
+예를 들어 Scene의 Light가 그림자를 만들지 않으면 `ShadowCaster` Pass는 호출되지 않습니다. 또한 Renderer Feature는 특정 `LightMode` 이름을 골라 별도의 렌더링 시점에 그 Pass만 호출할 수 있습니다.
+
 ## 4. 구조체와 함수: 누가 값을 채우나요?
 
 ### `Attributes`: GPU가 채우는 입력 상자
