@@ -26,7 +26,7 @@ Color Grading은 Shader Graph가 아니라 DAY 03에서 배운 Volume 기능입�
 1. `GraphicsLab` 씬을 열고, 결과를 분리하려면 `File > Save As`로 `Day08_NonPhotoreal` 씬으로 저장합니다.
 2. Hierarchy에서 `GameObject > 3D Object > Capsule`을 만들고 `ToonCharacter`로 이름을 바꿉니다.
 3. Project 창에 `GameGraphics/Day08/Graphs`, `GameGraphics/Day08/Materials` 폴더를 만듭니다.
-4. Capsule을 선택하고 `Mesh Renderer`가 있는지 확인합니다. 이후 만든 Material은 모두 `Mesh Renderer > Materials > Element 0`에 연결합니다.
+4. Capsule을 선택하고 `Mesh Renderer`가 있는지 확인합니다. 원본 `ToonCharacter`의 `Materials > Element 0`에는 먼저 `Mat_ToonBand`, 다음에는 `Mat_ToonRim`을 연결합니다. Outline Shell과 전체 화면 Outline Material의 연결 위치는 각각 4절과 5절에서 따로 안내합니다.
 5. Scene View 또는 Main Camera를 Capsule의 정면이 아니라 약간 옆에서 보이도록 둡니다. Rim Light와 Outline은 옆면이 보여야 확인하기 쉽습니다.
 
 > 이 문서는 정점이 고정된 Capsule을 기준으로 합니다. 애니메이션이 있는 Skinned Mesh의 Outline Shell은 본 애니메이션 동기화가 추가로 필요하므로, 먼저 Capsule에서 원리를 확인합니다.
@@ -104,14 +104,16 @@ Rim Light는 카메라를 정면으로 향한 면보다 옆으로 보이는 면�
 2. `RimPower`를 Fresnel Effect의 Power에 연결합니다.
 3. `RimColor`와 Fresnel 출력값을 `Multiply`로 곱합니다.
 4. 그 결과와 `RimIntensity`를 다시 `Multiply`로 곱합니다.
-5. 최종 결과를 Master Stack Fragment의 `Emission`에 연결합니다.
+5. `Add` 노드를 만들고, 기존 Toon Band의 최종 색과 Rim Light의 최종 결과를 더합니다.
+6. `Add`의 출력을 Master Stack Fragment의 `Base Color`에 연결합니다. `SG_ToonRim`은 Unlit Graph이므로 `Emission` 블록을 사용하지 않습니다.
 
 ```text
 RimPower ──> Fresnel Effect ──┐
-RimColor ─────────────────── Multiply ── Multiply(RimIntensity) ──> Emission
+RimColor ─────────────────── Multiply ── Multiply(RimIntensity) ──┐
+Toon Band 최종 색 ─────────────────────────────────────────────────── Add ──> Base Color
 ```
 
-`Fresnel Effect`는 법선과 카메라 방향의 차이를 이용해 가장자리에서 큰 값을 만듭니다. `Emission`에 연결하면 Scene Light의 방향이 바뀌어도 가독성용 Rim Light를 유지하기 쉽습니다.
+`Fresnel Effect`는 법선과 카메라 방향의 차이를 이용해 가장자리에서 큰 값을 만듭니다. Unlit Graph에서는 직접 계산한 Toon Band 색에 이 값을 더해 `Base Color`로 보내므로, Rim Light가 Scene Light에 의해 다시 계산되지 않습니다.
 
 | 바꿀 값 | 예상 결과 |
 | :--- | :--- |
@@ -119,7 +121,7 @@ RimColor ─────────────────── Multiply ─�
 | `RimIntensity`를 `0` → `3` | 값이 커질수록 테두리 빛이 밝아집니다. |
 | Camera를 옆으로 이동 | Rim Light가 보이는 가장자리 위치도 바뀝니다. |
 
-Rim Light가 전혀 보이지 않으면 Material이 `Mat_ToonRim`인지, Fresnel 결과가 Emission에 연결됐는지, `RimIntensity`가 0이 아닌지 순서로 확인합니다.
+Rim Light가 전혀 보이지 않으면 Material이 `Mat_ToonRim`인지, Rim 결과와 Toon Band 색이 `Add`를 거쳐 `Base Color`에 연결됐는지, `RimIntensity`가 0이 아닌지 순서로 확인합니다.
 
 ## 4. Outline Shell (Inverted Hull): 바깥쪽으로 확장한 뒷면만 그리기
 
@@ -248,17 +250,45 @@ Outline Shell은 지정한 Mesh를 한 번 더 그립니다. 반면 전체 화�
 
 이 실습의 핵심은 현재 픽셀의 왼쪽·오른쪽, 위·아래 값이 얼마나 다른지 비교하는 것입니다. 두 면의 방향이 다르면 Normal 차이가 커지고, 서로 멀리 떨어지면 Depth 차이가 커집니다. 둘 중 하나라도 큰 자리를 외곽선으로 표시합니다.
 
-1. `Screen Position` 노드를 만들고 Mode를 `Default`로 둡니다. `Split`의 `R`, `G`를 화면 UV로 사용합니다.
-2. `Screen` 노드의 `Width`, `Height`를 각각 `Reciprocal`로 바꾼 뒤 `Combine`합니다. 이것이 화면에서 한 픽셀만 이동하는 `TexelStep`입니다.
-3. `TexelStep`에 `OutlineWidthPixels`를 `Multiply`합니다. 결과를 `Offset`이라고 부릅니다.
-4. UV에 `Vector2(Offset.x, 0)`, `Vector2(-Offset.x, 0)`, `Vector2(0, Offset.y)`, `Vector2(0, -Offset.y)`를 각각 `Add`해 Right·Left·Up·Down UV를 만듭니다.
-5. `URP Sample Buffer` 노드를 네 개 만들고 Source Buffer를 모두 `NormalWorldSpace`로 설정합니다. 각 노드의 UV에 Right·Left·Up·Down UV를 연결합니다.
-6. `Subtract(RightNormal, LeftNormal)`과 `Subtract(UpNormal, DownNormal)`을 만들고, 각각 `Length`를 구합니다. 두 값을 `Add`하면 `NormalDifference`입니다.
-7. `Step(NormalThreshold, NormalDifference)`를 만들어 `NormalEdge`를 구합니다.
-8. `Scene Depth` 노드를 네 개 만들고 각 노드의 `Eye` 출력을 사용합니다. 각 UV에는 앞에서 만든 Right·Left·Up·Down UV를 연결합니다.
-9. `Abs(Subtract(RightDepth, LeftDepth))`와 `Abs(Subtract(UpDepth, DownDepth))`를 만들고 `Add`합니다. 이것이 `DepthDifference`입니다.
-10. `Step(DepthThreshold, DepthDifference)`를 만들어 `DepthEdge`를 구합니다.
-11. `Maximum(NormalEdge, DepthEdge)`를 만들어 `Edge`를 구합니다. `Edge`는 둘 중 하나가 경계면 `1`, 나머지는 `0`에 가까운 값입니다.
+### 먼저 새 노드의 역할 익히기
+
+아래 노드는 모두 "현재 픽셀과 이웃 픽셀을 비교"하기 위한 도구입니다. 처음에는 이름을 외우지 말고, **화면 좌표를 만든다 → 값을 읽는다 → 차이를 재서 판정한다** 순서만 기억합니다.
+
+| 노드 | 이 실습에서 하는 일 | 핵심 출력 또는 설정 |
+| :--- | :--- | :--- |
+| `Screen Position` | 지금 그리고 있는 픽셀의 화면 위치를 가져옵니다. | Mode는 `Default`, `Split`한 `R`, `G`가 화면 UV입니다. |
+| `Screen` | 화면의 가로·세로 픽셀 수를 가져옵니다. | `Width`, `Height` |
+| `Reciprocal` | `1 / 값`을 계산합니다. | `1 / Width`, `1 / Height`는 화면에서 한 픽셀 이동할 UV 거리입니다. |
+| `Combine` | Float 두 개를 Vector2로 묶습니다. | X와 Y 이동량을 하나의 UV Offset으로 만듭니다. |
+| `URP Sample Buffer` | URP가 미리 준비한 화면 버퍼의 값을 읽습니다. | `NormalWorldSpace`는 표면 방향, `BlitSource`는 원래 화면 색입니다. |
+| `Scene Depth` | 지정한 화면 UV에 있는 물체의 깊이를 읽습니다. | Sampling Mode를 `Eye`로 설정하고 `Out`을 사용합니다. 카메라에서 멀수록 값이 커집니다. |
+| `Subtract` + `Length` | 두 법선 Vector의 차이가 얼마나 큰지 계산합니다. | 방향이 다를수록 `Length`가 커집니다. |
+| `Subtract` + `Abs` | 두 깊이 Float의 거리 차이를 양수로 만듭니다. | 앞뒤 물체의 깊이가 다를수록 값이 커집니다. |
+| `Step` | 차이가 기준값 이상인지 0 또는 1로 판정합니다. | Edge에는 Threshold, In에는 Difference를 연결합니다. |
+| `Maximum` | Normal 판정과 Depth 판정 중 하나라도 1이면 1을 만듭니다. | 두 판정을 합치는 "또는" 역할입니다. |
+
+예를 들어 화면 폭이 1920이라면 `1 / Width`는 약 `0.00052`입니다. 이 작은 값을 현재 UV의 X에 더하면 바로 오른쪽 픽셀을 읽을 수 있습니다.
+
+### 1단계: 이웃 픽셀 위치 만들기
+
+1. `Screen Position` 노드를 만들고 Mode를 `Default`로 둡니다. `Split`의 `R`, `G`를 `UV`라고 부릅니다.
+2. `Screen` 노드의 `Width`, `Height`를 각각 `Reciprocal`에 연결합니다. 두 결과를 `Combine`해 `TexelStep`을 만듭니다. 이것이 화면에서 정확히 한 픽셀만 이동하는 UV 거리입니다.
+3. `TexelStep`에 `OutlineWidthPixels`를 `Multiply`합니다. 결과를 `Offset`이라고 부릅니다. `OutlineWidthPixels = 2`면 두 픽셀 떨어진 곳을 읽습니다.
+4. `Offset`을 `Split`합니다. `Combine` 네 개로 `(Offset.x, 0)`, `(-Offset.x, 0)`, `(0, Offset.y)`, `(0, -Offset.y)`를 만듭니다. 각각을 원래 `UV`에 `Add`해 `RightUV`, `LeftUV`, `UpUV`, `DownUV`를 만듭니다.
+
+### 2단계: Normal 차이로 모서리 찾기
+
+1. `URP Sample Buffer` 노드를 네 개 만들고 Source Buffer를 모두 `NormalWorldSpace`로 설정합니다. 각 노드의 UV에 `RightUV`, `LeftUV`, `UpUV`, `DownUV`를 연결합니다.
+2. `Subtract(RightNormal, LeftNormal)`과 `Subtract(UpNormal, DownNormal)`을 만들고, 각각의 출력에 `Length`를 연결합니다.
+3. 두 `Length` 값을 `Add`해 `NormalDifference`를 만듭니다.
+4. `Step(NormalThreshold, NormalDifference)`를 만들어 `NormalEdge`를 구합니다. 우선 이 값만 `Lerp`의 T에 연결해 선이 나오는지 확인해도 됩니다.
+
+### 3단계: Depth 차이로 물체 경계 찾기
+
+1. `Scene Depth` 노드를 네 개 만들고 각각의 Sampling Mode를 `Eye`로 설정합니다. 각 노드의 UV 입력에 `RightUV`, `LeftUV`, `UpUV`, `DownUV`를 연결하고, `Out`으로 네 방향의 깊이를 읽습니다.
+2. `Abs(Subtract(RightDepth, LeftDepth))`와 `Abs(Subtract(UpDepth, DownDepth))`를 만들고 `Add`합니다. 이것이 `DepthDifference`입니다.
+3. `Step(DepthThreshold, DepthDifference)`를 만들어 `DepthEdge`를 구합니다.
+4. `Maximum(NormalEdge, DepthEdge)`를 만들어 `Edge`를 구합니다. 둘 중 하나가 경계면 `1`, 나머지는 `0`입니다.
 
 ```text
 Right Normal ─ Left Normal ─ Length ─┐
@@ -327,7 +357,7 @@ float3 positionOS = input.positionOS.xyz + outlineOffset;
 output.positionCS = TransformObjectToHClip(positionOS);
 ```
 
-Graph의 Vertex Position은 Object Space 위치를 받습니다. HLSL의 `input.positionOS`와 `output.positionCS` 사이에 Offset 계산을 넣은 것과 같습니다. Rim Light의 Fresnel과 Toon Band의 Dot Product도 결국 Fragment 단계에서 최종 색·Emission으로 가는 값을 만드는 Graph 연결입니다.
+Graph의 Vertex Position은 Object Space 위치를 받습니다. HLSL의 `input.positionOS`와 `output.positionCS` 사이에 Offset 계산을 넣은 것과 같습니다. Rim Light의 Fresnel과 Toon Band의 Dot Product도 결국 Fragment 단계에서 최종 `Base Color`로 가는 값을 만드는 Graph 연결입니다.
 
 ## 9. 심화 미니 실습: 실제 게임 스타일을 축소 재현하기
 
@@ -393,7 +423,7 @@ Capsule·Cube·Plane의 경계가 한 번에 표시되는지 확인합니다. `N
 ## 오늘의 정리
 
 - Toon Band는 Normal과 고정 Light Direction의 Dot Product를 Step으로 나눠 두 색 중 하나를 고릅니다.
-- Rim Light는 Fresnel 결과를 Emission에 더해 카메라 가장자리 가독성을 높입니다.
+- Rim Light는 Fresnel 결과를 Toon Band 색에 더해 카메라 가장자리 가독성을 높입니다.
 - Outline Shell은 원본과 별도 Mesh를 법선 방향으로 확장하고, 뒷면만 그려 외곽만 남깁니다.
 - Shader Graph의 Vertex Position은 Object Space 위치를 받으므로 Position·Offset의 좌표 공간을 맞춰야 합니다.
 - 심화 미니 실습에서는 세 Graph를 조합해, 게임마다 캐릭터 전용 선·빛 중심 가독성·장면 전체 선 중 무엇을 선택하는지 비교합니다.
