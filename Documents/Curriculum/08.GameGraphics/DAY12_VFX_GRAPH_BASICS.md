@@ -2,6 +2,8 @@
 
 오늘의 목표는 Visual Effect Graph를 "**GPU에서 대량 파티클을 계산하는 이펙트 제작판**"으로 이해하고, 간단한 GPU 파티클 효과를 만드는 것입니다.
 
+> 이 문서의 실습 절차는 Unity 6의 Visual Effect Graph `17.0.x`와 `Simple Particle System` Template을 기준으로 합니다. Template을 다르게 선택하면 처음 보이는 Context와 Block이 달라집니다.
+
 ## NCS 연결
 
 - 능력단위 요소: 이펙트 프로그래밍하기
@@ -23,9 +25,9 @@ Unity 6 공식 문서에 따르면 Visual Effect Graph는 대규모 비주얼 �
 ## 2. 실습: GPU Spark 이펙트
 
 1. Package Manager에서 Visual Effect Graph가 사용 가능한지 확인합니다.
-2. `Create > Visual Effects > Visual Effect Graph`를 선택합니다.
+2. `Create > Visual Effects > Visual Effect Graph`에서 `Simple Particle System` Template을 선택합니다.
 3. `VFX_GpuSpark` 에셋을 만듭니다.
-4. 씬에 Visual Effect 오브젝트를 추가하고 에셋을 연결합니다.
+4. 에셋을 Scene 뷰에 끌어 놓아 Visual Effect 오브젝트를 만듭니다.
 5. Spawn Rate, Velocity, Color, Lifetime을 조절합니다.
 
 ### 패키지와 Graph 편집기 준비
@@ -35,9 +37,11 @@ Unity 6 공식 문서에 따르면 Visual Effect Graph는 대규모 비주얼 �
 1. `Window > Package Manager`를 열고 Packages 목록을 `Unity Registry` 또는 `All`로 바꿉니다.
 2. `Visual Effect Graph`를 선택하고 Install을 누릅니다. 설치가 끝난 뒤 Console Error가 없는지 확인하고, Unity가 재시작을 요청하면 재시작합니다.
 3. Project 창에서 `Assets/GameGraphics` 아래에 `VFX` 폴더가 없다면 먼저 만듭니다.
-4. `Assets/GameGraphics/VFX` 폴더에서 `Create > Visual Effects > Visual Effect Graph`를 선택해 `VFX_GpuSpark`를 만듭니다.
-5. Graph를 더블 클릭해 VFX Graph 창을 열고, 비어 있는 Context 또는 Context의 빈 영역을 우클릭해 필요한 Block을 검색·추가합니다. Block은 반드시 알맞은 Context 안에 넣습니다.
-6. Graph를 저장한 뒤 Asset을 Hierarchy로 끌어 놓습니다. 그러면 Visual Effect 컴포넌트와 Asset 연결을 가진 GameObject가 만들어집니다. 별도로 빈 GameObject를 만들었다면 `Add Component > Visual Effect` 후 Asset을 연결합니다.
+4. `Assets/GameGraphics/VFX` 폴더에서 `Create > Visual Effects > Visual Effect Graph`를 선택합니다.
+5. 열리는 Template 창에서 `Simple Particle System`을 선택하고, 이름을 `VFX_GpuSpark`로 입력한 뒤 Create를 누릅니다. Template을 선택하지 않으면 이후 Graph 모양과 실습 안내가 맞지 않습니다.
+6. `VFX_GpuSpark`를 더블 클릭해 VFX Graph 창을 엽니다. 이 Template이 만든 Context와 Block을 실습의 출발점으로 사용합니다.
+7. Block이 필요한 Context 안에 없으면 **해당 Context 내부**를 우클릭해 `Create Block`을 선택하거나, Context 위에 마우스를 올리고 Space를 누른 뒤 검색해 추가합니다.
+8. Graph를 저장합니다. Scene 배치는 6단계에서 Graph Asset을 Scene 뷰로 끌어 놓는 방법만 사용합니다.
 
 ## 3. Visual Effect Graph 창 사용법
 
@@ -78,18 +82,20 @@ Spawn -> Initialize Particle -> Update Particle -> Output Particle
 
 ### 1단계: Spawn 설정
 
-1. Spawn Context에서 Constant Spawn Rate를 찾습니다.
-2. Rate 값을 `80` 정도로 둡니다.
-3. 너무 많으면 `20`, 더 화려하게 보려면 `200`처럼 바꿔 봅니다.
+1. 맨 위의 `Spawn` Context를 찾습니다. 이 Context는 입자가 몇 개 생길지를 정하는 큰 상자입니다.
+2. Context 안에서 `Rate` 입력 칸이 있는 Block을 찾습니다. Unity 6 VFX Graph 17에서는 Block 검색에 `Constant Rate`를 입력해 추가할 수 있습니다. 일부 화면에서는 `Constant Spawn Rate`로 표시될 수 있습니다.
+3. `Rate` 오른쪽 숫자 칸을 클릭하고 `80`을 입력한 뒤 Enter를 누릅니다.
+4. `Rate` Block이 없다면 Spawn Context의 검은 빈 공간을 우클릭해 `Create Block`을 선택하고 `Constant Rate`를 검색해 추가합니다. Graph 전체의 빈 공간이 아니라 **Spawn Context 내부**를 클릭해야 합니다.
+5. 숫자 `80`을 기준 결과로 둡니다. 결과 확인 뒤 너무 적으면 `20`, 더 화려하게 비교하려면 `200`으로 한 번에 하나씩 바꿔 봅니다.
 
 ### 실습 결과를 고정하는 기본값
 
-아래 값은 모두가 같은 결과를 비교하기 위한 출발점입니다. 먼저 이 값을 완성하고, 그 다음 한 번에 한 값만 바꿔 봅니다.
+아래 값은 `Simple Particle System` Template에서 만들 최종 상태입니다. Block이 이미 있으면 값을 바꾸고, 없으면 **해당 Context 안에서만** `Create Block`으로 추가합니다. 처음 Graph에 무엇이 들어 있는지를 외워서 찾지 말고, 표의 Context·검색어·값 순서로 확인합니다.
 
 | 위치 | 설정 | 값 |
 | :--- | :--- | :--- |
 | Initialize Particle Context Inspector | Capacity | `128` |
-| Spawn | Constant Spawn Rate > Rate | `80` |
+| Spawn | `Constant Rate` 검색 후 Rate | `80` |
 | Initialize | Set Lifetime Random (Uniform) | `0.4 ~ 1.2` |
 | Initialize | Set Position (Shape : Sphere) > Radius | `0.1` |
 | Initialize | Set Velocity Random (Per Component) > A | `(-1, 2, -1)` |
@@ -104,7 +110,7 @@ Spawn -> Initialize Particle -> Update Particle -> Output Particle
 
 ### 2단계: Initialize 설정
 
-Initialize Particle Context에 다음 Block을 추가합니다.
+Initialize Particle Context에서 다음 Block을 확인합니다. 이미 있다면 값을 바꾸고, 없다면 Initialize Particle Context 내부에서 Block 이름을 검색해 추가합니다.
 
 | Block | 실제 설정 | 결과 |
 | :--- | :--- | :--- |
@@ -115,7 +121,7 @@ Initialize Particle Context에 다음 Block을 추가합니다.
 
 ### 3단계: Update 설정
 
-Update Particle Context에는 살아 있는 동안의 변화를 넣습니다.
+Update Particle Context에서 다음 Block을 확인합니다. 이미 있다면 값을 바꾸고, 없다면 Update Particle Context 내부에서 Block 이름을 검색해 추가합니다.
 
 | Block | 사용 이유 |
 | :--- | :--- |
@@ -127,7 +133,7 @@ Update Particle Context에는 살아 있는 동안의 변화를 넣습니다.
 
 ### 4단계: Output 설정
 
-Output Particle Context에서 다음을 확인합니다.
+Output Particle Quad Context에서 다음을 확인합니다. `Output Particle Quad`가 없다면 이 실습의 Template 선택부터 다시 확인합니다.
 
 - Output 타입이 `Output Particle Quad`인지 확인합니다.
 - Output Particle Quad Inspector의 Blend Mode를 `Additive`로 설정합니다.
@@ -136,12 +142,10 @@ Output Particle Context에서 다음을 확인합니다.
 
 ## 6. 씬에 배치하고 재생 확인하기
 
-1. Hierarchy에서 `Create Empty`로 `VFX_GpuSpark_Player`를 만듭니다.
-2. `Visual Effect` 컴포넌트를 추가합니다.
-3. Asset Template 또는 Asset 슬롯에 `VFX_GpuSpark`를 연결합니다.
-4. Transform Position을 `(0, 1, 0)`으로 둡니다. Main Camera가 이 위치를 보도록 Scene 뷰에서 구도를 잡은 뒤 `Ctrl + Shift + F`로 카메라를 현재 뷰에 정렬합니다.
-5. Play 모드에서 다음 결과가 보이는지 확인합니다: **작은 주황색 입자가 중심에서 위쪽과 바깥쪽으로 퍼진 뒤, 아래로 떨어지며 투명해져 사라집니다.**
-6. Game 뷰가 이 결과를 보이도록 스크린샷을 1장 남깁니다. 이것이 이 실습의 기본 완료 증거입니다.
+1. Project 창에서 `VFX_GpuSpark` 에셋을 Scene 뷰의 빈 곳으로 끌어 놓습니다. Unity가 카메라 앞에 Visual Effect GameObject를 만들고 에셋을 연결합니다.
+2. Hierarchy에서 방금 생긴 GameObject를 선택하고 이름을 `VFX_GpuSpark_Player`로 바꿉니다.
+3. Play 모드에서 다음 결과가 보이는지 확인합니다: **작은 주황색 입자가 중심에서 위쪽과 바깥쪽으로 퍼진 뒤, 아래로 떨어지며 투명해져 사라집니다.**
+4. Game 뷰가 이 결과를 보이도록 스크린샷을 1장 남깁니다. 이것이 이 실습의 기본 완료 증거입니다.
 
 보이지 않으면 먼저 씬 카메라가 이펙트 위치를 보고 있는지 확인합니다. 그 다음 Bounds, Spawn Rate, Output Color, Visual Effect 컴포넌트의 에셋 연결을 확인합니다.
 
@@ -158,7 +162,7 @@ Output Particle Context에서 다음을 확인합니다.
 
 ## VFX Graph와 Visual Effect Inspector 확인 절차
 
-Graph Area는 왼쪽에서 오른쪽으로 `Spawn > Initialize Particle > Update Particle > Output Particle Quad` 순서가 이어져야 합니다. Spawn에는 Constant Spawn Rate를 두고, Initialize에는 Set Lifetime Random (Uniform), Set Position (Shape : Sphere), Set Velocity Random (Per Component), Set Size Random을 넣습니다. Update에는 Add Force, Drag, Set Color over Life를 넣습니다. Output에는 Output Particle Quad와 Additive Blend Mode를 설정합니다. Context 사이 연결이 끊기면 해당 단계의 입자가 만들어지거나 보이지 않습니다.
+`Simple Particle System` Template을 선택했다면 Graph Area는 `Spawn > Initialize Particle > Update Particle > Output Particle Quad` 순서로 읽습니다. Spawn에는 `Constant Rate`와 Rate `80`을 둡니다. Initialize에는 Set Lifetime Random (Uniform), Set Position (Shape : Sphere), Set Velocity Random (Per Component), Set Size Random을 확인합니다. Update에는 Add Force, Drag, Set Color over Life를 확인합니다. Output에는 Output Particle Quad와 Additive Blend Mode를 설정합니다. Context 사이 연결이 끊기면 해당 단계의 입자가 만들어지거나 보이지 않습니다.
 
 VFX Graph Asset을 씬으로 끌어 놓아 만든 GameObject를 선택하면 `Visual Effect` 컴포넌트가 보입니다. Inspector의 Visual Effect Asset 필드에 만든 Graph가 연결돼 있는지, Pause·Play 상태가 의도한지, 노출한 프로퍼티가 있다면 값이 표시되는지 확인합니다. 에셋을 바꾼 뒤 결과가 갱신되지 않으면 Graph 저장, Asset 필드, Console Error 순서로 확인합니다.
 
