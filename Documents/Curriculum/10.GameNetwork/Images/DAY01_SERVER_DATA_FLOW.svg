@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="580" viewBox="0 0 1200 580" role="img" aria-labelledby="title desc">
+  <title id="title">코인 수집 게임의 서버 데이터 흐름</title>
+  <desc id="desc">두 클라이언트가 게임 서버에 요청을 보내고, 게임 서버가 데이터베이스에 저장한 뒤 모든 클라이언트에 결과를 알리는 구조</desc>
+  <defs>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#15803d"/>
+    </marker>
+    <style>
+      .box { stroke-width: 3; rx: 18; }
+      .heading { font-family: Arial, 'Malgun Gothic', sans-serif; font-size: 24px; font-weight: 700; fill: #172554; }
+      .label { font-family: Arial, 'Malgun Gothic', sans-serif; font-size: 19px; fill: #172554; }
+      .small { font-family: Arial, 'Malgun Gothic', sans-serif; font-size: 16px; fill: #334155; }
+      .request { font-family: Arial, 'Malgun Gothic', sans-serif; font-size: 15px; font-weight: 700; fill: #1d4ed8; }
+      .result { font-family: Arial, 'Malgun Gothic', sans-serif; font-size: 15px; font-weight: 700; fill: #166534; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="580" fill="#f8fafc"/>
+  <text x="600" y="48" text-anchor="middle" class="heading">2인 코인 수집 게임: 요청과 판정의 흐름</text>
+
+  <rect class="box" x="55" y="126" width="220" height="126" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="165" y="174" text-anchor="middle" class="heading">Player A</text>
+  <text x="165" y="207" text-anchor="middle" class="label">Client</text>
+  <text x="165" y="232" text-anchor="middle" class="small">입력과 화면 표시</text>
+
+  <rect class="box" x="55" y="332" width="220" height="126" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="165" y="380" text-anchor="middle" class="heading">Player B</text>
+  <text x="165" y="413" text-anchor="middle" class="label">Client</text>
+  <text x="165" y="438" text-anchor="middle" class="small">입력과 화면 표시</text>
+
+  <rect class="box" x="440" y="184" width="315" height="205" fill="#dcfce7" stroke="#15803d"/>
+  <text x="597" y="232" text-anchor="middle" class="heading">Game Server</text>
+  <text x="597" y="270" text-anchor="middle" class="label">거리·중복·규칙 검사</text>
+  <text x="597" y="304" text-anchor="middle" class="label">점수와 코인 상태 판정</text>
+  <text x="597" y="345" text-anchor="middle" class="small">공유 결과를 모든 Client에 전파</text>
+
+  <rect class="box" x="915" y="221" width="215" height="126" fill="#fef3c7" stroke="#b45309"/>
+  <text x="1022" y="269" text-anchor="middle" class="heading">Database</text>
+  <text x="1022" y="302" text-anchor="middle" class="label">점수 저장</text>
+  <text x="1022" y="327" text-anchor="middle" class="small">운영 기록 보관</text>
+
+  <path d="M275,173 C335,173 370,210 440,235" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="321" y="165" text-anchor="middle" class="request">CollectCoinRequest</text>
+  <path d="M275,395 C340,395 370,362 440,337" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="328" y="422" text-anchor="middle" class="request">MoveRequest</text>
+
+  <path d="M755,251 C815,251 852,259 915,272" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="836" y="239" text-anchor="middle" class="request">SaveScore</text>
+
+  <path d="M440,282 C367,275 337,247 275,232" fill="none" stroke="#15803d" stroke-width="4" marker-end="url(#arrowGreen)"/>
+  <text x="340" y="264" text-anchor="middle" class="result">CoinCollected</text>
+  <path d="M440,323 C367,331 337,357 275,378" fill="none" stroke="#15803d" stroke-width="4" marker-end="url(#arrowGreen)"/>
+  <text x="348" y="358" text-anchor="middle" class="result">PlayerStateChanged</text>
+
+  <rect x="55" y="500" width="1075" height="48" rx="10" fill="#e2e8f0"/>
+  <text x="592" y="530" text-anchor="middle" class="label">파란색은 Client의 요청, 초록색은 Server가 판정한 공유 결과입니다.</text>
+</svg>
