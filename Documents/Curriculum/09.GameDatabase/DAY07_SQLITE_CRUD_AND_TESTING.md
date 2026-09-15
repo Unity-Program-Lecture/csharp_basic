@@ -40,6 +40,12 @@ namespace GameDatabaseLab
             {
                 connection.Open();
 
+                using (SqliteCommand pragma = connection.CreateCommand())
+                {
+                    pragma.CommandText = "PRAGMA foreign_keys = ON;";
+                    pragma.ExecuteNonQuery();
+                }
+
                 using (SqliteCommand command = connection.CreateCommand())
                 {
                     command.CommandText = @"
@@ -60,7 +66,7 @@ VALUES ($itemId, $name, $price);";
 
 </details>
 
-## 3. 실습: 인벤토리 조회
+## 3. 안내형 실습: 인벤토리 조회
 
 **미션:** 플레이어 1번이 가진 아이템 이름과 수량을 출력합니다.
 
@@ -71,19 +77,34 @@ JOIN Item ON Inventory.ItemId = Item.ItemId
 WHERE Inventory.PlayerId = $playerId;
 ```
 
-`JOIN`은 두 표에서 관련 있는 행을 이어 읽는 명령입니다. `Inventory`의 아이템 번호와 `Item`의 아이템 번호가 같을 때 연결됩니다.
+`JOIN`은 두 표에서 관련 있는 행을 이어 읽는 명령입니다. `Inventory`의 아이템 번호와 `Item`의 아이템 번호가 같을 때 연결됩니다. DAY06에서 준비한 Player 1번과 회복 포션 1번을 이용해, 먼저 아래 SQL을 한 번 실행한 뒤 조회합니다.
+
+```sql
+INSERT INTO Inventory (PlayerId, ItemId, Quantity)
+VALUES (1, 1, 1);
+```
 
 ## 4. 테스트 기록하기
 
 | 번호 | 입력 또는 상황 | 기대 결과 | 실제 결과 | 통과 |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | 포션 등록 | Item에 포션 1건 생성 |  |  |
+| 1 | 철 검 등록 | Item에 철 검 1건 생성 |  |  |
 | 2 | 플레이어 1 조회 | 이름과 골드 출력 |  |  |
 | 3 | 없는 ItemId로 Inventory 등록 | 외래 키 오류 또는 등록 거부 |  |  |
 | 4 | 가격 수정 | 수정한 가격으로 조회 |  |  |
 | 5 | 테스트 아이템 삭제 | 조회 결과에서 사라짐 |  |  |
 
-> SQLite에서 외래 키 제약을 사용할 때는 각 연결을 연 뒤 `PRAGMA foreign_keys = ON;`을 실행해야 합니다. DAY08 코드의 연결 설정에서 이를 추가합니다.
+> SQLite에서 외래 키 제약을 사용할 때는 각 연결을 연 뒤 `PRAGMA foreign_keys = ON;`을 실행해야 합니다. 이 DAY의 예제도 연결 직후 그 설정을 적용합니다.
+
+### 완료 확인
+
+- [ ] SQL 값은 문자열을 이어 붙이지 않고 `Parameters`로 전달했다.
+- [ ] Player 1번의 인벤토리 조회 결과를 확인했다.
+- [ ] 존재하지 않는 ItemId의 인벤토리 등록이 거부됨을 기록했다.
+
+## 응용 실습: 가격 범위 검색
+
+최저 가격과 최고 가격을 매개 변수로 받아 그 범위의 아이템을 조회하는 SQL을 작성하세요. 두 값 모두 `Parameters`로 전달해야 합니다.
 
 ## 오늘의 정리
 

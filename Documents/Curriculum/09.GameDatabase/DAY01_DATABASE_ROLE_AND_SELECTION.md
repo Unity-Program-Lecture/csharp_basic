@@ -1,6 +1,6 @@
-# DAY 01: 게임 데이터와 데이터베이스 선택 (3교시)
+# DAY 01: 게임 데이터 선택과 SQLite 첫 실습 (3교시)
 
-오늘은 게임의 정보가 어디에 있어야 하는지 판단하고, 관계형 데이터베이스 (**DB**, Database)와 문서형 DB를 고르는 기준을 익힙니다.
+오늘은 게임의 정보가 어디에 있어야 하는지 판단하고, 관계형 데이터베이스 (**DB**, Database)와 문서형 DB를 고르는 기준을 익힙니다. 이어서 SQLite를 설치하고 `GameShop.db` 파일에 첫 아이템을 직접 저장합니다.
 
 ## NCS (National Competency Standards, 국가직무능력표준) 연결
 
@@ -25,6 +25,7 @@
 - **스키마**: DB에 어떤 표나 문서가 있고 어떤 규칙으로 연결되는지 적은 설계도입니다.
 - **관계형 DB**: 행과 열로 된 표를 관계로 연결하는 DB입니다.
 - **문서형 DB**: **JSON** (JavaScript Object Notation, 자바스크립트 객체 표기법)처럼 한 덩어리의 문서에 관련 정보를 묶어 보관하는 DB입니다.
+- **SQL** (Structured Query Language, 구조화 질의 언어): 관계형 DB에 표를 만들고 데이터를 넣거나 찾도록 요청하는 언어입니다.
 
 ## 2. 무엇을 어디에 저장할까요?
 
@@ -35,7 +36,36 @@
 | 접속 기록, 오류 기록 | 문서형 DB | 기록마다 내용이 조금 달라도 됨 |
 | 화면 해상도, 사운드 설정 | 문서형 DB 또는 로컬 설정 파일 | 한 사용자 설정을 묶어 저장 |
 
-## 3. 실습: RPG (Role-Playing Game, 역할 수행 게임) 상점 기획문에서 데이터 찾기
+## 3. 안내형 실습: SQLite 설치와 첫 아이템 저장
+
+DAY01 전에 [환경 준비](ENVIRONMENT_SETUP_GUIDE.md)의 .NET SDK와 DB Browser 실행 확인을 마쳤다면, 아래 순서로 SQLite 파일을 만듭니다.
+
+1. [DB Browser for SQLite 공식 다운로드](https://sqlitebrowser.org/dl/) 페이지에서 Windows용 `Standard installer`를 내려받아 설치합니다.
+2. 설치 뒤 시작 메뉴에서 `DB Browser for SQLite`를 실행합니다. 실행할 수 없다면 학교 PC의 설치 권한을 강사에게 알립니다.
+3. `File > New Database`를 누르고 실습 폴더에 `GameShop.db`로 저장합니다.
+4. `Create Table`에서 표 이름을 `Item`으로 입력하고 아래 열을 추가합니다. `itemId`에는 `PK`를 체크합니다.
+
+| 열 이름 | 자료형 | 규칙 |
+| :--- | :--- | :--- |
+| `itemId` | INTEGER | Primary Key (각 행을 구별하는 번호) |
+| `name` | TEXT | Not Null (비워 둘 수 없음) |
+| `price` | INTEGER | Not Null |
+
+5. `Write Changes`를 눌러 표를 저장한 뒤, `Execute SQL` 탭에서 아래 SQL을 실행합니다.
+
+```sql
+INSERT INTO Item (itemId, name, price)
+VALUES (1, '회복 포션', 30);
+
+SELECT itemId, name, price
+FROM Item;
+```
+
+6. `Browse Data` 탭에서도 회복 포션 한 건이 보이는지 확인합니다.
+
+> DB Browser for SQLite는 SQLite 파일을 눈으로 확인하는 도구입니다. 학생 프로그램에 DB 엔진을 별도로 설치하는 것은 아닙니다.
+
+## 4. 응용 실습: RPG (Role-Playing Game, 역할 수행 게임) 상점 기획문에서 데이터 찾기
 
 **미션:** 아래 문장에서 저장할 정보에 밑줄을 긋고, 저장 장소를 정합니다.
 
@@ -50,7 +80,18 @@
 1. 플레이어 골드를 ScriptableObject에 저장하면 어떤 문제가 생길까요?
 2. 구매 기록마다 오류 메시지의 항목 수가 다르다면 표와 문서 중 어느 쪽이 편할까요?
 
+### 완료 확인
+
+- [ ] DB Browser for SQLite를 실행하고 `GameShop.db`를 만들었다.
+- [ ] `Item` 표에 회복 포션을 저장하고 `SELECT` 결과를 확인했다.
+- [ ] 기획 원본, 관계형 DB, 문서형 DB에 저장할 정보를 구분했다.
+- [ ] 각 선택의 이유를 데이터 특성과 연결해 설명했다.
+
+## 추가 응용 실습: 친구 목록 저장 위치 고르기
+
+친구 목록, 친구 요청 기록, 접속 오류 기록을 각각 어디에 저장할지 정하고 이유를 한 문장씩 적으세요.
+
 ## 오늘의 정리
 
 - DB 선택은 유행이 아니라 "어떤 데이터를, 어떤 규칙으로, 얼마나 안전하게 다룰 것인가"의 문제입니다.
-- 다음 시간에는 플레이어, 아이템, 인벤토리의 관계를 ERD (Entity Relationship Diagram, 개체 관계 다이어그램)로 그립니다.
+- 다음 시간에는 오늘 만든 `Item` 표를 출발점으로 플레이어, 아이템, 인벤토리의 관계를 ERD (Entity Relationship Diagram, 개체 관계 다이어그램)로 그립니다.

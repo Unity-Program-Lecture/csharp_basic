@@ -23,6 +23,8 @@
 
 제약 조건은 "프로그램이 조심해서 넣을 것"이라고 부탁하는 것이 아니라, DB가 잘못된 데이터를 거부하게 만드는 규칙입니다.
 
+이제 SQL (Structured Query Language, 구조화 질의 언어)로 표와 규칙을 작성합니다. SQL은 DB에 데이터를 만들고, 찾고, 바꾸도록 요청하는 언어입니다.
+
 ```sql
 CREATE TABLE Item (
     itemId INTEGER PRIMARY KEY,
@@ -62,7 +64,7 @@ CREATE TABLE Inventory (
 3. `playerId`는 `Player` 표의 `playerId`를 참조한다고 선언합니다.
 4. `itemId`는 `Item` 표의 `itemId`를 참조한다고 선언합니다.
 
-따라서 Player 표에 1번 플레이어가 없는데 `playerId = 1`인 인벤토리를 등록하면 DB가 거부할 수 있습니다. SQLite에서는 이 규칙을 실제로 검사하려면 연결한 뒤 `PRAGMA foreign_keys = ON;`을 실행해야 하며, 이 내용은 DAY08에서 실습합니다.
+따라서 Player 표에 1번 플레이어가 없는데 `playerId = 1`인 인벤토리를 등록하면 DB가 거부할 수 있습니다. SQLite에서는 이 규칙을 실제로 검사하려면 연결한 뒤 `PRAGMA foreign_keys = ON;`을 실행해야 합니다. `PRAGMA`는 SQLite 연결의 동작 규칙을 설정·확인하는 명령이며, 이 설정은 연결을 새로 열 때마다 다시 적용합니다.
 
 ### `NOT NULL`과 `CHECK`의 차이
 
@@ -92,7 +94,7 @@ VALUES (2, '회복 포션', -30);
 
 `Item` 표에는 아이템의 고정 정보를, `Inventory` 표에는 보유 수량만 둡니다. 이것이 중복을 줄이는 정규화의 출발입니다.
 
-## 4. 실습: 잘못된 표 고치기
+## 4. 안내형 실습: 잘못된 표 고치기
 
 **미션:** 아래 비정규 표를 `Player`, `Item`, `Inventory`, `PurchaseLog`로 나눕니다.
 
@@ -115,6 +117,45 @@ VALUES (2, '회복 포션', -30);
 
 1. 가격을 Inventory에 저장하면 언제 문제가 될까요?
 2. 오류 메시지는 모든 구매에 반드시 있어야 할까요? 문서형 로그가 유리할 수 있는 이유는 무엇일까요?
+
+## 5. 실제 만들기: 잘못된 데이터를 DB가 거절하는지 확인하기
+
+DAY02에서 만든 `GameShop.db`를 열고, 아래 SQL을 **각 블록별로 따로** 실행합니다. 오류 메시지가 보이는 것은 실습 실패가 아니라 제약 조건이 동작했다는 증거입니다.
+
+먼저 없는 ItemId를 인벤토리에 넣어 외래 키 검사를 확인합니다.
+
+```sql
+PRAGMA foreign_keys = ON;
+
+INSERT INTO Inventory (PlayerId, ItemId, Quantity)
+VALUES (1, 999, 1);
+```
+
+다음으로 가격이 음수인 아이템을 거절할 테스트 전용 표를 만듭니다. DAY01의 `Item` 표를 억지로 바꾸지 않고, 제약 조건의 결과만 안전하게 관찰합니다.
+
+```sql
+CREATE TABLE IF NOT EXISTS ItemConstraintTest (
+    ItemId INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Price INTEGER NOT NULL CHECK (Price >= 0)
+);
+
+INSERT INTO ItemConstraintTest (ItemId, Name, Price)
+VALUES (1, '오류 확인용 아이템', -30);
+```
+
+두 번째 `INSERT`가 거절된 뒤 `SELECT * FROM ItemConstraintTest;`를 실행해 행이 추가되지 않았음을 확인합니다.
+
+### 완료 확인
+
+- [ ] 기본 키, 외래 키, `NOT NULL`, `CHECK`가 막는 실수를 각각 말할 수 있다.
+- [ ] 비정규 표를 역할이 다른 표로 나누고 각 표의 키를 표시했다.
+- [ ] SQLite에서 외래 키 검사를 켜려면 연결마다 `PRAGMA foreign_keys = ON;`이 필요함을 설명할 수 있다.
+- [ ] 없는 ItemId와 음수 가격 입력이 각각 거절되는 오류 메시지를 확인했다.
+
+## 응용 실습: 중복 닉네임 규칙 추가
+
+같은 서버 안에서 플레이어 닉네임이 겹치지 않게 하려면 어느 열에 어떤 제약 조건을 추가할지 SQL로 작성하세요. 닉네임 변경 때 생길 수 있는 문제도 한 가지 적으세요.
 
 ## 오늘의 정리
 

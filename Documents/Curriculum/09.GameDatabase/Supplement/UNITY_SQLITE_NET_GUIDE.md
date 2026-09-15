@@ -1,6 +1,6 @@
 # 참고: Unity 6에서 SQLite `GameShop.db` 사용하기
 
-이 문서는 DAY11에서 앞서 만든 SQLite `GameShop.db`를 Unity 6에서 읽는 방법을 설명합니다. `com.gilzoide.sqlite-net`은 SQLite-net과 Unity 플랫폼용 SQLite 라이브러리를 함께 제공하는 UPM 패키지입니다.
+이 문서는 DAY11에서 앞서 만든 SQLite `GameShop.db`를 Unity 6에서 읽는 방법을 설명합니다. `com.gilzoide.sqlite-net`은 SQLite-net과 Unity 플랫폼용 SQLite 라이브러리를 함께 제공하는 UPM (Unity Package Manager, Unity 패키지 관리자) 패키지입니다.
 
 > 이 문서의 코드는 Unity 6이 지원하는 **C# 9.0** 기준입니다.
 

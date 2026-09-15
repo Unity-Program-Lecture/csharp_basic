@@ -64,92 +64,9 @@ NuGetForUnity는 기본적으로 프로젝트 안에 NuGet 패키지 정보를 �
 | DAY11 Unity에서 실제 SQLite 파일 읽기 | Unity + `com.gilzoide.sqlite-net` | UPM으로 설치하며 주요 Unity 플랫폼과 WebGL 지원을 안내함 |
 | Unity에서 LiteDB를 실제로 시험 | Unity + NuGetForUnity + LiteDB | 문서형 DB를 Unity에서 읽는 확장 실습 |
 
-## 6. `GameLogs.db`를 Unity 프로젝트에 준비하기
+## 6. DAY11 LiteDB 확장 실습 실패 확인
 
-1. DAY09에서 만든 `GameLogs.db`를 찾습니다.
-2. Unity 프로젝트의 `Assets/StreamingAssets/` 폴더를 만듭니다. `StreamingAssets`가 없다면 Project 창에서 `Assets`를 선택하고 `Create > Folder`로 만듭니다.
-3. `GameLogs.db`를 `Assets/StreamingAssets/GameLogs.db`로 복사합니다.
-4. Project 창에서 파일이 보이는지 확인합니다.
-
-`StreamingAssets`는 빌드에 원본 파일을 포함하기 위한 폴더입니다. 하지만 실행 중인 플랫폼에서 이 위치가 항상 쓸 수 있는 것은 아닙니다. 따라서 실제 앱에서는 처음 실행할 때 `Application.persistentDataPath`로 파일을 복사해 그 복사본을 읽고 수정합니다.
-
-## 7. Unity에서 LiteDB 파일을 복사하고 읽기
-
-아래 스크립트를 `Assets/Scripts/GameLogReader.cs`로 만들고 빈 GameObject에 붙입니다. `GameLogs.db`에서 첫 로그를 읽어 Unity Console에 출력합니다.
-
-```csharp
-using System.IO;
-using LiteDB;
-using UnityEngine;
-
-public class GameLog
-{
-    public int Id { get; set; }
-    public string EventType { get; set; } = "";
-    public int PlayerId { get; set; }
-    public string Message { get; set; } = "";
-}
-
-public class GameLogReader : MonoBehaviour
-{
-    private void Start()
-    {
-        string sourcePath = Path.Combine(
-            Application.streamingAssetsPath,
-            "GameLogs.db");
-        string savePath = Path.Combine(
-            Application.persistentDataPath,
-            "GameLogs.db");
-
-        if (!File.Exists(savePath))
-        {
-            File.Copy(sourcePath, savePath);
-        }
-
-        using (LiteDatabase database = new LiteDatabase(savePath))
-        {
-            ILiteCollection<GameLog> logs =
-                database.GetCollection<GameLog>("logs");
-            GameLog firstLog = logs.FindOne(x => x.Id > 0);
-
-            if (firstLog != null)
-            {
-                Debug.Log(firstLog.EventType + ": " + firstLog.Message);
-            }
-            else
-            {
-                Debug.Log("읽을 로그가 없습니다.");
-            }
-        }
-    }
-}
-```
-
-### 코드 흐름
-
-1. `StreamingAssets`의 원본 DB 경로와 `persistentDataPath`의 복사본 경로를 만듭니다.
-2. 처음 실행이라 복사본이 없으면 원본을 복사합니다.
-3. 복사본을 `LiteDatabase`로 엽니다.
-4. `logs` 컬렉션에서 로그 한 건을 읽어 `Debug.Log()`로 출력합니다.
-
-> 위 복사 방식은 Windows Editor 학습 실습 기준입니다. Android처럼 `StreamingAssets`를 일반 파일 경로로 직접 읽을 수 없는 플랫폼에서는 `UnityWebRequest` 등의 별도 복사 방법이 필요합니다. 이 과정에서는 해당 플랫폼 배포까지 다루지 않습니다.
-
-## 8. ShopLab UI에 연결하기
-
-DAY11의 `ShopView`에 아래 메서드를 추가하면, 첫 로그의 메시지를 TextMeshPro UI에 표시할 수 있습니다.
-
-```csharp
-[SerializeField] private TMP_Text logText;
-
-public void SetLogMessage(string message)
-{
-    logText.text = message;
-}
-```
-
-`GameLogReader`에서 `ShopView` 참조를 받은 뒤 `SetLogMessage(firstLog.Message)`를 호출하는 것은 다음 작은 확장 실습으로 둡니다. 먼저 Unity Console에 DB 내용이 출력되는지 확인한 뒤 UI 연결로 넘어갑니다.
-
-## 9. 실패했을 때 확인 순서
+`GameLogs.db` 복사, `GameLogReader` 스크립트, 화면 표시 절차는 [DAY11](../DAY11_UNITY_DATA_CONNECTION.md)의 "선택 확장 실습"에서 진행합니다. 이 가이드는 NuGetForUnity 설치와 설치 문제 해결을 위한 참고 자료로 유지합니다.
 
 | 증상 | 먼저 확인할 것 |
 | :--- | :--- |

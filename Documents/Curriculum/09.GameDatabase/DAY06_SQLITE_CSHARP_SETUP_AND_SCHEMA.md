@@ -11,7 +11,7 @@
 
 ## 1. 프로젝트와 패키지 준비
 
-패키지를 처음 설치한다면 [NuGet 패키지 사용 가이드](Supplement/NUGET_PACKAGE_GUIDE.md)를 먼저 읽습니다. 프로젝트 생성부터 패키지 설치까지 **터미널 방식**과 **Visual Studio 방식**이 모두 정리되어 있습니다. 아래 터미널 절차가 낯설다면, 참고 문서의 "Visual Studio에서 콘솔 프로젝트 만들기" 후 "Visual Studio 메뉴에서 패키지 설치하기"를 따라 해도 됩니다.
+패키지를 처음 설치한다면 [NuGet 패키지 사용 가이드](Supplement/NUGET_PACKAGE_GUIDE.md)를 먼저 읽습니다. NuGet은 .NET (닷넷) 프로젝트에 필요한 라이브러리를 내려받아 연결하는 패키지 관리자이며, .NET은 C# 프로그램을 빌드하고 실행하는 개발 플랫폼입니다. 프로젝트 생성부터 패키지 설치까지 **터미널 방식**과 **Visual Studio 방식**이 모두 정리되어 있습니다. 아래 터미널 절차가 낯설다면, 참고 문서의 "Visual Studio에서 콘솔 프로젝트 만들기" 후 "Visual Studio 메뉴에서 패키지 설치하기"를 따라 해도 됩니다.
 
 `SqliteConnection`, `SqliteCommand`, `ExecuteNonQuery()`의 역할이 헷갈리면 [SQLite API 빠른 참조](Supplement/SQLITE_API_REFERENCE.md)를 함께 봅니다.
 
@@ -29,7 +29,7 @@ cd GameDatabaseLab
 dotnet add package Microsoft.Data.Sqlite
 ```
 
-4. 명령이 끝난 뒤 `.csproj` 파일에 `PackageReference`가 생겼는지 확인합니다.
+4. 명령이 끝난 뒤 `.csproj` 파일 (C# 프로젝트의 설정 파일)에 `PackageReference`가 생겼는지 확인합니다.
 5. 패키지 다운로드가 실패하면 인터넷 연결, NuGet 접근 권한, 프로젝트 폴더 쓰기 권한을 확인합니다. 버전 번호는 수업 당일 최신 안정판을 사용합니다.
 
 ## 2. 연결 문자열
@@ -40,7 +40,7 @@ string connectionString = "Data Source=GameShop.db";
 
 `GameShop.db` 파일이 없으면 SQLite가 새 파일을 만듭니다. 파일은 실행 폴더에 생기므로, 프로젝트 밖으로 복사할 때는 DB 파일도 함께 관리합니다.
 
-## 3. 실습 예제: 표를 만드는 프로그램
+## 3. 안내형 실습: 표를 만드는 프로그램
 
 **미션:** 코드를 위에서 아래로 읽으며 `CREATE TABLE` 세 문장이 어떤 표를 만드는지 확인합니다.
 
@@ -86,12 +86,18 @@ CREATE TABLE IF NOT EXISTS Inventory (
 
                 using (SqliteCommand command = connection.CreateCommand())
                 {
-                    command.CommandText = createTablesSql;
+                    command.CommandText = "PRAGMA foreign_keys = ON;\n" + createTablesSql + @"
+
+INSERT OR IGNORE INTO Player (PlayerId, Name, Gold)
+VALUES (1, '민지', 100);
+
+INSERT OR IGNORE INTO Item (ItemId, Name, Price)
+VALUES (1, '회복 포션', 30);";
                     command.ExecuteNonQuery();
                 }
             }
 
-            Console.WriteLine("GameShop.db와 3개 표를 준비했습니다.");
+            Console.WriteLine("GameShop.db, 3개 표, 초기 플레이어와 포션을 준비했습니다.");
         }
     }
 }
@@ -105,6 +111,17 @@ CREATE TABLE IF NOT EXISTS Inventory (
 2. 출력 메시지를 확인합니다.
 3. DB Browser for SQLite에서 생성된 `GameShop.db`를 엽니다.
 4. `Database Structure`에 세 표가 있는지 확인합니다.
+5. `Browse Data`에서 Player 1번의 골드가 100이고, Item 1번이 회복 포션인지 확인합니다.
+
+### 완료 확인
+
+- [ ] `GameShop.db`에 `Player`, `Item`, `Inventory` 표가 생성됐다.
+- [ ] 연결을 열 때 외래 키 검사를 켰다.
+- [ ] Player 1번과 Item 1번의 초기 데이터를 확인했다.
+
+## 응용 실습: 두 번째 아이템 초기화
+
+`INSERT OR IGNORE`를 사용해 Item 2번 `철 검`을 초기 데이터로 추가하세요. 프로그램을 두 번 실행해도 같은 ItemId가 중복되지 않는 이유를 설명하세요.
 
 ## 생각해보기
 

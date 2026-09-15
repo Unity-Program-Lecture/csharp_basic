@@ -1,6 +1,6 @@
 # DAY 02: ERD, 키, 게임 데이터 관계 설계 (4교시)
 
-오늘은 RPG 상점의 데이터를 표로 나누고, 표 사이의 관계를 ERD로 표현합니다.
+오늘은 RPG 상점의 데이터를 표로 나누고, 표 사이의 관계를 ERD (Entity Relationship Diagram, 개체 관계 다이어그램)로 표현합니다.
 
 ## NCS 연결
 
@@ -69,7 +69,7 @@ Player 1명 ── 여러 Inventory 기록 ── Item 1종
 4. 각 표에 기본 키를 정합니다.
 5. 연결 표에 외래 키와 수량 같은 관계 정보를 둡니다.
 
-## 5. 실습: 상점 ERD 그리기
+## 5. 안내형 실습: 상점 ERD 그리기
 
 **미션:** `Player`, `Item`, `Inventory` 표를 종이에 그리고 다음 조건을 만족시킵니다.
 
@@ -94,7 +94,52 @@ Player 1명 ── 여러 Inventory 기록 ── Item 1종
 
 정답을 고른 뒤, `Inventory` 표에서 `PlayerId`와 `ItemId`가 각각 어느 표를 가리키는지도 화살표로 그립니다.
 
+## 6. 실제 만들기: ERD를 `GameShop.db` 표와 행으로 옮기기
+
+DAY01의 `GameShop.db`를 열고, ERD에서 설계한 Player와 Inventory를 실제 표로 만듭니다. 아래 SQL을 `Execute SQL` 탭에서 실행합니다.
+
+```sql
+CREATE TABLE IF NOT EXISTS Player (
+    PlayerId INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Gold INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Inventory (
+    PlayerId INTEGER NOT NULL,
+    ItemId INTEGER NOT NULL,
+    Quantity INTEGER NOT NULL,
+    PRIMARY KEY (PlayerId, ItemId),
+    FOREIGN KEY (PlayerId) REFERENCES Player(PlayerId),
+    FOREIGN KEY (ItemId) REFERENCES Item(itemId)
+);
+
+INSERT OR IGNORE INTO Player (PlayerId, Name, Gold)
+VALUES (1, '민지', 100);
+
+INSERT OR IGNORE INTO Inventory (PlayerId, ItemId, Quantity)
+VALUES (1, 1, 3);
+
+SELECT Player.Name, Item.name, Inventory.Quantity
+FROM Inventory
+JOIN Player ON Inventory.PlayerId = Player.PlayerId
+JOIN Item ON Inventory.ItemId = Item.itemId;
+```
+
+`INSERT OR IGNORE`는 같은 기본 키가 이미 있으면 중복 행을 만들지 않고 넘어가는 SQLite 문법입니다. 이 DAY에서는 같은 SQL을 다시 실행해도 실습 DB가 중복으로 깨지지 않게 사용합니다.
+
+### 완료 확인
+
+- [ ] `Player`, `Item`, `Inventory`의 역할을 각각 설명할 수 있다.
+- [ ] `Inventory`의 `(PlayerId, ItemId)` 조합을 기본 키로 표시했다.
+- [ ] 두 외래 키가 각각 어느 표를 가리키는지 화살표로 표시했다.
+- [ ] `GameShop.db`에서 Player·Inventory 표와 민지의 포션 보유 행을 확인했다.
+
+## 응용 실습: 장비 강화 재료 설계
+
+강화 재료를 여러 아이템에 사용할 수 있게 `Material`과 연결 표를 추가로 설계하세요. 어떤 표에 가격과 보유 수량을 둘지도 한 문장으로 설명하세요.
+
 ## 오늘의 정리
 
 - ERD는 코드를 쓰기 전 데이터의 중복과 빠진 관계를 찾는 도구입니다.
-- 다음 시간에는 키, 제약 조건, 정규화로 이 설계를 더 안전하게 만듭니다.
+- 다음 시간에는 오늘 만든 표에 제약 조건을 적용하고, 잘못된 데이터를 실제로 거절하는지 확인합니다.

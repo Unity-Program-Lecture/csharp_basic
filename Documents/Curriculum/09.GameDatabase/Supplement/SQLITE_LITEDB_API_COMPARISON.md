@@ -1,6 +1,6 @@
-# 참고: SQLite와 LiteDB API 비교
+# 참고: SQLite와 LiteDB API (Application Programming Interface, 응용 프로그래밍 인터페이스) 비교
 
-SQLite와 LiteDB는 모두 C#에서 파일 기반 DB를 다룰 수 있지만, 코드가 데이터를 표현하는 방식이 다릅니다.
+SQLite와 LiteDB는 모두 C#에서 파일 기반 DB를 다룰 수 있지만, 코드가 데이터를 표현하는 방식이 다릅니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 클래스와 메서드의 약속입니다.
 
 | 목적 | SQLite: SQL을 명령으로 보냄 | LiteDB: C# 객체를 문서로 다룸 |
 | :--- | :--- | :--- |

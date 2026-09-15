@@ -28,19 +28,62 @@ public class QuestProgress
 }
 ```
 
-## 2. 실습: 퀘스트 진행 갱신
+## 2. 안내형 실습: 퀘스트 진행 갱신
 
 **미션:** 고블린을 한 마리 처치할 때마다 `KillCount`를 올리고, 목표에 도달하면 완료 상태를 바꿉니다.
 
 ```csharp
-QuestProgress quest = quests.FindOne(x =>
-    x.PlayerId == 1 && x.QuestId == "GoblinHunt");
+using System;
+using System.Collections.Generic;
+using LiteDB;
 
-if (quest != null)
+namespace GameDatabaseLab
 {
-    quest.KillCount++;
-    quest.IsCompleted = quest.KillCount >= quest.TargetCount;
-    quests.Update(quest);
+    public class QuestProgress
+    {
+        public int Id { get; set; }
+        public int PlayerId { get; set; }
+        public string QuestId { get; set; } = "";
+        public int KillCount { get; set; }
+        public int TargetCount { get; set; }
+        public bool IsCompleted { get; set; }
+        public List<string> RewardIds { get; set; } = new List<string>();
+    }
+
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
+            using (LiteDatabase database = new LiteDatabase("QuestProgress.db"))
+            {
+                ILiteCollection<QuestProgress> quests =
+                    database.GetCollection<QuestProgress>("quests");
+                quests.EnsureIndex(x => x.PlayerId);
+
+                QuestProgress quest = quests.FindOne(x =>
+                    x.PlayerId == 1 && x.QuestId == "GoblinHunt");
+
+                if (quest == null)
+                {
+                    quest = new QuestProgress
+                    {
+                        PlayerId = 1,
+                        QuestId = "GoblinHunt",
+                        TargetCount = 3,
+                        RewardIds = new List<string> { "Potion" }
+                    };
+                    quests.Insert(quest);
+                }
+
+                quest.KillCount++;
+                quest.IsCompleted = quest.KillCount >= quest.TargetCount;
+                quests.Update(quest);
+
+                Console.WriteLine("처치 수: " + quest.KillCount);
+                Console.WriteLine("완료 여부: " + quest.IsCompleted);
+            }
+        }
+    }
 }
 ```
 
@@ -68,10 +111,20 @@ LiteDB의 `_id`는 이미 알고 있는 문서 한 건을 다시 열거나 수�
 
 | 번호 | 상황 | 기대 결과 |
 | :--- | :--- | :--- |
-| 1 | 새 퀘스트 문서 생성 | `GameLogs.db`에 문서가 추가됨 |
+| 1 | 새 퀘스트 문서 생성 | `QuestProgress.db`의 `quests` 컬렉션에 문서가 추가됨 |
 | 2 | 고블린 1마리 처치 | `KillCount`가 1 증가 |
 | 3 | 목표 수 도달 | `IsCompleted`가 `true` |
 | 4 | 선택 항목 없는 이전 문서 읽기 | 프로그램이 중단되지 않음 |
+
+### 완료 확인
+
+- [ ] `QuestProgress.db`와 `quests` 컬렉션을 만들었다.
+- [ ] 처음 실행할 때 고블린 퀘스트가 생성되고 처치 수가 1이 됐다.
+- [ ] 세 번 실행한 뒤 `IsCompleted`가 `true`가 됨을 확인했다.
+
+## 응용 실습: 보상 수령 상태
+
+`IsRewardClaimed` 속성을 추가하고, 완료 전에는 보상을 받지 못하게 하세요. 이미 받은 보상을 다시 받으려 할 때 출력할 메시지도 정하세요.
 
 ## 오늘의 정리
 

@@ -1,6 +1,6 @@
-# DAY 05: SQLite 설치와 첫 SQL (4교시)
+# DAY 05: SQLite CRUD와 조건 조회 (4교시)
 
-오늘은 SQLite DB 파일을 만들고, DB Browser for SQLite로 SQL의 기본 문법을 직접 실행합니다.
+오늘은 DAY01에 만든 SQLite `GameShop.db`를 다시 열고, SQL로 데이터를 등록·조회·수정·삭제합니다.
 
 ## NCS 연결
 
@@ -9,7 +9,7 @@
 
 ## 1. SQLite는 무엇인가요?
 
-SQLite는 별도 서버 없이 `.db` 파일 하나에 SQL 관계형 DB를 저장하는 도구입니다. 오늘은 **GUI** (Graphical User Interface, 그래픽 사용자 인터페이스) 도구로 파일을 보고, 다음 시간에는 C# 코드로 같은 일을 합니다.
+SQLite는 별도 서버 없이 `.db` 파일 하나에 SQL 관계형 DB를 저장하는 도구입니다. 오늘은 **GUI** (Graphical User Interface, 그래픽 사용자 인터페이스) 도구인 DB Browser for SQLite로 DAY01의 파일을 열어 SQL을 실행합니다.
 
 ### SQL은 무엇인가요?
 
@@ -47,38 +47,18 @@ SQL이 실행된다고 해서 C# 코드가 없어지는 것은 아닙니다. C#�
 
 | 교시 | 할 일 | 결과 |
 | :--- | :--- | :--- |
-| 1교시 | DB Browser for SQLite 다운로드·설치 | 도구 실행 확인 |
-| 2교시 | DB 파일과 `Item` 표 생성 | `GameShop.db`와 표 1개 |
-| 3교시 | SQL 기본 문법 실행 | 등록·조회·수정·삭제 결과 |
-| 4교시 | 조건 조회와 미니 실습 | SQL 파일 또는 실행 기록 |
+| 1교시 | DAY01의 `GameShop.db` 열기와 SQL 복습 | 회복 포션 조회 결과 |
+| 2교시 | 아이템 추가와 조건 조회 | 검·방패의 조회 결과 |
+| 3교시 | 가격 수정과 대상 확인 | 수정 전후 결과 |
+| 4교시 | 테스트 데이터 삭제와 미니 실습 | SQL 실행 기록 |
 
-## 2. DB Browser for SQLite 다운로드와 설치 (Windows)
+## 2. DAY01의 `GameShop.db` 다시 열기
 
-1. 브라우저에서 [DB Browser for SQLite 공식 다운로드](https://sqlitebrowser.org/dl/) 페이지를 엽니다.
-2. Windows 항목에서 자신의 PC에 맞는 `Standard installer`를 고릅니다. 대부분의 PC는 `win64`입니다. ARM (Advanced RISC Machine, RISC는 Reduced Instruction Set Computer의 약자) 기반 PC는 ARM64 설치 파일을 고릅니다.
-3. 내려받은 `.msi` 파일을 두 번 클릭합니다.
-4. 설치 화면에서 기본 설치 위치를 유지하고 `Install`을 누릅니다.
-5. 설치가 끝나면 시작 메뉴에서 `DB Browser for SQLite`를 실행합니다.
-6. 실행이 되지 않으면 다운로드 페이지에서 `zip (no installer)` 대신 표준 설치 파일을 받았는지 확인하고, 학교 PC의 설치 권한은 강사에게 알립니다.
+1. DB Browser for SQLite에서 `File > Open Database`를 누르고 DAY01의 `GameShop.db`를 엽니다.
+2. `Browse Data` 탭에서 `Item` 표와 회복 포션 한 건이 보이는지 확인합니다.
+3. 파일이나 표가 없다면 DAY01의 "SQLite 설치와 첫 아이템 저장"을 다시 실행합니다.
 
-> 이 프로그램은 SQLite DB를 눈으로 확인하는 도구입니다. 학생 프로그램에 포함되는 DB 엔진 설치가 아닙니다.
-
-## 3. 첫 DB 파일 만들기
-
-1. `File > New Database`를 누릅니다.
-2. 실습 폴더에 `GameShop.db`로 저장합니다.
-3. `Create Table`에서 표 이름을 `Item`으로 입력합니다.
-4. 아래 열을 추가한 뒤 `itemId`에 `PK`를 체크합니다.
-
-| 열 이름 | 자료형 | 규칙 |
-| :--- | :--- | :--- |
-| `itemId` | INTEGER | Primary Key |
-| `name` | TEXT | Not Null |
-| `price` | INTEGER | Not Null |
-
-5. `Write Changes`를 눌러 파일에 실제로 저장합니다.
-
-## 4. SQL 기본 문법: "DB에 요청하는 짧은 문장"
+## 3. SQL 기본 문법: "DB에 요청하는 짧은 문장"
 
 SQL은 보통 명령어로 시작하고, 마지막에 세미콜론(`;`)을 붙입니다. SQL 명령어는 대문자로 쓰는 관례가 있지만, 소문자로 써도 됩니다. 수업에서는 읽기 쉽게 대문자로 통일합니다.
 
@@ -90,7 +70,7 @@ SQL은 보통 명령어로 시작하고, 마지막에 세미콜론(`;`)을 붙�
 | `UPDATE` | 기존 값 수정 | 포션 가격 변경 |
 | `DELETE FROM` | 행 삭제 | 테스트 아이템 삭제 |
 
-### 표를 SQL로 만들기
+### DAY01의 표 만들기 복습
 
 DB Browser의 표 생성 화면으로도 만들 수 있지만, 아래 SQL을 실행하면 같은 `Item` 표를 만들 수 있습니다. SQL의 줄은 위에서 아래로 읽습니다. 먼저 표 이름을 정하고, 괄호 안에 열 이름과 규칙을 적습니다.
 
@@ -118,7 +98,7 @@ CREATE TABLE Item (
 
 ```sql
 INSERT INTO Item (itemId, name, price)
-VALUES (1, '회복 포션', 30);
+VALUES (2, '철 검', 100);
 
 SELECT itemId, name, price
 FROM Item;
@@ -126,15 +106,17 @@ FROM Item;
 
 결과가 보이면 `Browse Data` 탭에서도 `Item` 표를 선택해 확인합니다.
 
-## 5. SQL 문장을 조각으로 읽기
+## 4. SQL 문장을 조각으로 읽기
 
 SQL은 영어 문장처럼 보이지만, 각 자리에 역할이 정해져 있습니다. 처음에는 아래 네 가지 틀을 통째로 읽고, 빈칸을 자신의 표·열·값으로 바꿔 씁니다.
 
 ### 새 데이터를 넣는 문장: `INSERT INTO ... VALUES`
 
+DAY01에서 회복 포션 1번을 이미 넣었으므로, 여기서는 새 ItemId 2번 철 검을 넣습니다. 같은 ItemId를 두 번 실행하면 기본 키 중복 오류가 나는 것도 함께 관찰할 수 있습니다.
+
 ```sql
 INSERT INTO Item (itemId, name, price)
-VALUES (1, '회복 포션', 30);
+VALUES (2, '철 검', 100);
 ```
 
 | 조각 | 뜻 |
@@ -142,7 +124,7 @@ VALUES (1, '회복 포션', 30);
 | `INSERT INTO Item` | `Item` 표에 새 행을 넣습니다. |
 | `(itemId, name, price)` | 값을 넣을 열의 순서를 적습니다. |
 | `VALUES` | 이제 실제 값을 적겠다는 뜻입니다. |
-| `(1, '회복 포션', 30)` | 앞의 열 순서에 맞춰 넣을 값입니다. 숫자는 그대로, 글자는 작은따옴표로 감쌉니다. |
+| `(2, '철 검', 100)` | 앞의 열 순서에 맞춰 넣을 값입니다. 숫자는 그대로, 글자는 작은따옴표로 감쌉니다. |
 
 열과 값은 같은 순서·같은 개수여야 합니다. 예를 들어 `name`에 넣을 `'회복 포션'`을 `price` 자리에 쓰면 데이터 의미가 틀어집니다.
 
@@ -211,9 +193,9 @@ WHERE itemId = 1;
 - **WHERE**: 명령을 적용할 행의 조건을 적습니다.
 - **Primary Key**: 같은 행을 중복 없이 구별합니다.
 
-## 실습 미션
+## 안내형 실습 미션
 
-`Item` 표에 검과 방패를 더 넣고, 가격이 50 이상인 아이템만 조회하는 SQL을 작성합니다. 이후 검의 가격을 한 번 수정하고, 테스트용 아이템 한 개를 삭제합니다.
+`Item` 표에 방패와 테스트용 아이템을 더 넣고, 가격이 50 이상인 아이템만 조회하는 SQL을 작성합니다. 이후 철 검의 가격을 한 번 수정하고, 테스트용 아이템 한 개를 삭제합니다.
 
 ```sql
 SELECT name, price
@@ -226,7 +208,17 @@ WHERE price >= 50;
 1. `INSERT`와 `UPDATE`의 차이는 무엇인가요?
 2. `DELETE FROM Item;`을 실행하면 어떤 일이 일어날까요?
 3. 가격이 50 이상인 아이템을 찾을 때 `WHERE` 뒤에는 어떤 조건을 적어야 할까요?
-4. `VALUES (1, '회복 포션', 30)`의 세 값은 각각 어느 열에 들어갈까요?
+4. `VALUES (2, '철 검', 100)`의 세 값은 각각 어느 열에 들어갈까요?
+
+### 완료 확인
+
+- [ ] DAY01의 `GameShop.db`와 `Item` 표를 열어 회복 포션을 확인했다.
+- [ ] `INSERT`, `SELECT`, `UPDATE`, `DELETE`를 각각 한 번 이상 실행했다.
+- [ ] `UPDATE` 또는 `DELETE` 전에 같은 조건의 `SELECT`로 대상 행을 확인했다.
+
+## 응용 실습: 희귀도별 아이템 찾기
+
+`Item` 표에 `rarity` 열을 추가하고, 희귀도가 `Rare` 이상인 아이템만 조회하는 SQL을 작성하세요. 문자열 값에는 왜 작은따옴표가 필요한지도 설명하세요.
 
 ## 오늘의 정리
 
