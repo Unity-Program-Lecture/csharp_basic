@@ -97,7 +97,7 @@ public class ShopView : MonoBehaviour
 
 ## 6. 선택 확장 실습: Unity에서 LiteDB 로그 표시하기
 
-DAY09에서 만든 문서형 로그도 Unity에서 읽어 표시할 수 있습니다. 이 실습은 Windows Editor 학습용이며, 기본 SQLite 실습을 완료한 학생이 진행합니다.
+DAY09에서 만든 문서형 NoSQL 로그도 Unity에서 읽어 표시할 수 있습니다. 이 실습은 Windows Editor 학습용이며, 기본 SQLite 실습을 완료한 학생이 진행합니다.
 
 1. [NuGetForUnity 가이드](Supplement/NUGET_FOR_UNITY_GUIDE.md)의 설치 절차를 따라 NuGetForUnity와 LiteDB 패키지를 추가합니다.
 2. `GameLogs.db`를 `Assets/StreamingAssets/GameLogs.db`로 복사합니다.

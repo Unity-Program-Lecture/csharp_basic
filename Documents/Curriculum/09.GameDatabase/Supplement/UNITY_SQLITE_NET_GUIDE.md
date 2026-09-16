@@ -86,6 +86,8 @@ public class GameShopDatabaseReader : MonoBehaviour
 }
 ```
 
+`SELECT ItemId, Name, Price FROM Item`은 DAY01에서 배운 것처럼 "Item 표에서 세 열을 조회한다"는 뜻입니다. 여기서 처음 추가된 `ORDER BY ItemId`는 조회한 행을 `ItemId`의 작은 값부터 정렬하라는 문법입니다. 큰 값부터 보고 싶다면 뒤에 `DESC`를 붙여 `ORDER BY ItemId DESC`라고 씁니다.
+
 ### 코드 읽기
 
 1. `SQLiteAsset`은 Unity에 포함한 읽기 전용 SQLite 원본입니다.
@@ -104,6 +106,8 @@ public class GameShopDatabaseReader : MonoBehaviour
 ## 6. 쓰기 데이터로 확장할 때
 
 자산 원본은 상점 기획 데이터처럼 바뀌지 않는 데이터에 알맞습니다. 골드·인벤토리처럼 플레이 도중 바뀌는 데이터는 `Application.persistentDataPath`에 새 DB 또는 복사본을 열어 관리합니다.
+
+아래 `CREATE TABLE IF NOT EXISTS`는 "PlayerSave 표가 없을 때만 만든다"는 뜻입니다. DAY01의 `CREATE TABLE`에 `IF NOT EXISTS`라는 안전장치를 더한 것으로, 앱을 다시 실행해도 이미 있는 표를 다시 만들려다 오류가 나는 일을 막습니다.
 
 ```csharp
 using SQLite;

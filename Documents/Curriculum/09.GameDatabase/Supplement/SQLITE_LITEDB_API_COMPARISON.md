@@ -1,6 +1,6 @@
-# 참고: SQLite와 LiteDB API (Application Programming Interface, 응용 프로그래밍 인터페이스) 비교
+# 참고: 관계형 SQLite와 문서형 NoSQL LiteDB API (Application Programming Interface, 응용 프로그래밍 인터페이스) 비교
 
-SQLite와 LiteDB는 모두 C#에서 파일 기반 DB를 다룰 수 있지만, 코드가 데이터를 표현하는 방식이 다릅니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 클래스와 메서드의 약속입니다.
+SQLite와 LiteDB는 모두 C#에서 파일 기반 DB를 다룰 수 있지만, SQLite는 관계형 DB이고 LiteDB는 NoSQL의 한 유형인 문서형 DB입니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 클래스와 메서드의 약속입니다.
 
 | 목적 | SQLite: SQL을 명령으로 보냄 | LiteDB: C# 객체를 문서로 다룸 |
 | :--- | :--- | :--- |
@@ -24,6 +24,8 @@ INSERT INTO PurchaseLog (PlayerId, Message)
 VALUES (1, '골드가 부족합니다.');
 ```
 
+`INSERT INTO PurchaseLog`은 로그 표에 새 행을 넣겠다는 뜻이고, 첫 괄호의 열 순서에 맞춰 `VALUES` 뒤의 값이 들어갑니다. 즉 이 예제는 플레이어 1번의 구매 실패 메시지 한 건을 추가합니다. 기본 읽기 순서는 [DAY01](../DAY01_DATABASE_ROLE_AND_SELECTION.md)에서 확인합니다.
+
 LiteDB에서는 로그 C# 객체를 만들어 컬렉션에 넣습니다.
 
 ```csharp
@@ -41,7 +43,7 @@ LiteDB의 `_id`는 관계형 DB의 기본 키와 비슷하게 한 문서를 고�
 ## 선택 기준
 
 - 재화, 인벤토리, 구매처럼 여러 데이터를 정확히 함께 바꿔야 한다면 SQLite 실습을 우선합니다.
-- 로그, 설정, 퀘스트 스냅샷처럼 한 묶음으로 저장·조회하는 정보는 LiteDB 사례가 이해하기 쉽습니다.
+- 로그, 설정, 퀘스트 스냅샷처럼 한 묶음으로 저장·조회하는 정보는 문서형 NoSQL LiteDB 사례가 이해하기 쉽습니다.
 - 온라인 게임의 운영 DB는 이 로컬 실습과 별도입니다. Unity 클라이언트가 직접 DB 파일을 고치는 대신 서버/API가 요청을 검증하는 구조를 사용합니다.
 
 ## 더 자세히 보기

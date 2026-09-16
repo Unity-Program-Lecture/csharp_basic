@@ -15,7 +15,7 @@ SQLite는 별도 서버 없이 `.db` 파일 하나에 SQL 관계형 DB를 저장
 
 **SQL** (Structured Query Language)은 데이터베이스에 "표를 만들어 주세요", "이 데이터를 넣어 주세요", "조건에 맞는 데이터를 보여 주세요"라고 요청하는 언어입니다. C#처럼 게임 전체의 동작을 만드는 범용 프로그래밍 언어라기보다, **데이터를 만들고·찾고·바꾸고·지우는 데 특화된 언어**라고 이해하면 됩니다.
 
-SQL은 SQLite, MySQL, PostgreSQL, SQL Server 같은 **관계형 DBMS의 공통 기반 언어**입니다. 하지만 모든 DB가 SQL을 주된 방식으로 쓰는 것은 아닙니다. LiteDB나 MongoDB 같은 문서형 DB는 보통 C# **API** (Application Programming Interface, 응용 프로그래밍 인터페이스) 또는 제품별 문서 질의 방식을 사용합니다. 또 관계형 DB끼리도 `SELECT`, `INSERT`, `UPDATE`, `DELETE` 같은 기본 문법은 비슷하지만, 자료형·날짜 함수·자동 번호·고급 기능에는 제품별 차이(방언)가 있습니다.
+SQL은 SQLite, MySQL, PostgreSQL, SQL Server 같은 **관계형 DBMS의 공통 기반 언어**입니다. 하지만 모든 DB가 SQL을 주된 방식으로 쓰는 것은 아닙니다. 문서형 NoSQL DB인 LiteDB나 MongoDB는 보통 C# **API** (Application Programming Interface, 응용 프로그래밍 인터페이스) 또는 제품별 문서 질의 방식을 사용합니다. 또 관계형 DB끼리도 `SELECT`, `INSERT`, `UPDATE`, `DELETE` 같은 기본 문법은 비슷하지만, 자료형·날짜 함수·자동 번호·고급 기능에는 제품별 차이(방언)가 있습니다.
 
 ```text
 학생이 SQL 문장을 작성
@@ -72,7 +72,7 @@ SQL은 보통 명령어로 시작하고, 마지막에 세미콜론(`;`)을 붙�
 
 ### DAY01의 표 만들기 복습
 
-DB Browser의 표 생성 화면으로도 만들 수 있지만, 아래 SQL을 실행하면 같은 `Item` 표를 만들 수 있습니다. SQL의 줄은 위에서 아래로 읽습니다. 먼저 표 이름을 정하고, 괄호 안에 열 이름과 규칙을 적습니다.
+DAY01에서 직접 실행한 표 만들기 문장을 다시 읽어 봅니다. SQL의 줄은 위에서 아래로 읽습니다. 먼저 표 이름을 정하고, 괄호 안에 열 이름과 규칙을 적습니다.
 
 | SQL 조각 | 뜻 |
 | :--- | :--- |
@@ -90,7 +90,7 @@ CREATE TABLE Item (
 );
 ```
 
-`CREATE TABLE`은 표를 한 번만 만들어야 합니다. 이미 GUI에서 `Item` 표를 만들었다면 이 SQL은 다시 실행하지 않습니다. "table already exists" 오류는 표가 이미 있다는 뜻입니다.
+`CREATE TABLE`은 표를 한 번만 만들어야 합니다. DAY01에서 `Item` 표를 만들었다면 이 SQL은 다시 실행하지 않습니다. "table already exists" 오류는 표가 이미 있다는 뜻입니다.
 
 ### 데이터를 등록하고 조회하기
 

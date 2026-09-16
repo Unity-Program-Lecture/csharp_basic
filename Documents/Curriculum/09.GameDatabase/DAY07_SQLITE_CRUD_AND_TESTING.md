@@ -77,7 +77,14 @@ JOIN Item ON Inventory.ItemId = Item.ItemId
 WHERE Inventory.PlayerId = $playerId;
 ```
 
-`JOIN`은 두 표에서 관련 있는 행을 이어 읽는 명령입니다. `Inventory`의 아이템 번호와 `Item`의 아이템 번호가 같을 때 연결됩니다. DAY06에서 준비한 Player 1번과 회복 포션 1번을 이용해, 먼저 아래 SQL을 한 번 실행한 뒤 조회합니다.
+| 코드 조각 | 이렇게 읽기 | 사용 목적 |
+| :--- | :--- | :--- |
+| `JOIN Item` | "Item 표를 이어 붙인다" | 인벤토리의 `ItemId`를 아이템 이름으로 함께 봄 |
+| `ON Inventory.ItemId = Item.ItemId` | "두 아이템 번호가 같은 행을 연결한다" | 관계없는 아이템이 섞이지 않게 연결 기준을 정함 |
+| `WHERE Inventory.PlayerId = $playerId` | "플레이어 번호가 같은 행만 고른다" | 조회 대상을 플레이어 한 명으로 제한함 |
+| `$playerId` | C#에서 값을 넣을 이름표 | SQL 문자열을 이어 붙이지 않고 안전하게 번호를 전달함 |
+
+DAY06에서 준비한 Player 1번과 회복 포션 1번을 이용해, 먼저 아래 SQL을 한 번 실행한 뒤 조회합니다.
 
 ```sql
 INSERT INTO Inventory (PlayerId, ItemId, Quantity)

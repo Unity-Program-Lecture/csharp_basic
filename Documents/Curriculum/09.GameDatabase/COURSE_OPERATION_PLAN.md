@@ -4,7 +4,7 @@
 
 ## 운영 원칙
 
-- 관계형 DB는 SQLite와 SQL로, 문서형 DB는 LiteDB와 C# API로 각각 확인합니다.
+- 관계형 DB는 SQLite와 SQL로, NoSQL의 문서형 DB는 LiteDB와 C# API로 각각 확인합니다. 키-값형 Redis, 컬럼형 Apache Cassandra, 그래프형 Neo4j는 분류와 대표 제품만 확인합니다.
 - DAY01에서 만든 `GameShop.db`를 DAY05에서 SQL CRUD로 확장하고, DAY06에서 C# 관리 프로그램으로 다시 구성합니다.
 - Unity 6에서는 DB를 직접 운영하는 대신, 읽기 전용 기획 DB와 실행 중 저장 DB의 책임을 구분해 화면 표시를 실습합니다.
 - 모든 DAY에는 안내형 실습, 완료 확인, 조건만 제시하는 응용 실습을 둡니다.

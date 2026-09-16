@@ -55,14 +55,14 @@ NuGetForUnity는 기본적으로 프로젝트 안에 NuGet 패키지 정보를 �
 
 `Microsoft.Data.Sqlite`는 기본적으로 SQLitePCLRaw와 네이티브 SQLite 번들을 함께 사용합니다. .NET 콘솔 프로젝트에서는 편리하지만, Unity에서는 Editor·Windows 빌드·Android·iOS·IL2CPP (Intermediate Language To C++, 중간 언어를 C++로 변환하는 Unity 스크립팅 백엔드)마다 네이티브 라이브러리와 플랫폼 설정을 별도로 검증해야 할 수 있습니다.
 
-따라서 DAY11의 기본 실습은 **UPM용 `com.gilzoide.sqlite-net`**으로 합니다. 해당 패키지는 Unity 플랫폼용 네이티브 라이브러리와 WebGL용 저장 처리를 포함합니다. LiteDB는 이 문서에서 다루는 NuGet 연습 및 문서형 DB 확장 실습으로 유지합니다.
+따라서 DAY11의 기본 실습은 **UPM용 `com.gilzoide.sqlite-net`**으로 합니다. 해당 패키지는 Unity 플랫폼용 네이티브 라이브러리와 WebGL용 저장 처리를 포함합니다. LiteDB는 이 문서에서 다루는 NuGet 연습 및 문서형 NoSQL DB 확장 실습으로 유지합니다.
 
 | 목적 | 권장 선택 | 이유 |
 | :--- | :--- | :--- |
 | DAY06~08 관계형 DB·SQL·트랜잭션 학습 | .NET 콘솔 + Microsoft.Data.Sqlite | SQL과 관계형 설계를 분명히 학습 |
-| DAY09~10 문서형 DB 학습 | .NET 콘솔 + LiteDB | 문서 CRUD 학습 |
+| DAY09~10 문서형 NoSQL DB 학습 | .NET 콘솔 + LiteDB | 문서 CRUD 학습 |
 | DAY11 Unity에서 실제 SQLite 파일 읽기 | Unity + `com.gilzoide.sqlite-net` | UPM으로 설치하며 주요 Unity 플랫폼과 WebGL 지원을 안내함 |
-| Unity에서 LiteDB를 실제로 시험 | Unity + NuGetForUnity + LiteDB | 문서형 DB를 Unity에서 읽는 확장 실습 |
+| Unity에서 LiteDB를 실제로 시험 | Unity + NuGetForUnity + LiteDB | 문서형 NoSQL DB를 Unity에서 읽는 확장 실습 |
 
 ## 6. DAY11 LiteDB 확장 실습 실패 확인
 

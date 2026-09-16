@@ -54,6 +54,19 @@ Player 1명 ── 여러 Inventory 기록 ── Item 1종
 
 인벤토리는 Player와 Item을 이어 주는 표입니다. `Inventory.PlayerId`는 Player 표의 `PlayerId`를, `Inventory.ItemId`는 Item 표의 `ItemId`를 가리킵니다.
 
+```text
+Inventory.PlayerId (FK) -> Player.PlayerId (PK)
+Inventory.ItemId   (FK) -> Item.ItemId     (PK)
+```
+
+외래 키를 선언할 때는 가리킬 표와 열을 `REFERENCES 표이름(열이름)`으로 명시합니다. 예를 들어 아래 문장은 "Inventory의 PlayerId는 Player 표의 PlayerId를 가리킨다"라고 읽습니다.
+
+```sql
+FOREIGN KEY (PlayerId) REFERENCES Player(PlayerId)
+```
+
+이렇게 참조 대상을 적어야 DB가 "어느 표에 실제로 있는 번호인지" 확인할 수 있습니다. SQLite에서는 연결을 열 때 `PRAGMA foreign_keys = ON;`도 실행해야 이 검사가 실제로 켜집니다. 이 설정의 자세한 이유와 확인 실습은 DAY03에서 다룹니다.
+
 | PlayerId (FK) | ItemId (FK) | Quantity |
 | ---: | ---: | ---: |
 | 1 | 10 | 3 |
@@ -126,7 +139,19 @@ JOIN Player ON Inventory.PlayerId = Player.PlayerId
 JOIN Item ON Inventory.ItemId = Item.itemId;
 ```
 
-`INSERT OR IGNORE`는 같은 기본 키가 이미 있으면 중복 행을 만들지 않고 넘어가는 SQLite 문법입니다. 이 DAY에서는 같은 SQL을 다시 실행해도 실습 DB가 중복으로 깨지지 않게 사용합니다.
+### 이 실습에서 처음 만나는 SQL 키워드
+
+| 코드 조각 | 이렇게 읽기 | 사용 목적 |
+| :--- | :--- | :--- |
+| `CREATE TABLE IF NOT EXISTS Player` | "Player 표가 아직 없을 때만 만든다" | 같은 표를 다시 만들려다 오류가 나는 일을 막음 |
+| `PRIMARY KEY (PlayerId, ItemId)` | "두 번호를 합쳐 인벤토리 한 행을 구별한다" | 같은 플레이어에게 같은 아이템 행이 중복되는 것을 막음 |
+| `FOREIGN KEY (...) REFERENCES ...` | "이 번호는 다른 표의 번호를 가리킨다" | 존재하지 않는 플레이어·아이템을 연결하는 실수를 막음 |
+| `INSERT OR IGNORE` | "넣되, 같은 기본 키가 있으면 넘어간다" | 같은 초기 데이터를 다시 실행해도 중복 행이 생기지 않게 함 |
+| `JOIN 표이름 ON 조건` | "조건이 맞는 행끼리 표를 이어 읽는다" | 인벤토리의 번호를 플레이어·아이템 이름으로 바꾸어 함께 조회함 |
+
+`INSERT OR IGNORE`는 기존 행을 수정하거나 덮어쓰지 않습니다. 이 DAY에서는 "민지와 회복 포션이 아직 없을 때만 준비한다"는 초기 데이터 목적에 맞습니다. 이미 있는 값을 바꿔야 하는 상황의 처리 방법은 DAY08에서 배웁니다.
+
+마지막 `SELECT`는 `Inventory`를 기준으로 시작한 뒤, `ON Inventory.PlayerId = Player.PlayerId`처럼 두 번호가 같은 행을 찾아 `Player`를 붙이고, 같은 방식으로 `Item`을 붙입니다. 그래서 번호만 있는 인벤토리에서 플레이어 이름과 아이템 이름까지 함께 볼 수 있습니다.
 
 ### 완료 확인
 
