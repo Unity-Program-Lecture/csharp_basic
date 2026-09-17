@@ -1,6 +1,6 @@
 # 참고: LiteDB API 빠른 참조
 
-이 문서는 DAY09~DAY10에서 사용하는 LiteDB C# API (Application Programming Interface, 응용 프로그래밍 인터페이스)를 찾아보는 참고 자료입니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 클래스와 메서드의 약속입니다. 패키지 설치는 [NuGet 패키지 사용 가이드](NUGET_PACKAGE_GUIDE.md)를 먼저 확인합니다.
+이 문서는 6~7일차에서 사용하는 LiteDB C# API (Application Programming Interface, 응용 프로그래밍 인터페이스)를 찾아보는 참고 자료입니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 클래스와 메서드의 약속입니다. 패키지 설치는 [NuGet 패키지 사용 가이드](NUGET_PACKAGE_GUIDE.md)를 먼저 확인합니다.
 
 > LiteDB는 NoSQL의 한 유형인 문서형 DB입니다. C# 클래스 한 개를 문서 한 건처럼 저장하고, 같은 성격의 문서를 컬렉션으로 모아 관리합니다. NoSQL에는 문서형 외에 키-값형, 컬럼형, 그래프형도 있습니다.
 

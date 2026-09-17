@@ -1,10 +1,10 @@
 # 게임 데이터베이스 프로그래밍 환경 준비
 
-DAY01 전에 .NET SDK, DB Browser for SQLite, 그리고 C# 코드를 작성·실행할 도구 하나를 준비합니다. C# 도구는 **Visual Studio** 또는 **Visual Studio Code (VS Code)** 중 하나만 선택하면 됩니다. DAY11은 별도 Unity 6 프로젝트와 `com.gilzoide.sqlite-net` 패키지가 필요합니다.
+1일차 전에 .NET SDK, DB Browser for SQLite, 그리고 C# 코드를 작성·실행할 도구 하나를 준비합니다. C# 도구는 **Visual Studio** 또는 **Visual Studio Code (VS Code)** 중 하나만 선택하면 됩니다. 7일차는 별도 Unity 6 프로젝트와 `com.gilzoide.sqlite-net` 패키지가 필요합니다.
 
 | 선택 | 이런 학습자에게 권장 | 이 과정에서 하는 일 |
 | :--- | :--- | :--- |
-| Visual Studio | 메뉴와 버튼으로 프로젝트·NuGet 패키지를 관리하고 싶은 학습자 | DAY06~10 콘솔 DB 프로젝트 생성, 패키지 설치, 실행 |
+| Visual Studio | 메뉴와 버튼으로 프로젝트·NuGet 패키지를 관리하고 싶은 학습자 | 4~7일차 콘솔 DB 프로젝트 생성, 패키지 설치, 실행 |
 | VS Code | 가벼운 편집기와 터미널 명령을 함께 익히고 싶은 학습자 | 폴더 열기, 코드 편집, `dotnet` 명령으로 패키지 설치·실행 |
 
 > 두 도구를 모두 설치할 필요는 없습니다. 수업 중에는 한 도구를 정해 같은 방식으로 따라갑니다. NuGet 패키지 설치의 자세한 방법은 [NuGet 패키지 사용 가이드](Supplement/NUGET_PACKAGE_GUIDE.md)를 봅니다.
@@ -14,7 +14,7 @@ DAY01 전에 .NET SDK, DB Browser for SQLite, 그리고 C# 코드를 작성·실
 1. .NET SDK를 설치합니다. SDK는 C# 프로젝트를 만들고 빌드·실행하는 도구 모음입니다. 단순 실행용 Runtime만 설치하면 `dotnet new`, `dotnet run`을 사용할 수 없습니다.
 2. 터미널을 새로 열고 `dotnet --version`을 실행합니다.
 3. [DB Browser for SQLite](https://sqlitebrowser.org/dl/)를 설치하고 실행합니다.
-4. DAY01에 사용할 실습 폴더에 쓰기 권한이 있는지 확인합니다.
+4. 1일차에 사용할 실습 폴더에 쓰기 권한이 있는지 확인합니다.
 
 ## 2. Visual Studio로 준비하기
 
@@ -48,14 +48,14 @@ dotnet run
 
 1. 터미널에서 `dotnet --version`을 실행해 .NET SDK 버전이 출력되는지 확인합니다.
 2. DB Browser for SQLite를 실행하고 빈 DB를 만들 수 있는지 확인합니다.
-3. DAY01에 사용할 실습 폴더에 쓰기 권한이 있는지 확인합니다.
-4. Unity 6 프로젝트가 필요한 경우 DAY11 전에 Package Manager를 열 수 있는지 확인합니다.
+3. 1일차에 사용할 실습 폴더에 쓰기 권한이 있는지 확인합니다.
+4. Unity 6 프로젝트가 필요한 경우 7일차 전에 Package Manager를 열 수 있는지 확인합니다.
 
 ### 완료 확인
 
 - [ ] `dotnet --version`이 오류 없이 출력된다.
 - [ ] DB Browser for SQLite에서 `.db` 파일을 열 수 있다.
-- [ ] DAY01 실습 폴더에 `GameShop.db` 파일을 저장할 수 있다.
+- [ ] 1일차 실습 폴더에 `GameShop.db` 파일을 저장할 수 있다.
 - [ ] Visual Studio 또는 VS Code 중 선택한 도구에서 C# 콘솔 프로젝트를 한 번 실행했다.
 - [ ] Unity 실습 대상자는 Package Manager를 열 수 있다.
 

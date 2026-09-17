@@ -1,4 +1,4 @@
-# DAY 01: 게임 데이터 선택과 SQLite 첫 실습 (3교시)
+# 1일차: 게임 데이터 선택과 SQLite 첫 실습 (3교시)
 
 오늘은 게임의 정보가 어디에 있어야 하는지 판단하고, 관계형 데이터베이스 (**DB**, Database)와 NoSQL DB를 고르는 기준을 익힙니다. 문서형 DB는 NoSQL의 한 종류이며, 이 과정에서는 SQLite와 문서형 NoSQL DB인 LiteDB를 실습합니다. 이어서 SQLite를 설치하고 `GameShop.db` 파일에 첫 아이템을 직접 저장합니다.
 
@@ -120,7 +120,7 @@ CREATE TABLE ItemExample (
 );
 ```
 
-이 예제는 아이템 번호를 고유하게 정하고, 코드 중복과 음수 가격을 막으며, 수량을 생략하면 `0`으로 시작하게 합니다. `REFERENCES`로 표와 표를 연결하는 자세한 방법은 DAY02에서, 제약 조건이 실제로 잘못된 데이터를 거절하는 모습은 DAY03에서 실습합니다.
+이 예제는 아이템 번호를 고유하게 정하고, 코드 중복과 음수 가격을 막으며, 수량을 생략하면 `0`으로 시작하게 합니다. `REFERENCES`로 표와 표를 연결하는 자세한 방법과 제약 조건이 잘못된 데이터를 거절하는 실습은 2일차에서 진행합니다.
 
 ### 2) `INSERT INTO ... VALUES`: 새 행 넣기
 
@@ -142,7 +142,7 @@ FROM Item;
 
 ## 4. 안내형 실습: SQLite 설치와 첫 아이템 저장
 
-DAY01 전에 [환경 준비](ENVIRONMENT_SETUP_GUIDE.md)의 .NET SDK와 DB Browser 실행 확인을 마쳤다면, 아래 순서로 SQLite 파일을 만듭니다.
+1일차 전에 [환경 준비](ENVIRONMENT_SETUP_GUIDE.md)의 .NET SDK와 DB Browser 실행 확인을 마쳤다면, 아래 순서로 SQLite 파일을 만듭니다.
 
 1. [DB Browser for SQLite 공식 다운로드](https://sqlitebrowser.org/dl/) 페이지에서 Windows용 `Standard installer`를 내려받아 설치합니다.
 2. 설치 뒤 시작 메뉴에서 `DB Browser for SQLite`를 실행합니다. 실행할 수 없다면 학교 PC의 설치 권한을 강사에게 알립니다.

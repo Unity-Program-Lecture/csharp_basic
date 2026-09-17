@@ -1,12 +1,12 @@
 # 참고: Microsoft.Data.Sqlite API 빠른 참조
 
-이 문서는 DAY06~DAY08에서 사용하는 SQLite C# API (Application Programming Interface, 응용 프로그래밍 인터페이스)를 찾아보는 참고 자료입니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 약속된 클래스와 메서드의 묶음입니다. SQL 문법 자체는 [DAY05](../DAY05_SQLITE_INSTALL_AND_SQL_BASICS.md)에서, 패키지 설치는 [NuGet 패키지 사용 가이드](NUGET_PACKAGE_GUIDE.md)에서 먼저 확인합니다.
+이 문서는 4~5일차에서 사용하는 SQLite C# API (Application Programming Interface, 응용 프로그래밍 인터페이스)를 찾아보는 참고 자료입니다. API는 코드가 라이브러리 기능을 호출할 때 사용하는 약속된 클래스와 메서드의 묶음입니다. SQL 문법 자체는 [3일차](../DAY03_SQL_CRUD_AND_CONDITIONAL_QUERY.md)에서, 패키지 설치는 [NuGet 패키지 사용 가이드](NUGET_PACKAGE_GUIDE.md)에서 먼저 확인합니다.
 
 > 예제는 Unity 6이 지원하는 C# 9.0 범위에서 읽을 수 있는 문법을 사용합니다. 실제 DB 실습은 .NET 콘솔 프로젝트에서 진행합니다.
 
 ## SQL 키워드 빠른 읽기
 
-이 문서는 API 참고용이므로 SQL의 첫 설명은 [DAY01](../DAY01_DATABASE_ROLE_AND_SELECTION.md)과 [DAY05](../DAY05_SQLITE_INSTALL_AND_SQL_BASICS.md)를 먼저 봅니다. 아래 표는 API 예제를 읽다가 만나는 기본 키워드의 뜻과 사용 위치를 빠르게 확인하는 용도입니다.
+이 문서는 API 참고용이므로 SQL의 첫 설명은 [1일차](../DAY01_DATABASE_ROLE_AND_SELECTION.md)와 [3일차](../DAY03_SQL_CRUD_AND_CONDITIONAL_QUERY.md)를 먼저 봅니다. 아래 표는 API 예제를 읽다가 만나는 기본 키워드의 뜻과 사용 위치를 빠르게 확인하는 용도입니다.
 
 | 코드 조각 | 뜻 | 사용할 때 |
 | :--- | :--- | :--- |

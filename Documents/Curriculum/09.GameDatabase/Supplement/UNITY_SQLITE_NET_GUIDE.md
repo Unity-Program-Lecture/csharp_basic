@@ -1,6 +1,6 @@
 # 참고: Unity 6에서 SQLite `GameShop.db` 사용하기
 
-이 문서는 DAY11에서 앞서 만든 SQLite `GameShop.db`를 Unity 6에서 읽는 방법을 설명합니다. `com.gilzoide.sqlite-net`은 SQLite-net과 Unity 플랫폼용 SQLite 라이브러리를 함께 제공하는 UPM (Unity Package Manager, Unity 패키지 관리자) 패키지입니다.
+이 문서는 7일차에서 앞서 만든 SQLite `GameShop.db`를 Unity 6에서 읽는 방법을 설명합니다. `com.gilzoide.sqlite-net`은 SQLite-net과 Unity 플랫폼용 SQLite 라이브러리를 함께 제공하는 UPM (Unity Package Manager, Unity 패키지 관리자) 패키지입니다.
 
 > 이 문서의 코드는 Unity 6이 지원하는 **C# 9.0** 기준입니다.
 
@@ -8,12 +8,12 @@
 
 SQLite의 데이터는 한 개의 파일에 저장됩니다. 따라서 콘솔에서 만든 `GameShop.db`와 Unity에서 읽는 `GameShop.db`는 같은 SQLite 형식입니다. 이 패키지는 Windows, macOS, Linux, Android, iOS, WebGL을 지원한다고 안내합니다. WebGL에서는 IndexedDB 기반 저장소를 사용합니다.
 
-| 구분 | DAY11의 선택 |
+| 구분 | 7일차의 선택 |
 | :--- | :--- |
 | DB 형식 | SQLite |
 | Unity 패키지 | `com.gilzoide.sqlite-net` |
 | 설치 방법 | Unity Package Manager의 Git URL |
-| 읽을 표 | DAY06~07의 `Item` |
+| 읽을 표 | 4일차의 `Item` |
 | DB 파일 위치 | 읽기 전용 원본은 Unity 자산, 실행 중 저장은 `Application.persistentDataPath` |
 
 ## 2. UPM 패키지 설치하기
@@ -34,7 +34,7 @@ https://github.com/gilzoide/unity-sqlite-net.git#1.3.2
 
 ## 3. 기존 `GameShop.db`를 Unity 자산으로 준비하기
 
-1. DAY06~07의 콘솔 프로젝트에서 `GameShop.db`를 찾습니다.
+1. 4일차의 콘솔 프로젝트에서 `GameShop.db`를 찾습니다.
 2. 원본은 보관하고, 복사본 파일 이름을 `GameShop.sqlite`로 바꿉니다. 확장자만 바뀌며 SQLite 데이터 내용은 바뀌지 않습니다.
 3. Unity 프로젝트의 `Assets/Databases/` 폴더를 만들고 `GameShop.sqlite` 복사본을 넣습니다.
 4. Project 창에서 `GameShop.sqlite`를 선택합니다. SQLite 자산으로 가져와졌는지 Inspector에서 확인합니다.
@@ -86,7 +86,7 @@ public class GameShopDatabaseReader : MonoBehaviour
 }
 ```
 
-`SELECT ItemId, Name, Price FROM Item`은 DAY01에서 배운 것처럼 "Item 표에서 세 열을 조회한다"는 뜻입니다. 여기서 처음 추가된 `ORDER BY ItemId`는 조회한 행을 `ItemId`의 작은 값부터 정렬하라는 문법입니다. 큰 값부터 보고 싶다면 뒤에 `DESC`를 붙여 `ORDER BY ItemId DESC`라고 씁니다.
+`SELECT ItemId, Name, Price FROM Item`은 1일차에서 배운 것처럼 "Item 표에서 세 열을 조회한다"는 뜻입니다. 여기서 처음 추가된 `ORDER BY ItemId`는 조회한 행을 `ItemId`의 작은 값부터 정렬하라는 문법입니다. 큰 값부터 보고 싶다면 뒤에 `DESC`를 붙여 `ORDER BY ItemId DESC`라고 씁니다.
 
 ### 코드 읽기
 
@@ -107,7 +107,7 @@ public class GameShopDatabaseReader : MonoBehaviour
 
 자산 원본은 상점 기획 데이터처럼 바뀌지 않는 데이터에 알맞습니다. 골드·인벤토리처럼 플레이 도중 바뀌는 데이터는 `Application.persistentDataPath`에 새 DB 또는 복사본을 열어 관리합니다.
 
-아래 `CREATE TABLE IF NOT EXISTS`는 "PlayerSave 표가 없을 때만 만든다"는 뜻입니다. DAY01의 `CREATE TABLE`에 `IF NOT EXISTS`라는 안전장치를 더한 것으로, 앱을 다시 실행해도 이미 있는 표를 다시 만들려다 오류가 나는 일을 막습니다.
+아래 `CREATE TABLE IF NOT EXISTS`는 "PlayerSave 표가 없을 때만 만든다"는 뜻입니다. 1일차의 `CREATE TABLE`에 `IF NOT EXISTS`라는 안전장치를 더한 것으로, 앱을 다시 실행해도 이미 있는 표를 다시 만들려다 오류가 나는 일을 막습니다.
 
 ```csharp
 using SQLite;
@@ -135,7 +135,7 @@ public class PlayerSaveDatabase : MonoBehaviour
 | 증상 | 확인 순서 |
 | :--- | :--- |
 | `SQLiteAsset` 형식이 보이지 않음 | 패키지 설치 완료와 `GameShop.sqlite` 확장자 확인 |
-| `no such table: Item` | DAY06에서 만든 `GameShop.db` 복사본인지, 표 이름이 `Item`인지 확인 |
+| `no such table: Item` | 4일차에서 만든 `GameShop.db` 복사본인지, 표 이름이 `Item`인지 확인 |
 | Inspector 연결 칸이 비어 있음 | 스크립트 컴파일 오류를 먼저 해결한 뒤 GameObject를 다시 선택 |
 | WebGL에서 파일 경로 오류 | `Application.streamingAssetsPath`의 직접 파일 열기를 쓰지 않았는지 확인 |
 | 데이터 수정이 저장되지 않음 | 읽기 전용 SQLite 자산이 아닌 `persistentDataPath`의 저장 DB를 열었는지 확인 |
