@@ -1,0 +1,5 @@
+CREATE TABLE player_score (
+    player_id INTEGER PRIMARY KEY,
+    score INTEGER NOT NULL CHECK (score >= 0),
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

@@ -39,3 +39,6 @@ Host 시작, Client 연결, Client 종료 세 상황에 대해 남길 로그 형
 
 - 게임 서버 응용 프로그램은 실시간 동기화만이 아니라 저장, 운영 관찰, 업데이트까지 연결합니다.
 
+## 선택 참고 실습
+
+Unity 클라이언트 요청이 C# 서버를 거쳐 PostgreSQL에 저장되고 다시 Unity로 응답되는 전체 흐름은 [Unity - C# 서버 - PostgreSQL 전체 연결 참고 실습](Supplement/POSTGRESQL_UNITY_SERVER_REFERENCE.md)에서 직접 실행해 볼 수 있습니다.
