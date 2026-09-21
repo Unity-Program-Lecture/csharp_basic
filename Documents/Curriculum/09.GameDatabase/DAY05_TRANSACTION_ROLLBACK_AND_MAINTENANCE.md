@@ -26,6 +26,8 @@ SQL `ROLLBACK;`     -> `transaction.Rollback()`
 - **롤백**: 묶음에서 발생한 변경을 취소하고 시작 전으로 되돌립니다.
 - **무결성**: 데이터가 규칙에 맞고 서로 모순되지 않는 상태입니다.
 
+`SqliteTransaction`이 오류를 알아서 롤백하는 것은 아닙니다. 이 실습 코드에서는 SQL 실행 오류 또는 직접 만든 `throw`가 발생하면 `catch`로 이동하고, `catch` 안의 `transaction.Rollback()`이 변경 묶음을 취소합니다. 오류가 없을 때만 `try` 블록 끝의 `transaction.Commit()`까지 도달합니다.
+
 ## 2. 안내형 실습: C# 포션 구매
 
 **미션:** `try` 안의 두 명령이 모두 성공해야 `Commit()`이 호출되는지 확인합니다.
@@ -104,6 +106,8 @@ WHERE PlayerId = $playerId AND ItemId = $itemId;";
     }
 }
 ```
+
+`spendGold.Transaction = transaction;`과 `addPotion.Transaction = transaction;`은 각 SQL 명령을 같은 변경 묶음에 넣는 코드입니다. 둘 중 하나라도 실패하면 `Commit()`에 도달하지 않고 `catch`가 `Rollback()`을 실행하므로, 먼저 성공한 골드 차감도 함께 취소됩니다.
 
 </details>
 

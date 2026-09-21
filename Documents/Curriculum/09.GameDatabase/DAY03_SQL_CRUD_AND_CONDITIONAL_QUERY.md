@@ -103,6 +103,8 @@ WHERE price >= 50;
 
 구매는 골드 차감과 포션 수량 증가가 **함께** 성공해야 합니다. `BEGIN;`은 변경 묶음을 시작하고, `COMMIT;`은 묶음 전체를 확정하며, `ROLLBACK;`은 `BEGIN;` 뒤의 변경을 모두 취소합니다.
 
+트랜잭션 안에서 SQL 하나가 실패해도 SQLite가 항상 전체를 자동 취소하지는 않습니다. 실패한 SQL 문만 실행되지 않고, 그 전에 성공한 변경은 아직 트랜잭션 안에 남을 수 있습니다. 따라서 오류 또는 조건 미충족을 확인하면 `COMMIT;`을 실행하지 말고, 직접 `ROLLBACK;`을 실행해야 합니다.
+
 먼저 현재 상태를 확인합니다. 2일차에서 만든 인벤토리 행이 없다면 `PlayerId = 1`, `ItemId = 1` 행을 먼저 준비합니다.
 
 ```sql
@@ -117,7 +119,7 @@ WHERE PlayerId = 1 AND ItemId = 1;
 
 ### 정상 구매: 함께 확정하기
 
-아래 블록을 순서대로 실행합니다. 마지막 `COMMIT;` 전까지는 변경이 확정되지 않습니다.
+아래 명령을 **한 번에 모두 실행하지 말고 순서대로** 실행합니다. 마지막 `COMMIT;` 전까지는 변경이 확정되지 않습니다.
 
 ```sql
 BEGIN;
@@ -126,6 +128,17 @@ UPDATE Player
 SET Gold = Gold - 30
 WHERE PlayerId = 1 AND Gold >= 30;
 
+SELECT changes();
+```
+
+`SELECT changes();`의 결과는 바로 앞 `UPDATE`가 실제로 변경한 행 수입니다.
+
+- 결과가 `1`이면 골드 차감에 성공한 것입니다. 아래 SQL을 실행해 포션을 지급한 뒤 `COMMIT;`합니다.
+- 결과가 `0`이면 골드가 부족하거나 플레이어가 없는 것입니다. 포션 지급 SQL은 실행하지 말고 `ROLLBACK;`합니다.
+
+```sql
+-- SELECT changes(); 결과가 1일 때만 실행
+
 UPDATE Inventory
 SET Quantity = Quantity + 1
 WHERE PlayerId = 1 AND ItemId = 1;
@@ -133,11 +146,17 @@ WHERE PlayerId = 1 AND ItemId = 1;
 COMMIT;
 ```
 
+골드가 부족해 `SELECT changes();`의 결과가 `0`이었다면 아래 한 줄만 실행합니다.
+
+```sql
+ROLLBACK;
+```
+
 실행 뒤 다시 `SELECT`하여 골드가 30 줄고 포션 수량이 1 늘었는지 확인합니다.
 
 ### 실패 구매: 직접 롤백하기
 
-이번에는 첫 번째 변경 뒤에 `CHECK (Quantity >= 0)` 제약 조건을 일부러 위반합니다. 두 번째 `UPDATE`에서 오류가 나면 **`COMMIT;`을 실행하지 않고**, 같은 DB Browser 연결에서 `ROLLBACK;`을 실행합니다.
+이번에는 첫 번째 변경 뒤에 `CHECK (Quantity >= 0)` 제약 조건을 일부러 위반합니다. 두 번째 `UPDATE`에서 오류가 나면 첫 번째 골드 차감은 아직 트랜잭션 안에 남아 있을 수 있습니다. **`COMMIT;`을 실행하지 않고**, 같은 DB Browser 연결에서 별도로 `ROLLBACK;`을 실행합니다.
 
 ```sql
 BEGIN;
@@ -149,16 +168,20 @@ WHERE PlayerId = 1 AND Gold >= 30;
 UPDATE Inventory
 SET Quantity = -1
 WHERE PlayerId = 1 AND ItemId = 1;
+```
 
+오류 메시지를 확인한 뒤, SQL 실행 창에서 아래 한 줄을 새로 실행합니다. 오류가 난 묶음과 같은 DB Browser 연결을 유지해야 합니다.
+
+```sql
 ROLLBACK;
 ```
 
-마지막 `ROLLBACK;` 뒤 다시 조회합니다. 첫 번째 `UPDATE`가 실행됐더라도 골드와 포션 수량은 트랜잭션 시작 전 값으로 돌아와야 합니다.
+`ROLLBACK;` 뒤 다시 조회합니다. 첫 번째 `UPDATE`가 실행됐더라도 골드와 포션 수량은 트랜잭션 시작 전 값으로 돌아와야 합니다.
 
 | 상황 | `COMMIT` 전 | `ROLLBACK` 뒤 |
 | :--- | :--- | :--- |
 | 첫 SQL만 성공 | 골드는 임시로 줄어든 상태 | 골드와 포션 모두 시작 전 상태 |
-| 두 번째 SQL이 제약 조건 오류 | 변경을 확정하지 않음 | 첫 SQL의 골드 차감도 취소 |
+| 두 번째 SQL이 제약 조건 오류 | 첫 SQL의 변경이 트랜잭션 안에 남을 수 있음 | 첫 SQL의 골드 차감도 취소 |
 
 > `COMMIT`이 성공한 뒤 발견한 업무 오류는 `ROLLBACK`으로 취소할 수 없습니다. 이 경우에는 반대 변경을 새 트랜잭션으로 기록해 보정합니다.
 
