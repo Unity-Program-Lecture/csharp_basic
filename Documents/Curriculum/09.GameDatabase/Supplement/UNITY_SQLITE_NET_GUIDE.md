@@ -97,36 +97,16 @@ public class GameShopDatabaseReader : MonoBehaviour
 
 ## 5. 실행 확인 순서
 
-1. 빈 GameObject를 만들고 `GameShopDatabaseReader`를 붙입니다.
-2. `Database Asset`에 `GameShop.sqlite`를 연결합니다.
-3. `Item Text`에 Canvas의 `PotionText`를 연결합니다.
-4. Play Mode를 누릅니다.
-5. 화면과 Console에 `회복 포션 : 30 Gold`처럼 `Item` 표의 값이 보이는지 확인합니다.
+1. Canvas 안에 TextMeshPro 텍스트 하나를 만들고 `ItemText`로 이름 붙입니다.
+2. 빈 GameObject를 만들고 `GameShopDatabaseReader`를 붙입니다.
+3. `Database Asset`에 `GameShop.sqlite`를 연결합니다.
+4. `Item Text`에 Canvas의 `ItemText`를 연결합니다.
+5. Play Mode를 누릅니다.
+6. DB Browser에서 확인한 `Item` 첫 행의 이름·가격이 화면과 Console에 함께 보이는지 확인합니다. 예를 들어 첫 행이 `회복 포션`, `30`이면 `회복 포션 : 30 Gold`가 표시됩니다.
 
-## 6. 쓰기 데이터로 확장할 때
+## 6. 이번 실습의 범위
 
-자산 원본은 상점 기획 데이터처럼 바뀌지 않는 데이터에 알맞습니다. 골드·인벤토리처럼 플레이 도중 바뀌는 데이터는 `Application.persistentDataPath`에 새 DB 또는 복사본을 열어 관리합니다.
-
-아래 `CREATE TABLE IF NOT EXISTS`는 "PlayerSave 표가 없을 때만 만든다"는 뜻입니다. 1일차의 `CREATE TABLE`에 `IF NOT EXISTS`라는 안전장치를 더한 것으로, 앱을 다시 실행해도 이미 있는 표를 다시 만들려다 오류가 나는 일을 막습니다.
-
-```csharp
-using SQLite;
-using UnityEngine;
-
-public class PlayerSaveDatabase : MonoBehaviour
-{
-    private void Start()
-    {
-        string savePath = Application.persistentDataPath + "/PlayerSave.db";
-
-        using (SQLiteConnection database = new SQLiteConnection(savePath))
-        {
-            database.Execute(
-                "CREATE TABLE IF NOT EXISTS PlayerSave (PlayerId INTEGER PRIMARY KEY, Gold INTEGER NOT NULL)");
-        }
-    }
-}
-```
+`GameShopDatabaseReader`는 배포용 읽기 전용 자산의 `Item`만 조회합니다. 구매, 골드·인벤토리 변경, 저장 후 재조회는 구현하지 않았습니다. 이런 변경 데이터를 Unity에서 다루려면 `Application.persistentDataPath`의 쓰기 가능한 DB를 열고 구매 트랜잭션과 화면 갱신까지 별도로 구현해야 합니다. 앞서 C# 콘솔에서 수행한 구매 결과가 이 자산에 자동으로 반영되지는 않습니다.
 
 > 온라인 게임에서는 Unity 클라이언트가 서버 운영 DB를 직접 열지 않습니다. `Unity -> 서버/API -> DB` 구조에서 서버가 구매·골드 변경 규칙을 확인합니다.
 
@@ -138,7 +118,6 @@ public class PlayerSaveDatabase : MonoBehaviour
 | `no such table: Item` | 4일차에서 만든 `GameShop.db` 복사본인지, 표 이름이 `Item`인지 확인 |
 | Inspector 연결 칸이 비어 있음 | 스크립트 컴파일 오류를 먼저 해결한 뒤 GameObject를 다시 선택 |
 | WebGL에서 파일 경로 오류 | `Application.streamingAssetsPath`의 직접 파일 열기를 쓰지 않았는지 확인 |
-| 데이터 수정이 저장되지 않음 | 읽기 전용 SQLite 자산이 아닌 `persistentDataPath`의 저장 DB를 열었는지 확인 |
 
 ## 공식 참고
 

@@ -131,13 +131,16 @@ LiteDB의 `_id`는 이미 알고 있는 문서 한 건을 다시 열거나 수�
 
 ## 7일차 후반: Unity 6와 게임 데이터 연결하기
 
-전반의 `QuestProgress.db`는 LiteDB 문서 설계·갱신을 익히기 위한 결과물입니다. 후반에는 초점을 바꾸어, 2~5일차에 사용한 관계형 SQLite `GameShop.db`를 Unity에서 읽고 상점 결과를 UI (User Interface, 사용자 인터페이스)로 보여 줍니다. 즉 같은 DB를 Unity에서 운영하는 실습이 아니라, DB 종류에 따라 데이터를 어디에 두고 Unity가 어떤 결과를 표시하는지 구분하는 실습입니다.
+전반의 `QuestProgress.db`는 LiteDB 문서 설계·갱신을 익히기 위한 결과물입니다. 후반에는 초점을 바꾸어, 2~5일차에 사용한 관계형 SQLite `GameShop.db`의 `Item` 표를 Unity에서 읽고 아이템 이름과 가격을 UI (User Interface, 사용자 인터페이스)에 보여 줍니다. 이 실습은 **읽기 전용 조회**입니다. 구매 버튼, 골드 차감, 인벤토리 변경은 여기서 구현하지 않습니다.
 
 ### Unity와 DB의 역할
 
 ```text
-학습용 로컬 구조
-Unity 상점 UI -> C# 데이터 관리 코드 -> SQLite 또는 LiteDB 파일
+이번 학습용 로컬 구조
+GameShop.sqlite 읽기 전용 자산 -> GameShopDatabaseReader -> Unity 아이템 텍스트
+
+앞서 만든 구매 프로그램
+C# 콘솔 프로그램 -> 쓰기 가능한 GameShop.db -> 골드·인벤토리 변경
 
 온라인 게임의 기본 구조
 Unity 클라이언트 -> 게임 서버/API (Application Programming Interface, 응용 프로그래밍 인터페이스) -> 서버형 데이터베이스
@@ -151,8 +154,8 @@ Unity 실제 연동의 기본은 NuGet이 아니라 Unity Package Manager (UPM)�
 
 1. [Unity용 SQLite-net 사용 가이드](Supplement/UNITY_SQLITE_NET_GUIDE.md)를 따라 UPM Git URL (Uniform Resource Locator, 웹 주소)로 패키지를 설치합니다.
 2. 1일차에 시작하고 4일차에서 확장한 `GameShop.db`의 복사본을 Unity 프로젝트에 준비합니다.
-3. `Item` 표를 `SELECT`하여 Unity Console에 출력합니다.
-4. 조회 결과를 `ShopView`에 전달해 UI에 표시합니다.
+3. `GameShopDatabaseReader`가 `Item` 표를 `SELECT`합니다.
+4. 조회한 아이템 이름·가격을 같은 스크립트가 Unity Console과 UI에 표시합니다.
 
 > `Microsoft.Data.Sqlite`를 NuGetForUnity로 설치하는 방식은 이 수업의 기본 경로가 아닙니다. Unity용 네이티브 라이브러리와 WebGL 처리를 포함한 전용 UPM 패키지를 사용하면, 앞에서 만든 SQLite 파일을 더 직접적으로 연결할 수 있습니다.
 
@@ -165,56 +168,30 @@ Unity 실제 연동의 기본은 NuGet이 아니라 Unity Package Manager (UPM)�
 | 플레이어 골드, 보유 수량 | DB 또는 저장 데이터 | 플레이에 따라 달라짐 |
 | 구매 실패 기록 | SQLite 로그 표 또는 서버 로그 | 문제 추적용 기록 |
 
-### 안내형 실습: Unity 6 상점 결과 표시와 SQLite 읽기
+위 표는 실제 게임에서 데이터를 배치할 때의 예시입니다. 이번 조회 실습은 SQL과 Unity 연결을 확인하려고 `Item` 이름·가격을 SQLite 복사본에서 읽습니다. 같은 값을 ScriptableObject에도 따로 넣어 두고 어느 쪽이 최신인지 비교하는 실습은 아닙니다.
 
-1. Unity 6에서 빈 씬을 만들고 `ShopLab`으로 저장합니다.
-2. `Canvas` 안에 TextMeshPro 텍스트 두 개를 만듭니다: `GoldText`, `PotionText`.
-3. `Buy Potion` 버튼 하나를 만듭니다.
-4. [Unity용 SQLite-net 사용 가이드](Supplement/UNITY_SQLITE_NET_GUIDE.md)의 `GameShopDatabaseReader`를 빈 GameObject에 붙입니다. `SQLiteAsset`은 Unity 프로젝트에 넣은 읽기 전용 SQLite DB 원본을 Inspector에서 연결할 수 있게 하는 패키지의 자산 타입입니다.
-5. Inspector에서 `Item Text`에 `PotionText`를 연결합니다.
-6. Play Mode에서 Unity Console과 화면에 `Item` 표의 항목이 출력되는지 확인합니다.
+### 안내형 실습: Unity 6에서 SQLite 아이템 읽기
 
-<details>
-<summary>UI 표시 스크립트</summary>
+1. [Unity용 SQLite-net 사용 가이드](Supplement/UNITY_SQLITE_NET_GUIDE.md)의 설치·DB 자산 준비 절차를 완료합니다. `SQLiteAsset`은 Unity에 넣은 읽기 전용 SQLite DB 원본을 Inspector에서 연결하는 패키지 자산 타입입니다.
+2. Unity 6에서 빈 씬을 만들고 `ShopLab`으로 저장합니다.
+3. `Canvas` 안에 TextMeshPro 텍스트 하나를 만들고 `ItemText`로 이름 붙입니다. 구매 버튼이나 골드·수량 텍스트는 만들지 않습니다.
+4. 가이드 4절의 `GameShopDatabaseReader` 코드를 `Assets/Scripts/GameShopDatabaseReader.cs`에 입력하고 빈 GameObject에 붙입니다.
+5. Inspector의 `Database Asset`에는 `GameShop.sqlite`, `Item Text`에는 `ItemText`를 연결합니다.
+6. Play Mode에서 `GameShopDatabaseReader.Start()`가 `SELECT ItemId, Name, Price FROM Item ORDER BY ItemId`를 실행하는지 확인합니다. 첫 행의 이름·가격이 Unity Console과 `ItemText`에 함께 나타나야 합니다.
 
-```csharp
-using TMPro;
-using UnityEngine;
-
-public class ShopView : MonoBehaviour
-{
-    [SerializeField] private TMP_Text goldText;
-    [SerializeField] private TMP_Text potionText;
-
-    public void SetInventory(int gold, int potionCount)
-    {
-        goldText.text = $"Gold: {gold}";
-        potionText.text = $"Potion: {potionCount}";
-    }
-}
-```
-
-</details>
-
-| Inspector 항목 | 연결할 대상 | 확인할 점 |
-| :--- | :--- | :--- |
-| `Gold Text` | GoldText | 골드 표시 TextMeshProUGUI |
-| `Potion Text` | PotionText | 포션 표시 TextMeshProUGUI |
-
-> 이 수업의 핵심은 Unity가 DB 파일을 직접 운영하는 기술이 아니라, 데이터 변경 결과를 화면에 반영하는 책임 분리입니다.
+이 실습의 데이터 흐름은 **SQLite `Item` 행 → `ItemRow` 객체 → `ItemText`와 Console**입니다. 코드가 실제로 읽는 열은 `ItemId`, `Name`, `Price`뿐이므로 골드나 인벤토리 수량을 표시했다고 기록하지 않습니다. 콘솔 구매 프로그램의 결과를 Unity 화면에 자동 전달하는 코드도 없습니다.
 
 ### 실습 미션
 
-- DB에서 읽었다고 가정한 골드 100, 포션 0을 먼저 표시합니다.
-- 구매 성공 뒤 골드 70, 포션 1을 표시합니다.
-- 구매 실패 뒤에는 원래 값이 유지됨을 표시합니다.
-- 세 장면을 캡처하고 어떤 데이터가 바뀌었는지 설명합니다.
-- `GameShop.db`의 `Item` 한 건이 Unity Console과 화면에 출력되는 장면을 확인합니다.
+- DB Browser에서 원본 `GameShop.db`의 첫 번째 `Item` 이름·가격을 확인합니다.
+- Unity Play Mode에서 같은 값이 `ItemText`와 Console에 표시되는지 대조합니다.
+- Play Mode를 멈추고 실습용 `GameShop.db` 복사본의 첫 아이템 가격을 SQL `UPDATE`로 바꾼 뒤 저장합니다. 바뀐 파일을 다시 `GameShop.sqlite`로 복사해 Unity가 자산을 다시 가져오게 하고, Play Mode에서 새 가격이 표시되는지 확인합니다. 앞서 가져온 Unity 자산은 콘솔의 DB 파일 변경을 자동으로 따라가지 않습니다.
+- `ItemText`에 표시된 값이 코드에 적은 고정 문자열이 아니라 DB 조회 결과임을 설명합니다.
 
 #### 완료 확인
 
 - [ ] `GameShop.sqlite` 원본과 `SQLiteAsset` 연결을 Inspector에서 확인했다.
-- [ ] Item 한 건이 Unity Console과 화면에 함께 표시된다.
+- [ ] DB의 Item 첫 행과 같은 이름·가격이 Unity Console과 `ItemText`에 함께 표시된다.
 - [ ] 읽기 전용 원본과 `persistentDataPath`에 둘 저장용 DB의 역할 차이를 설명할 수 있다.
 
 ### 응용 실습: 읽기 실패 안내
