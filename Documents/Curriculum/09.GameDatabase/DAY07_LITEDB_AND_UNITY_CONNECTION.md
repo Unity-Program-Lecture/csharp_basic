@@ -30,7 +30,7 @@ public class QuestProgress
 
 ## 2. 안내형 실습: 퀘스트 진행 갱신
 
-**미션:** 고블린을 한 마리 처치할 때마다 `KillCount`를 올리고, 목표에 도달하면 완료 상태를 바꿉니다.
+**미션:** 콘솔에서 `1`을 입력할 때마다 고블린을 한 마리 처치하고, 저장된 처치 수와 완료 여부를 바로 출력합니다. `r`을 입력하면 고블린 퀘스트의 저장된 진행 상태를 초기화하고, `q`를 입력하면 종료합니다. 프로그램을 다시 실행해도 기존 진행 상태에서 이어서 시작합니다.
 
 ```csharp
 using System;
@@ -75,23 +75,69 @@ namespace GameDatabaseLab
                     quests.Insert(quest);
                 }
 
-                quest.KillCount++;
-                quest.IsCompleted = quest.KillCount >= quest.TargetCount;
-                quests.Update(quest);
-
-                Console.WriteLine("처치 수: " + quest.KillCount);
+                Console.WriteLine("고블린 퀘스트를 불러왔습니다.");
+                Console.WriteLine("처치 수: " + quest.KillCount + "/" + quest.TargetCount);
                 Console.WriteLine("완료 여부: " + quest.IsCompleted);
+
+                while (true)
+                {
+                    Console.Write("1: 고블린 한 마리 처치 | r: 진행 상태 초기화 | q: 종료 > ");
+                    string input = Console.ReadLine();
+
+                    if (input == null || input == "q" || input == "Q")
+                    {
+                        break;
+                    }
+
+                    if (input == "r" || input == "R")
+                    {
+                        quest.KillCount = 0;
+                        quest.IsCompleted = false;
+                        quests.Update(quest);
+
+                        Console.WriteLine("고블린 퀘스트 진행 상태를 초기화했습니다.");
+                        Console.WriteLine("처치 수: " + quest.KillCount + "/" + quest.TargetCount);
+                        Console.WriteLine("완료 여부: " + quest.IsCompleted);
+                        continue;
+                    }
+
+                    if (input != "1")
+                    {
+                        Console.WriteLine("1, r 또는 q를 입력하세요.");
+                        continue;
+                    }
+
+                    if (quest.IsCompleted)
+                    {
+                        Console.WriteLine("이미 완료한 퀘스트입니다.");
+                        continue;
+                    }
+
+                    quest.KillCount++;
+                    quest.IsCompleted = quest.KillCount >= quest.TargetCount;
+                    quests.Update(quest);
+
+                    Console.WriteLine("고블린을 한 마리 처치했습니다.");
+                    Console.WriteLine("처치 수: " + quest.KillCount + "/" + quest.TargetCount);
+                    Console.WriteLine("완료 여부: " + quest.IsCompleted);
+                }
             }
         }
     }
 }
 ```
 
+같은 코드를 실행 가능한 프로젝트로 준비한 [QuestProgressConsole](../../../Code/GameDatabase/QuestProgressConsole/QuestProgressConsole.csproj)에서도 확인할 수 있습니다. 프로젝트 폴더에서 `dotnet run`을 실행하면 `QuestProgress.db`가 그 폴더에 생성됩니다.
+
 코드를 읽는 순서입니다.
 
-1. 위에서 아래로: 조건에 맞는 퀘스트를 찾습니다.
-2. 오른쪽에서 왼쪽으로: 처치 수를 하나 늘립니다.
-3. 안에서 밖으로: 목표 수와 비교해 완료 여부를 계산한 뒤 문서를 저장합니다.
+1. 위에서 아래로: 조건에 맞는 퀘스트를 찾고 현재 상태를 출력한 뒤 입력을 기다립니다.
+2. 오른쪽에서 왼쪽으로: `1`이면 처치 수에 1을 더하고, `r`이면 처치 수를 0·완료 여부를 `false`로 되돌립니다.
+3. 안에서 밖으로: 변경한 값을 `Update()`로 문서에 저장한 뒤 결과를 출력합니다.
+
+`q`를 입력하거나 입력이 끝나면 반복문을 나갑니다. 목표에 도달한 뒤 `1`을 다시 입력해도 처치 수를 더하지 않습니다. `r`은 DB 파일을 삭제하거나 다른 퀘스트를 지우는 명령이 아니라, 현재 고블린 퀘스트 한 건의 진행 값만 `0/3`, `false`로 다시 저장합니다. **프로그램 실행 자체는 처치로 계산하지 않습니다.**
+
+아래 테스트의 처음 상태 `0/3`은 해당 작업 폴더에 고블린 퀘스트 문서가 아직 없을 때의 결과입니다. 이미 실습한 `QuestProgress.db`가 있다면 저장된 값부터 표시됩니다. 재실행 테스트에서는 같은 작업 폴더의 DB 파일을 사용하세요.
 
 ## 3. 선택 기준을 실제 구조에 적용하기
 
@@ -108,15 +154,19 @@ LiteDB의 `_id`는 이미 알고 있는 문서 한 건을 다시 열거나 수�
 | 번호 | 상황 | 기대 결과 |
 | :--- | :--- | :--- |
 | 1 | 새 퀘스트 문서 생성 | `QuestProgress.db`의 `quests` 컬렉션에 문서가 추가됨 |
-| 2 | 고블린 1마리 처치 | `KillCount`가 1 증가 |
-| 3 | 목표 수 도달 | `IsCompleted`가 `true` |
-| 4 | 선택 항목 없는 이전 문서 읽기 | 프로그램이 중단되지 않음 |
+| 2 | 콘솔에서 `1`을 한 번 입력 | `KillCount`가 1 증가하고 결과가 출력됨 |
+| 3 | `1`을 세 번 입력해 목표 수 도달 | `KillCount`가 3, `IsCompleted`가 `true` |
+| 4 | `q`로 종료한 뒤 다시 실행 | 입력 없이 처치 수가 늘지 않고 이전 값이 출력됨 |
+| 5 | 완료 후 `1`을 다시 입력 | 완료 안내가 출력되고 처치 수가 3으로 유지됨 |
+| 6 | 완료 후 `r`을 입력하고 재실행 | 처치 수 `0/3`, 완료 여부 `false`가 저장·출력됨 |
 
 ### 완료 확인
 
 - [ ] `QuestProgress.db`와 `quests` 컬렉션을 만들었다.
-- [ ] 처음 실행할 때 고블린 퀘스트가 생성되고 처치 수가 1이 됐다.
-- [ ] 세 번 실행한 뒤 `IsCompleted`가 `true`가 됨을 확인했다.
+- [ ] 새 DB에서 처음 실행할 때 고블린 퀘스트가 생성되고 처치 수가 0으로 표시됐다.
+- [ ] `1`을 입력할 때마다 처치 수가 하나씩 증가해 세 번째 입력 후 `IsCompleted`가 `true`가 됐다.
+- [ ] 종료 후 재실행해도 처치 수가 유지되고, 추가 입력 없이 증가하지 않았다.
+- [ ] `r`로 초기화한 뒤 재실행해도 `0/3`, `False`가 유지됐다.
 
 ## 응용 실습: 보상 수령 상태
 
