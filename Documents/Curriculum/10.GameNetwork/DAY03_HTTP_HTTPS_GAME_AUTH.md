@@ -115,6 +115,8 @@ public class Program
         }
 
         // Guid는 중복 가능성이 매우 낮은 식별자를 만드는 타입입니다.
+        // ToString("N")에서 "N"은 하이픈(-) 없이 32자리 16진수로 출력하라는 뜻입니다.
+        // 예: <guid> 7e6d7b64-3145-42e4-9c85-4c18aab0e7f2 -> 7e6d7b64314542e49c854c18aab0e7f2
         string accessToken = Guid.NewGuid().ToString("N");
         IssuedTokens[accessToken] = 101;
 
