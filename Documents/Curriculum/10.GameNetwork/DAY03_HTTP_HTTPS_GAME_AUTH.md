@@ -299,3 +299,37 @@ AccessToken: 0d3c... (매번 다른 값)
 - 비밀번호는 TCP 게임 메시지로 보내지 않고 HTTPS 로그인으로 확인합니다.
 - 로그인 성공 뒤 받은 accessToken은 이후 게임 서버 연결을 인증하는 데 사용할 수 있습니다.
 - 프로토콜별 선택 기준은 [게임에서 사용하는 네트워크 프로토콜 참고 안내](Supplement/GAME_NETWORK_PROTOCOL_REFERENCE.md)에서 다시 확인할 수 있습니다.
+
+## 참고 사항: REST API와 HTTP 메서드의 약속
+
+**REST (Representational State Transfer, 표현 상태 전이)** 는 서버가 제공하는 데이터나 기능을 자원 중심으로 다루는 API 설계 방식입니다. **API (Application Programming Interface)** 는 프로그램끼리 기능을 요청하고 결과를 받기 위한 약속입니다. 게임의 플레이어 정보, 인벤토리, 친구 목록처럼 주소를 붙여 접근하는 대상을 **자원 (Resource)** 이라고 합니다.
+
+HTTPS는 통신을 보호하는 방식이고, REST는 API를 설계하는 방식입니다. 따라서 HTTPS로 REST API를 호출할 수 있습니다. Unity Cloud Save도 [공식 REST API](https://docs.unity.com/en-us/cloud-save/tutorials/rest-api)를 제공합니다.
+
+### 메서드는 공통 약속, 주소와 데이터는 게임의 약속
+
+**HTTP 메서드 (HTTP Method)** 는 요청으로 무엇을 하려는지 나타내는 이름입니다. 일반적인 REST API에서는 표준 HTTP 메서드의 의미를 지키고, 게임마다 자원의 주소와 요청·응답 데이터를 정합니다.
+
+| 메서드 | 의미 | 게임 API 예시 |
+| :--- | :--- | :--- |
+| `GET` | 자원 조회 | `GET /players/101` — 플레이어 정보 조회 |
+| `POST` | 자원 생성 또는 처리 요청 | `POST /purchases` — 구매 처리 요청 |
+| `PUT` | 지정한 자원의 전체 표현 교체 | `PUT /players/101/settings` — 설정 전체 교체 |
+| `PATCH` | 자원의 일부 변경 | `PATCH /players/101/settings` — 설정 일부 변경 |
+| `DELETE` | 지정한 자원 삭제 요청 | `DELETE /players/101/friends/205` — 친구 관계 삭제 |
+| `HEAD` | 본문 없이 GET과 같은 응답 정보 조회 | 패치 파일의 크기·수정 정보 확인 |
+| `OPTIONS` | 대상이 지원하는 통신 옵션 조회 | 허용된 요청 메서드 확인 |
+
+REST가 위 다섯 가지 주요 메서드만 허용하는 것은 아닙니다. HTTP에는 `HEAD`, `OPTIONS` 같은 표준 메서드와 확장 메서드도 있습니다. 이 과정에서는 표준 메서드를 사용하고 그 의미를 지키는 원칙을 익힙니다.
+
+예를 들어 `GET /items/10/delete`로 아이템을 삭제하면 조회 요청이 서버 데이터를 바꾸므로 GET의 의미에 맞지 않습니다. `DELETE /items/10`처럼 삭제 의도를 표현합니다. 공격 요청도 `ATTACK`이라는 HTTP 메서드를 임의로 만들기보다 `POST /monsters/10/attacks`처럼 표준 메서드와 주소로 표현할 수 있습니다.
+
+### 요청마다 필요한 정보를 보내기
+
+**무상태성 (Statelessness)** 은 서버가 앞선 요청의 대화 내용을 기억해야만 다음 요청을 이해할 수 있는 구조를 피하는 원칙입니다. 요청에는 처리에 필요한 자원 주소, 데이터, 인증 정보 등을 담습니다. 이는 서버가 계정이나 게임 데이터를 저장하지 않는다는 뜻은 아닙니다.
+
+**상태 코드 (Status Code)** 는 HTTP 응답의 처리 결과를 나타내는 숫자입니다. 오늘 실습의 `Results.Ok()`는 `200 OK`를, `Results.Unauthorized()`는 `401 Unauthorized`를 반환합니다. 클라이언트는 이 결과를 확인해 성공과 인증 실패를 구분합니다.
+
+오늘 만든 `POST /login`과 `POST /validate`는 동작 중심의 HTTP API 예시입니다. 모든 HTTP API가 REST 원칙을 충족하는 것은 아니며, REST를 이해할 때는 플레이어 정보처럼 자원 중심의 주소와 메서드 사례도 함께 살펴봅니다.
+
+더 자세한 설계 기준은 [Microsoft REST 웹 API 설계 문서](https://learn.microsoft.com/en-us/azure/architecture/best-practices/api-design)를 참고하세요.
