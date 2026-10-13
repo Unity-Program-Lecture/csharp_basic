@@ -1,0 +1,60 @@
+# Unity-generated files stay local. This project belongs to the parent repository.
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Bb]uild/
+/[Bb]uilds/
+/[Aa]rtifacts/
+/[Ss]creenshots/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Cc]rashReports/
+/.vs/
+/.idea/
+/.vscode/
+*.csproj
+*.sln
+*.slnx
+*.unityproj
+*.log
+
+# The parent C# repository ignores .meta and Packages contents globally.
+# Unity needs asset GUIDs and its resolved package manifests in source control.
+!**/*.meta
+!/Packages/
+!/Packages/manifest.json
+!/Packages/packages-lock.json
+!/ProjectSettings/Packages/
+!/ProjectSettings/Packages/**/
+!/ProjectSettings/Packages/**/*.json
+
+# BEGIN unity vcs doctor
+# Unity ignore rules kept current by `unity vcs doctor --fix`. Managed block: edits here are overwritten. To opt out of a rule, negate it below this block (for example `!*.log`).
+*.aab
+*.apk
+*.app
+*.blend1
+*.booproj
+*.mdb
+*.svd
+*.unitypackage
+.consulo/
+.gradle/
+.utmp/
+/ServerData
+/[Aa]ssets/AddressableAssetsData/*/*.bin*
+/[Aa]ssets/AddressableAssetsData/link.xml*
+/[Aa]ssets/Addressables_Temp*
+/[Aa]ssets/Plugins/Editor/JetBrains*
+/[Aa]ssets/StreamingAssets/aa*
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+/[Aa]ssets/[Ss]ceneDependencyCache*
+ExportedObj/
+InitTestScene*.unity*
+crashlytics-build.properties
+sysinfo.txt
+# END unity vcs doctor

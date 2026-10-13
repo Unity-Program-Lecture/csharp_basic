@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="430" viewBox="0 0 1080 430" role="img" aria-labelledby="title desc">
+<title id="title">Host와 Client에 존재하는 플레이어 복제본</title>
+<desc id="desc">Host는 서버와 로컬 클라이언트 역할을 한다. 양쪽 창에는 A와 B가 각각 있으며 같은 네트워크 번호로 대응하지만 메모리는 별개다. 소유자는 A가 0, B가 1이다.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#f1c75b"/></marker></defs>
+<rect width="1080" height="430" rx="16" fill="#19232e"/>
+<g font-family="Segoe UI, Malgun Gothic, sans-serif" fill="#f4f7fb">
+<text x="540" y="38" text-anchor="middle" font-size="24" font-weight="700">같은 네트워크 객체 · 서로 다른 로컬 복제본</text>
+<rect x="30" y="65" width="445" height="300" rx="12" fill="#223449" stroke="#89bdf0" stroke-width="2"/>
+<rect x="605" y="65" width="445" height="300" rx="12" fill="#352c48" stroke="#c5a6ef" stroke-width="2"/>
+<text x="55" y="103" font-size="23" font-weight="700">Host 창</text>
+<text x="55" y="132" font-size="17">서버 + 로컬 Client (ClientId = 0)</text>
+<text x="630" y="103" font-size="23" font-weight="700">별도 Client 창</text>
+<text x="630" y="132" font-size="17">Client 역할 (ClientId = 1)</text>
+<rect x="55" y="155" width="395" height="82" rx="8" fill="#274b67"/>
+<rect x="630" y="155" width="395" height="82" rx="8" fill="#274b67"/>
+<text x="72" y="183" font-size="19" font-weight="700">Player A · NetworkObjectId = 10</text>
+<text x="72" y="215" font-size="17">OwnerClientId = 0 / IsOwner = true</text>
+<text x="647" y="183" font-size="19" font-weight="700">Player A · NetworkObjectId = 10</text>
+<text x="647" y="215" font-size="17">OwnerClientId = 0 / IsOwner = false</text>
+<rect x="55" y="255" width="395" height="82" rx="8" fill="#514064"/>
+<rect x="630" y="255" width="395" height="82" rx="8" fill="#514064"/>
+<text x="72" y="283" font-size="19" font-weight="700">Player B · NetworkObjectId = 11</text>
+<text x="72" y="315" font-size="17">OwnerClientId = 1 / IsOwner = false</text>
+<text x="647" y="283" font-size="19" font-weight="700">Player B · NetworkObjectId = 11</text>
+<text x="647" y="315" font-size="17">OwnerClientId = 1 / IsOwner = true</text>
+<path d="M485 196 H595" stroke="#f1c75b" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M595 296 H485" stroke="#f1c75b" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="540" y="175" text-anchor="middle" font-size="15">A의 상태</text>
+<text x="540" y="275" text-anchor="middle" font-size="15">B의 상태</text>
+<text x="540" y="397" text-anchor="middle" font-size="18">Owner 권한의 이동 예시 · Unity Transport로 통신 · 번호는 설명용</text>
+</g></svg>
