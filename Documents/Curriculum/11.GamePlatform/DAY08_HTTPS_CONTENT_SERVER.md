@@ -86,6 +86,7 @@ namespace ContentServer
             // 수업에서 쓰는 형식만 제공합니다. .cs, .csproj 등은 제공하지 않습니다.
             FileExtensionContentTypeProvider types = new FileExtensionContentTypeProvider();
             types.Mappings.Clear();
+            // application은 프로그램이 처리할 데이터, octet-stream은 8비트 단위로 이어진 일반 바이너리 데이터를 뜻합니다.
             types.Mappings[".bundle"] = "application/octet-stream";
             types.Mappings[".hash"] = "text/plain";
             types.Mappings[".json"] = "application/json";
