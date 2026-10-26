@@ -4,7 +4,7 @@
 
 ## 기준 환경과 시간
 
-- Unity 6.6 `6000.6.6f1`, Input System 1.20.1, Addressables 2.11.2, UGUI·TextMeshPro를 기준으로 합니다. 설치한 정확한 버전을 기록합니다.
+- Unity 6.6 `6000.6.7f1`, Input System 1.20.1, Addressables 2.11.2, UGUI·TextMeshPro를 기준으로 합니다. 설치한 정확한 버전을 기록합니다.
 - 16일 × 6시간 = **96시간**이며 추가 **4시간**은 빌드 오류 보완과 같은 조건의 재측정에 사용합니다. 공식 시간 기준은 [교육 일정 요약](../../COURSE_SCHEDULE_SUMMARY.md)입니다.
 - C# 클래스·컬렉션과 Unity Scene·Component·Prefab·기초 UI를 선수학습으로 합니다.
 - 2일차에 게임 진행 기록 설계와 한 판의 흐름을 함께 구현합니다. 7일차는 로컬 콘텐츠 빌드, 8일차는 HTTPS 파일 서버, 9일차는 원격 콘텐츠 배포와 오류 복구를 진행합니다.

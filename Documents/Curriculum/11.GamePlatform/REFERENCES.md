@@ -34,7 +34,7 @@ Unity 6.4는 [공식 출시 공지](https://discussions.unity.com/t/unity-6-4-is
 
 ### Unity 6.6 기준 문서 보완
 
-2026년 10월 19일 [최신 정식 릴리스 `6000.6.6f1`](https://unity.com/releases/editor/whats-new/6000.6.6f1)과 [Unity 6.6 변경 사항](https://docs.unity.com/en-us/engine/6000.6/manual/whats-new/unity66)을 기준으로 다음 내용을 보완했습니다.
+2026년 10월 26일 수업 기준 Editor를 [Unity 6.6 `6000.6.7f1`](https://unity.com/releases/editor/whats-new/6000.6.7f1)로 변경했습니다. 다음 내용은 2026년 10월 19일 [Unity 6.6 변경 사항](https://docs.unity.com/en-us/engine/6000.6/manual/whats-new/unity66)을 기준으로 보완한 내용입니다. 기준 버전 변경은 `6000.6.7f1`에서의 빌드·실행 검증을 완료했다는 의미는 아닙니다.
 
 - 이전 DAY 14 예제에서 사용 중단된 정렬 인자 오버로드를 제거했습니다. 누적형 개편에서는 별도 탐색 예제를 실제 GameSession UI 갱신 개선으로 대체했습니다. [공식 API](https://docs.unity3d.com/6000.6/Documentation/ScriptReference/Object.FindObjectsByType.html)
 - 환경 설정: Package Management 메뉴 경로, Android 최소 지원 조건과 도구 버전을 안내합니다.

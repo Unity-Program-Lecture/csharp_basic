@@ -50,7 +50,7 @@ Unity 밖에서 만든 ContentServer도 별도 폴더로 전달합니다. Conten
 **미션:** 기존 Library나 생성 번들에 기대지 않고 다른 폴더에서 복원합니다.
 
 1. 학생 작업을 커밋하고 Unity를 닫습니다. 저장소를 다른 폴더에 clone하거나 Assets·Packages·ProjectSettings와 모든 meta를 새 폴더로 복사합니다. Library·Temp·기존 빌드 출력·ServerData는 복사하지 않습니다.
-2. Unity Hub에서 복원 폴더를 Unity `6000.6.6f1`로 열고 패키지 설치와 import·컴파일이 끝날 때까지 기다립니다.
+2. Unity Hub에서 복원 폴더를 Unity `6000.6.7f1`로 열고 패키지 설치와 import·컴파일이 끝날 때까지 기다립니다.
 3. `Assets/Scenes/PlatformMain.unity`를 열고 누락 스크립트와 Inspector 참조를 확인합니다. StageMain 프리팹의 코인 10개, PlatformControls.inputactions, StreamingAssets/platform-config.json도 확인합니다.
 4. 기본 로컬 구성과 Use Asset Database로 Play하여 한 판을 확인합니다. 이어서 대상 플랫폼으로 전환하고 해당 플랫폼의 로컬 콘텐츠와 Player를 새로 빌드합니다.
 5. 생성한 Player를 실행해 시작·이동·수집·종료·재시작·저장·45초 설정을 확인합니다. 원격 비교는 별도 설정 기록을 따라 진행하며, 기존 설치·캐시의 영향도 기록합니다.

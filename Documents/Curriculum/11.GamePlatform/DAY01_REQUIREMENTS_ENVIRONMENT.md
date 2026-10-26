@@ -84,7 +84,7 @@ Unity에서 Android 빌드를 누르면 여러 도구가 역할을 나누어 앱
 
 ### Editor와 플랫폼 모듈 설치
 
-이 과정의 기준은 **Unity 6.6 `6000.6.6f1`** 입니다. 2026년 10월 19일에 확인한 기준 버전이며, 설치한 전체 Editor 버전과 운영체제도 실습 기록에 적습니다. 같은 조립 설명서라도 부품이 다르면 과정이 달라지듯, Unity도 Editor·패키지·SDK에 따라 설정 이름과 결과가 달라질 수 있습니다.
+이 과정의 기준은 **Unity 6.6 `6000.6.7f1`** 입니다. 2026년 10월 26일에 수업 기준 버전으로 지정했으며, 설치한 전체 Editor 버전과 운영체제도 실습 기록에 적습니다. 같은 조립 설명서라도 부품이 다르면 과정이 달라지듯, Unity도 Editor·패키지·SDK에 따라 설정 이름과 결과가 달라질 수 있습니다.
 
 1. Unity Hub의 Installs에서 기준 Editor를 설치하거나 설치 상태를 확인합니다.
 2. 해당 Editor의 Add modules에서 Android Build Support와 하위 Android SDK & NDK Tools·OpenJDK, Web Build Support를 설치합니다.
