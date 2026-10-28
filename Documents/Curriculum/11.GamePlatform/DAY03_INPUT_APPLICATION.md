@@ -1,6 +1,6 @@
 # DAY 03: 키보드·게임패드·터치 입력
 
-오늘은 키보드, 게임패드, 화면 방향 버튼으로 같은 이동 기능을 사용하도록 입력을 연결합니다. `Application`을 이용해 게임이 어떤 환경에서 실행 중인지도 확인합니다. 이 활동은 NCS 학습 목표 G5·G7에 해당합니다.
+오늘은 키보드, 게임패드, 화면 방향 버튼으로 같은 이동 기능을 사용하도록 입력을 연결합니다. 추가 실습에서는 화면의 손잡이를 끌어 조작하는 가상 조이스틱도 만듭니다. `Application`을 이용해 게임이 어떤 환경에서 실행 중인지도 확인합니다. 이 활동은 NCS 학습 목표 G5·G7에 해당합니다.
 
 ## 1. 핵심 개념: 여러 리모컨, 같은 명령
 
@@ -82,11 +82,73 @@ Canvas/SafeAreaRoot 아래 빈 UI 오브젝트를 만들고 MobileControls로 �
 
 EventSystem의 InputSystemUIInputModule에 기본 UI Actions가 연결되어 있어야 합니다. HUD 장식 Text/Image의 Raycast Target은 끄고 버튼의 배경 Image는 켭니다. 마우스로 버튼을 누르고 있는 동안 움직이고 놓으면 멈추는지 확인합니다. 이 구성은 가상 Keyboard 입력을 사용하며 실제 키보드와 같은 Move 바인딩을 공유합니다. Android에서 화면 버튼을 사용하려고 물리 키보드를 연결할 필요는 없습니다.
 
-터치 스틱은 선택 실습입니다. 방향 버튼 동작을 확인한 뒤 프로젝트 복사본에서 `OnScreenStick`과 `<Gamepad>/leftStick`을 연결할 수 있습니다. 기본 필수 실습은 방향 버튼 네 개를 사용합니다.
-
 공식 참고: [Input System 1.20 매뉴얼](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.20/manual/index.html). 설치한 패키지 버전에서 해당 설정을 다시 확인합니다.
 
-## 4. 실행 환경 표시
+## 4. 추가 실습: 가상 조이스틱 만들기
+
+**미션:** 방향 버튼으로 이동하는 것을 확인한 뒤, 같은 프로젝트에 가상 조이스틱을 추가합니다. 기존 PlatformMover와 Move 액션을 그대로 사용합니다.
+
+방향 버튼이 W·A·S·D 키를 대신 누르는 방식이라면, 가상 조이스틱은 게임패드의 왼쪽 스틱을 대신 움직이는 방식입니다. `OnScreenStick`은 화면에서 손잡이를 끈 방향과 크기를 Vector2 입력으로 전달합니다. 실제 게임패드를 연결할 필요는 없습니다.
+
+### UI 오브젝트 구성
+
+Play를 종료하고 기존 `Canvas/SafeAreaRoot/MobileControls` 아래에 다음 오브젝트를 만듭니다. Up·Down·Left·Right는 삭제하지 않습니다.
+
+```text
+MobileControls
+├── Up / Down / Left / Right
+└── JoystickBase (Image)
+    └── JoystickHandle (Image, OnScreenStick)
+```
+
+1. MobileControls를 선택하고 `UI > Image`로 JoystickBase를 만듭니다.
+2. JoystickBase를 선택하고 다시 `UI > Image`로 JoystickHandle을 만듭니다.
+3. 두 오브젝트의 RectTransform을 아래 표대로 설정합니다. Scale은 `(1,1,1)`로 둡니다. MobileControls의 기존 배치는 유지합니다.
+4. Image의 Color는 바탕을 짙은 회색, 손잡이를 밝은 회색으로 설정합니다. 먼저 기본 Image로 동작을 확인하고, 원형 Sprite가 있다면 Source Image에 넣어 모양을 바꿀 수 있습니다.
+
+| 오브젝트 | 크기 | Anchor Min·Max / Pivot | Anchored Position | Image의 Raycast Target |
+| :--- | :--- | :--- | :--- | :--- |
+| JoystickBase | `(200,200)` | `(0.5,0.5)` / `(0.5,0.5)` | `(0,0)` | 끔 |
+| JoystickHandle | `(64,64)` | `(0.5,0.5)` / `(0.5,0.5)` | `(0,0)` | 켬 |
+
+### OnScreenStick 연결
+
+JoystickHandle에 Add Component로 `On-Screen Stick`을 추가하고 다음과 같이 설정합니다. Button 컴포넌트나 On Click 이벤트, 별도의 이동 스크립트는 추가하지 않습니다.
+
+| 설정 | 값 | 의미 |
+| :--- | :--- | :--- |
+| Control Path | `<Gamepad>/leftStick` | 가상 게임패드의 왼쪽 스틱으로 입력 전달 |
+| Movement Range | `60` | 손잡이의 UI 이동 범위. Player의 월드 이동 거리와는 다름 |
+| Behaviour | `Relative Position With Static Origin` | 중앙을 고정하고, 누른 뒤 끈 만큼 손잡이를 이동 |
+| Use Isolated Input Actions | 끔 | 기존 EventSystem의 포인터 이벤트로 조작 |
+
+Behaviour의 코드 이름은 `RelativePositionWithStaticOrigin`입니다. 이 설정에서는 **손잡이를 누른 상태로 끌어야** 움직입니다. 바탕의 빈 곳을 누르는 것만으로 이동하는 구성은 아닙니다. EventSystem의 InputSystemUIInputModule과 Canvas의 GraphicRaycaster는 방향 버튼 실습 때의 구성을 사용합니다.
+
+PlatformControls를 열어 Gameplay/Move에 `<Gamepad>/leftStick` 바인딩이 있는지 확인하고 저장합니다. PlatformMover의 Move 필드는 계속 같은 Gameplay/Move를 참조합니다. 조이스틱을 위해 새 Move 액션을 만들지 않습니다.
+
+방향 버튼 네 개는 Inspector 상단의 체크를 꺼 오브젝트를 비활성화하고, JoystickBase와 JoystickHandle은 활성화합니다. **MobileControls 자체는 활성 상태로 둡니다.** 두 입력 UI가 같은 위치에서 겹치지 않도록 한 번에 한 방식만 표시합니다.
+
+### 실행해보면
+
+Play 후 Start를 누르고 Game View에서 손잡이를 마우스로 끌어 봅니다. Android 실기기에서는 같은 위치를 손가락으로 누르고 끕니다.
+
+| 조작 | 확인할 결과 |
+| :--- | :--- |
+| 위·아래·왼쪽·오른쪽으로 끌기 | 기존 Player가 같은 방향으로 이동 |
+| 중앙에서 조금 끌기와 크게 끌기 비교 | 스틱의 데드존을 넘은 뒤에는 입력 크기에 따라 이동 속도가 달라짐 |
+| 손잡이에서 손 떼기 | 손잡이가 중앙으로 돌아가고 이동이 멈춤 |
+| 대각선으로 끝까지 끌기 | 직선보다 더 빠르게 이동하지 않음 |
+| 메뉴·결과 화면에서 끌기 | 기존 session.CanMove 조건에 따라 Player는 이동하지 않음 |
+
+중앙 근처의 작은 입력을 무시하는 범위를 **데드존**이라고 합니다. 기존 PlatformMover는 길이가 1보다 작은 입력을 그대로 사용하므로 스틱 입력 크기에 따른 속도를 유지합니다. `normalized`로 바꾸면 작은 입력도 최대 길이가 되어 이 차이가 사라집니다.
+
+손잡이가 움직이지 않으면 JoystickHandle의 Raycast Target, EventSystem의 UI Actions, UI 위를 덮은 다른 Image를 확인합니다. 손잡이는 움직이는데 Player가 멈춰 있다면 Start 여부, Move의 `<Gamepad>/leftStick` 바인딩, PlatformMover의 Move·Session 참조를 확인합니다.
+
+기본 필수 실습은 방향 버튼 네 개이며 조이스틱은 추가 실습입니다. 사용한 방식과 확인 결과를 기록합니다. 방향 버튼으로 돌아가려면 Play를 종료한 뒤 JoystickBase를 끄고 버튼 네 개를 켭니다. 이후 수업에서도 두 방식 모두 같은 MobileControls 아래에 두어 Safe Area와 플랫폼별 표시 설정을 함께 적용합니다.
+
+공식 참고: [Input System 1.20 OnScreenStick](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.20/api/UnityEngine.InputSystem.OnScreen.OnScreenStick.html), [스틱 동작 방식](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.20/api/UnityEngine.InputSystem.OnScreen.OnScreenStick.Behaviour.html).
+
+## 5. 실행 환경 표시
 
 **미션:** `Assets/Scripts/Runtime/PlatformInfo.cs`를 작성하고 기존 GameSession 오브젝트에 붙여 Editor와 PC Player 로그를 비교합니다.
 
@@ -103,7 +165,7 @@ public sealed class PlatformInfo : MonoBehaviour
         Debug.Log($"Version={Application.version}, Data={Application.dataPath}");
         Debug.Log($"Save={Application.persistentDataPath}");
 
-        // 모바일과 연습용 Editor에서는 방향 버튼을 표시하고, 일반 PC Player에서는 숨깁니다.
+        // 모바일과 연습용 Editor에서는 터치 UI를 표시하고, 일반 PC Player에서는 숨깁니다.
         mobileControls.SetActive(Application.isMobilePlatform || Application.isEditor);
     }
 }
@@ -115,6 +177,7 @@ Mobile Controls 필드에 터치 UI의 루트 오브젝트를 연결합니다. E
 
 - [ ] WASD·방향키와 화면 방향 버튼으로 같은 Player가 움직입니다. 게임패드는 연결 가능한 환경에서 별도로 확인합니다.
 - [ ] 메뉴·결과·중단 상태에서는 이동하지 않고 대각선 속도가 증가하지 않습니다.
+- [ ] 조이스틱 추가 실습을 했다면 끌기·손 떼기·입력 크기에 따른 속도를 확인하고, 방향 버튼과 겹치지 않게 표시했습니다.
 
 오늘의 프로젝트를 `Progress/Day03`에 기록합니다. 소스 관리 커밋 또는 Assets·Packages·ProjectSettings 백업을 사용하고, 씬 저장·Inspector 참조·빌드 조건을 [실습 기록 양식](PRACTICE_REPORT_TEMPLATE.md)에 남깁니다. 다음 수업에서 새 Unity 프로젝트를 만들지 않습니다.
 
